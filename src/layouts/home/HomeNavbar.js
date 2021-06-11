@@ -31,8 +31,8 @@ import MenuPopover from '../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const MENU_LINKS = [
-  { title: 'Home', icon: homeFill, href: '/' },
-  { title: 'Dashboard', icon: roundSpeed, href: PATH_HOME.dashboard }
+  { title: 'How it works', icon: homeFill, href: '/' },
+  { title: 'Pricing', icon: roundSpeed, href: PATH_HOME.dashboard }
 ];
 
 const APP_BAR_MOBILE = 64;
@@ -97,18 +97,23 @@ export default function HomeNavbar() {
           activeClassName="isDesktopActive"
           sx={{
             mr: 5,
-            color: 'text.primary',
-            transition: (theme) =>
-              theme.transitions.create('opacity', {
-                duration: theme.transitions.duration.shortest
-              }),
-            '&:hover': { opacity: 0.48 },
+            // '&:hover': { opacity: 0.48 },
             ...(isHome && { color: 'common.white' }),
-            ...(offset && { color: 'text.primary' })
+            ...(offset && { color: 'text.info' })
           }}
         >
-          {link.title}
+          <Button
+            size="large"
+            key={link.title}
+            sx={{
+              color: 'black'
+            }}
+          >
+            {link.title}
+          </Button>
         </Link>
+        // eslint-disable-next-line prettier/prettier
+        // <Button size="large" key={link.title}>{link.title}</Button>
       ))}
     </>
   );
@@ -157,6 +162,7 @@ export default function HomeNavbar() {
         <Container
           maxWidth="lg"
           sx={{
+            width: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
@@ -169,8 +175,14 @@ export default function HomeNavbar() {
 
           <Hidden mdDown>{renderMenuDesktop}</Hidden>
 
-          <Button variant="contained" target="_blank" href={PATH_HOME.purchase}>
-            Purchase Now
+          <Button
+            variant="outlined"
+            // sx={{ color: 'black' }}
+            target="_blank"
+            href={PATH_HOME.purchase}
+            // color="info"
+          >
+            Get Started
           </Button>
 
           <Hidden mdUp>

@@ -74,11 +74,11 @@ export default function LandingHero() {
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
-        <HeroOverlayStyle
+        {/* <HeroOverlayStyle
           alt="overlay"
           src="/static/home/overlay.svg"
           variants={varFadeIn}
-        />
+        /> */}
 
         <HeroImgStyle
           alt="hero"
@@ -89,28 +89,27 @@ export default function LandingHero() {
         <Container maxWidth="lg">
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
-              <Typography variant="h1" sx={{ color: 'common.white' }}>
-                Start a <br />
-                New Project <br /> with
-                <Typography
+              <Typography variant="h1" sx={{ color: 'primary.main' }}>
+                Hybrid work coordination
+                <br />
+                made simple.
+                {/* <Typography
                   component="span"
                   variant="h1"
                   sx={{ color: 'primary.main' }}
                 >
                   &nbsp;Minimal
-                </Typography>
+                </Typography> */}
               </Typography>
             </motion.div>
 
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ py: 5, color: 'common.white' }}>
-                The starting point for your next project based on
-                easy-to-customize Material-UI © helps you build apps faster and
-                better.
+              <Typography sx={{ py: 5, color: 'primary.main' }}>
+                Let employees schedule office time as they need.
               </Typography>
             </motion.div>
 
-            <Box
+            {/* <Box
               component={motion.div}
               variants={varFadeInRight}
               sx={{
@@ -135,7 +134,7 @@ export default function LandingHero() {
               >
                 Preview in Sketch Cloud
               </Link>
-            </Box>
+            </Box> */}
 
             <motion.div variants={varFadeInRight}>
               <Button
@@ -145,11 +144,18 @@ export default function LandingHero() {
                 to={PATH_DASHBOARD.root}
                 startIcon={<Icon icon={flashFill} width={20} height={20} />}
               >
-                Live Preview
+                Get started for free
               </Button>
+              <Box
+                sx={{
+                  ml: 2
+                }}
+              >
+                No credit card required
+              </Box>
             </motion.div>
 
-            <Box
+            {/* <Box
               sx={{
                 mt: 5,
                 display: 'flex',
@@ -181,7 +187,7 @@ export default function LandingHero() {
                 variants={varFadeInRight}
                 src="/static/icons/ic_m_ts.svg"
               />
-            </Box>
+            </Box> */}
           </ContentStyle>
         </Container>
       </RootStyle>
