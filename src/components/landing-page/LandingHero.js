@@ -53,7 +53,7 @@ const HeroOverlayStyle = styled(motion.img)({
   position: 'absolute'
 });
 
-const HeroImgStyle = styled(motion.img)(({ theme }) => ({
+const HeroImgStyleRight = styled(motion.img)(({ theme }) => ({
   top: 0,
   right: 0,
   bottom: 0,
@@ -62,9 +62,24 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   margin: 'auto',
   position: 'absolute',
   [theme.breakpoints.up('lg')]: {
-    right: '8%',
+    right: 0,
     width: 'auto',
-    height: '72vh'
+    height: '50vh'
+  }
+}));
+
+const HeroImgStyleLeft = styled(motion.img)(({ theme }) => ({
+  top: 0,
+  left: 0,
+  bottom: 0,
+  zIndex: 8,
+  width: '100%',
+  margin: 'auto',
+  position: 'absolute',
+  [theme.breakpoints.up('lg')]: {
+    left: 0,
+    width: 'auto',
+    height: '50vh'
   }
 }));
 
@@ -80,26 +95,25 @@ export default function LandingHero() {
           variants={varFadeIn}
         /> */}
 
-        <HeroImgStyle
+        <HeroImgStyleRight
           alt="hero"
-          src="/static/home/hero.png"
+          src="/static/home/headerRight.png"
           variants={varFadeInUp}
         />
 
-        <Container maxWidth="lg">
+        <HeroImgStyleLeft
+          alt="hero"
+          src="/static/home/headerLeft.png"
+          variants={varFadeInUp}
+        />
+
+        {/* <Container maxWidth={false}>
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
               <Typography variant="h1" sx={{ color: 'primary.main' }}>
                 Hybrid work coordination
                 <br />
                 made simple.
-                {/* <Typography
-                  component="span"
-                  variant="h1"
-                  sx={{ color: 'primary.main' }}
-                >
-                  &nbsp;Minimal
-                </Typography> */}
               </Typography>
             </motion.div>
 
@@ -108,33 +122,6 @@ export default function LandingHero() {
                 Let employees schedule office time as they need.
               </Typography>
             </motion.div>
-
-            {/* <Box
-              component={motion.div}
-              variants={varFadeInRight}
-              sx={{
-                mb: 5,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: { xs: 'center', md: 'flex-start' }
-              }}
-            >
-              <Box
-                component="img"
-                alt="sketch icon"
-                src="/static/icons/ic_sketch.svg"
-                sx={{ mr: 1, width: 20, height: 20 }}
-              />
-              <Link
-                color="inherit"
-                underline="always"
-                href={PATH_HOME.cloud}
-                target="_blank"
-                sx={{ color: 'common.white' }}
-              >
-                Preview in Sketch Cloud
-              </Link>
-            </Box> */}
 
             <motion.div variants={varFadeInRight}>
               <Button
@@ -154,42 +141,8 @@ export default function LandingHero() {
                 No credit card required
               </Box>
             </motion.div>
-
-            {/* <Box
-              sx={{
-                mt: 5,
-                display: 'flex',
-                justifyContent: { xs: 'center', md: 'flex-start' },
-                '& > :not(:last-of-type)': { mr: 1.5 }
-              }}
-            >
-              <motion.img
-                variants={varFadeInRight}
-                src="/static/icons/ic_m_sketch.svg"
-              />
-              <motion.img
-                variants={varFadeInRight}
-                src="/static/icons/ic_m_figma.svg"
-              />
-              <motion.img
-                variants={varFadeInRight}
-                src="/static/icons/ic_m_material.svg"
-              />
-              <motion.img
-                variants={varFadeInRight}
-                src="/static/icons/ic_m_react.svg"
-              />
-              <motion.img
-                variants={varFadeInRight}
-                src="/static/icons/ic_m_js.svg"
-              />
-              <motion.img
-                variants={varFadeInRight}
-                src="/static/icons/ic_m_ts.svg"
-              />
-            </Box> */}
           </ContentStyle>
-        </Container>
+        </Container> */}
       </RootStyle>
       <Box sx={{ height: { md: '100vh' } }} />
     </>

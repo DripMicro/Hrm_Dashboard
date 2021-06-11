@@ -160,9 +160,8 @@ export default function HomeNavbar() {
         }}
       >
         <Container
-          maxWidth="lg"
+          maxWidth={false}
           sx={{
-            width: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
