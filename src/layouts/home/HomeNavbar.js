@@ -153,6 +153,7 @@ export default function HomeNavbar() {
       <ToolbarStyle
         disableGutters
         sx={{
+          backgroundColor: '#FCEEE2',
           ...(offset && {
             bgcolor: 'background.default',
             height: { md: APP_BAR_DESKTOP - 20 }

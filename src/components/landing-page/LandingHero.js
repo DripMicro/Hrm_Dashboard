@@ -106,7 +106,7 @@ export default function LandingHero() {
           variants={varFadeInUp}
         />
 
-        <Container>
+        <Container sx={{ backgroundColor: '#FCEEE2' }} maxWidth={false}>
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
               <Typography
