@@ -20,13 +20,11 @@ import {
 const RootStyle = styled(motion.div)(({ theme }) => ({
   position: 'relative',
   backgroundColor: '#F2F3F5',
+  marginTop: '90px',
   [theme.breakpoints.up('md')]: {
     top: 0,
     left: 0,
     width: '100%',
-    height: '100vh',
-    display: 'flex',
-    position: 'fixed',
     alignItems: 'center'
   }
 }));
@@ -36,24 +34,16 @@ const ContentStyle = styled('div')(({ theme }) => ({
   margin: 'auto',
   textAlign: 'center',
   position: 'relative',
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(15),
+  paddingTop: 30,
+  paddingBottom: 30,
   [theme.breakpoints.up('md')]: {
     margin: 'unset',
     textAlign: 'left'
   }
 }));
 
-const HeroOverlayStyle = styled(motion.img)({
-  zIndex: 9,
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  position: 'absolute'
-});
-
 const HeroImgStyleRight = styled(motion.img)(({ theme }) => ({
-  top: 0,
+  top: 50,
   right: 0,
   bottom: 0,
   zIndex: 8,
@@ -63,12 +53,12 @@ const HeroImgStyleRight = styled(motion.img)(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     right: 0,
     width: 'auto',
-    height: '50vh'
+    height: '500px'
   }
 }));
 
 const HeroImgStyleLeft = styled(motion.img)(({ theme }) => ({
-  top: 0,
+  top: 50,
   left: 0,
   bottom: 0,
   zIndex: 8,
@@ -78,7 +68,17 @@ const HeroImgStyleLeft = styled(motion.img)(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     left: 0,
     width: 'auto',
-    height: '50vh'
+    height: '500px'
+  }
+}));
+
+const HeroImageLogo = styled(motion.img)(({ theme }) => ({
+  zIndex: 8,
+  width: '100%',
+  [theme.breakpoints.up('lg')]: {
+    left: 0,
+    width: 'auto',
+    height: '60px'
   }
 }));
 
@@ -88,12 +88,6 @@ export default function LandingHero() {
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
-        {/* <HeroOverlayStyle
-          alt="overlay"
-          src="/static/home/overlay.svg"
-          variants={varFadeIn}
-        /> */}
-
         <HeroImgStyleRight
           alt="hero"
           src="/static/home/headerRight.png"
@@ -149,8 +143,58 @@ export default function LandingHero() {
             </motion.div>
           </ContentStyle>
         </Container>
+        <Container sx={{ backgroundColor: '#2E2836' }} maxWidth={false}>
+          <ContentStyle>
+            <motion.div variants={varFadeInRight} maxWidth="lg">
+              <Box sx={{ textAlign: 'center', color: 'white' }}>
+                Trusted by <b>top businesses</b> to build
+                <b> dynamic workplaces</b>
+              </Box>
+              <Box
+                sx={{
+                  width: '100%',
+                  mt: 5,
+                  mb: 5,
+                  display: 'flex',
+                  justifyContent: { xs: 'center', md: 'center' },
+                  '& > :not(:last-of-type)': { mr: 1.5 }
+                }}
+              >
+                <HeroImageLogo
+                  alt="hero"
+                  src="/static/home/ref2.png"
+                  variants={varFadeInUp}
+                />
+                <HeroImageLogo
+                  alt="hero"
+                  src="/static/home/ref6.png"
+                  variants={varFadeInUp}
+                />
+                <HeroImageLogo
+                  alt="hero"
+                  src="/static/home/ref5.png"
+                  variants={varFadeInUp}
+                />
+                <HeroImageLogo
+                  alt="hero"
+                  src="/static/home/ref1.png"
+                  variants={varFadeInUp}
+                />
+                <HeroImageLogo
+                  alt="hero"
+                  src="/static/home/ref3.png"
+                  variants={varFadeInUp}
+                />
+                <HeroImageLogo
+                  alt="hero"
+                  src="/static/home/ref4.png"
+                  variants={varFadeInUp}
+                />
+              </Box>
+            </motion.div>
+          </ContentStyle>
+        </Container>
       </RootStyle>
-      <Box sx={{ height: { md: '100vh' } }} />
     </>
   );
 }

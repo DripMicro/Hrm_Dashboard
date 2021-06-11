@@ -96,7 +96,7 @@ export default function HomeNavbar() {
           component={RouterLink}
           activeClassName="isDesktopActive"
           sx={{
-            mr: 5,
+            mr: 3,
             // '&:hover': { opacity: 0.48 },
             ...(isHome && { color: 'common.white' }),
             ...(offset && { color: 'text.info' })
@@ -112,8 +112,6 @@ export default function HomeNavbar() {
             {link.title}
           </Button>
         </Link>
-        // eslint-disable-next-line prettier/prettier
-        // <Button size="large" key={link.title}>{link.title}</Button>
       ))}
     </>
   );
@@ -191,7 +189,7 @@ export default function HomeNavbar() {
               onClick={() => setOpenMenu(true)}
               sx={{
                 ml: 1,
-                ...(isHome && { color: 'common.white' }),
+                ...(isHome && { color: 'common.black' }),
                 ...(offset && { color: 'text.primary' })
               }}
             >
