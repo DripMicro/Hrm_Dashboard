@@ -33,7 +33,6 @@ const RootStyle = styled(motion.div)(({ theme }) => ({
 
 const ContentStyle = styled('div')(({ theme }) => ({
   zIndex: 10,
-  maxWidth: 520,
   margin: 'auto',
   textAlign: 'center',
   position: 'relative',
@@ -107,10 +106,13 @@ export default function LandingHero() {
           variants={varFadeInUp}
         />
 
-        {/* <Container maxWidth={false}>
+        <Container>
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
-              <Typography variant="h1" sx={{ color: 'primary.main' }}>
+              <Typography
+                variant="h1"
+                sx={{ color: 'primary.main', textAlign: 'center' }}
+              >
                 Hybrid work coordination
                 <br />
                 made simple.
@@ -118,31 +120,35 @@ export default function LandingHero() {
             </motion.div>
 
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ py: 5, color: 'primary.main' }}>
+              <Typography
+                sx={{ py: 5, color: 'primary.main', textAlign: 'center' }}
+              >
                 Let employees schedule office time as they need.
               </Typography>
             </motion.div>
 
             <motion.div variants={varFadeInRight}>
-              <Button
-                size="large"
-                variant="contained"
-                component={RouterLink}
-                to={PATH_DASHBOARD.root}
-                startIcon={<Icon icon={flashFill} width={20} height={20} />}
-              >
-                Get started for free
-              </Button>
-              <Box
-                sx={{
-                  ml: 2
-                }}
-              >
-                No credit card required
+              <Box sx={{ textAlign: 'center' }}>
+                <Button
+                  size="large"
+                  variant="contained"
+                  component={RouterLink}
+                  to={PATH_DASHBOARD.root}
+                  startIcon={<Icon icon={flashFill} width={20} height={20} />}
+                >
+                  Get started for free
+                </Button>
+                <Box
+                  sx={{
+                    ml: 2
+                  }}
+                >
+                  No credit card required
+                </Box>
               </Box>
             </motion.div>
           </ContentStyle>
-        </Container> */}
+        </Container>
       </RootStyle>
       <Box sx={{ height: { md: '100vh' } }} />
     </>
