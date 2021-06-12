@@ -4,6 +4,7 @@ import homeFill from '@iconify/icons-eva/home-fill';
 import roundSpeed from '@iconify/icons-ic/round-speed';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
+
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import {
@@ -27,7 +28,7 @@ import useOffSetTop from '../../hooks/useOffSetTop';
 import { MIconButton } from '../../components/@material-extend';
 import Logo from '../../components/Logo';
 import MenuPopover from '../../components/MenuPopover';
-
+import HomeTopBar from './HomeTopbar';
 // ----------------------------------------------------------------------
 
 const MENU_LINKS = [
@@ -75,12 +76,17 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
   boxShadow: theme.customShadows.z8
 }));
 
+const ToolbarHeight = styled('div')(() => ({
+  height: '76px'
+}));
+
+const ManropeRegular = "'ManropeRegular', sans-serif";
 // ----------------------------------------------------------------------
 
 export default function HomeNavbar() {
   const anchorRef = useRef(null);
   const { pathname } = useLocation();
-  const offset = useOffSetTop(100);
+  const offset = useOffSetTop(64);
   const [openMenu, setOpenMenu] = useState(false);
   const isHome = pathname === '/';
 
@@ -97,7 +103,6 @@ export default function HomeNavbar() {
           activeClassName="isDesktopActive"
           sx={{
             mr: 3,
-            // '&:hover': { opacity: 0.48 },
             ...(isHome && { color: 'common.white' }),
             ...(offset && { color: 'text.info' })
           }}
@@ -106,7 +111,9 @@ export default function HomeNavbar() {
             size="large"
             key={link.title}
             sx={{
-              color: 'black'
+              color: 'black',
+              fontWeight: 400,
+              fontFamily: ManropeRegular
             }}
           >
             {link.title}
@@ -147,60 +154,74 @@ export default function HomeNavbar() {
   );
 
   return (
-    <RootStyle color="transparent">
-      <ToolbarStyle
-        disableGutters
+    <>
+      <HomeTopBar />
+      <RootStyle
+        color="transparent"
         sx={{
-          backgroundColor: '#FCEEE2',
+          position: 'relative',
           ...(offset && {
-            bgcolor: 'background.default',
-            height: { md: APP_BAR_DESKTOP - 20 }
+            position: 'fixed'
           })
         }}
       >
-        <Container
-          maxWidth={false}
+        {/* {!offset && <HomeTopBar sx={{ transition: 'all 5s' }} />} */}
+        <ToolbarStyle
+          disableGutters
+          position="static"
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+            backgroundColor: '#FCEEE2',
+            ...(offset && {
+              bgcolor: 'background.default',
+              height: { md: APP_BAR_DESKTOP - 20 }
+            })
           }}
         >
-          <RouterLink to="/">
-            <Logo />
-          </RouterLink>
-          <Box sx={{ flexGrow: 1 }} />
-
-          <Hidden mdDown>{renderMenuDesktop}</Hidden>
-
-          <Button
-            variant="outlined"
-            // sx={{ color: 'black' }}
-            target="_blank"
-            href={PATH_HOME.purchase}
-            // color="info"
+          <Container
+            maxWidth={false}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
           >
-            Get Started
-          </Button>
+            <RouterLink to="/">
+              <Logo />
+            </RouterLink>
+            <Box sx={{ flexGrow: 1 }} />
 
-          <Hidden mdUp>
-            <MIconButton
-              ref={anchorRef}
-              onClick={() => setOpenMenu(true)}
-              sx={{
-                ml: 1,
-                ...(isHome && { color: 'common.black' }),
-                ...(offset && { color: 'text.primary' })
-              }}
+            <Hidden mdDown>{renderMenuDesktop}</Hidden>
+
+            <Button
+              variant="outlined"
+              // sx={{ color: 'black' }}
+              target="_blank"
+              href={PATH_HOME.purchase}
+              // color="info"
             >
-              <Icon icon={menu2Fill} />
-            </MIconButton>
-            {renderMenuMobile}
-          </Hidden>
-        </Container>
-      </ToolbarStyle>
+              Get Started
+            </Button>
 
-      {offset && <ToolbarShadowStyle />}
-    </RootStyle>
+            <Hidden mdUp>
+              <MIconButton
+                ref={anchorRef}
+                onClick={() => setOpenMenu(true)}
+                sx={{
+                  ml: 1,
+                  ...(isHome && { color: 'common.black' }),
+                  ...(offset && { color: 'text.primary' })
+                }}
+              >
+                <Icon icon={menu2Fill} />
+              </MIconButton>
+              {renderMenuMobile}
+            </Hidden>
+          </Container>
+        </ToolbarStyle>
+
+        {offset && <ToolbarShadowStyle />}
+      </RootStyle>
+      {offset && <ToolbarHeight />}
+    </>
   );
 }

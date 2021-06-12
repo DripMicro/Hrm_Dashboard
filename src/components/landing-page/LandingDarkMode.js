@@ -57,7 +57,7 @@ export default function LandingDarkMode() {
           }}
         />
 
-        <Grid container spacing={5} direction="row-reverse">
+        <Grid container spacing={5}>
           <Grid item xs={12} md={4}>
             <ContentStyle>
               <MotionInView variants={varFadeInUp}>

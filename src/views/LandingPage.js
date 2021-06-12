@@ -5,11 +5,13 @@ import Page from '../components/Page';
 import {
   LandingHero,
   LandingFooter,
-  LandingMinimal,
-  LandingDarkMode,
-  LandingAdvertisement,
-  LandingCleanInterfaces,
-  LandingHugePackElements
+  LandingPlugPlay,
+  LandingFunEasy,
+  LandingHybridPolicy,
+  LandingMyTeamCafe,
+  LandingSafeFlexible,
+  LandingTryCafe,
+  LandingLeaders
 } from '../components/landing-page';
 
 // ----------------------------------------------------------------------
@@ -31,11 +33,13 @@ export default function LandingPage() {
     <RootStyle title="Human Resource | Home" id="move_top">
       <LandingHero />
       <ContentStyle>
-        <LandingMinimal />
-        <LandingHugePackElements />
-        <LandingDarkMode />
-        <LandingCleanInterfaces />
-        <LandingAdvertisement />
+        <LandingSafeFlexible />
+        <LandingFunEasy />
+        <LandingPlugPlay />
+        <LandingHybridPolicy />
+        <LandingMyTeamCafe />
+        <LandingLeaders />
+        <LandingTryCafe />
         <LandingFooter />
       </ContentStyle>
     </RootStyle>

@@ -4,23 +4,19 @@ import flashFill from '@iconify/icons-eva/flash-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Button, Box, Link, Container, Typography } from '@material-ui/core';
+import { Button, Box, Container, Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 // routes
-import { PATH_DASHBOARD, PATH_HOME } from '../../routes/paths';
+import { PATH_DASHBOARD } from '../../routes/paths';
 //
-import {
-  varFadeIn,
-  varWrapEnter,
-  varFadeInUp,
-  varFadeInRight
-} from '../animate';
+import { varWrapEnter, varFadeInUp, varFadeInRight } from '../animate';
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
   position: 'relative',
   backgroundColor: '#F2F3F5',
-  marginTop: '90px',
+  // marginTop: '154px',
   [theme.breakpoints.up('md')]: {
     top: 0,
     left: 0,
@@ -47,13 +43,21 @@ const HeroImgStyleRight = styled(motion.img)(({ theme }) => ({
   right: 0,
   bottom: 0,
   zIndex: 8,
+  display: 'none',
   width: '100%',
   margin: 'auto',
   position: 'absolute',
+  [theme.breakpoints.up('md')]: {
+    right: 0,
+    width: 'auto',
+    height: '300px',
+    display: 'block'
+  },
   [theme.breakpoints.up('lg')]: {
     right: 0,
     width: 'auto',
-    height: '500px'
+    height: '500px',
+    display: 'block'
   }
 }));
 
@@ -62,13 +66,21 @@ const HeroImgStyleLeft = styled(motion.img)(({ theme }) => ({
   left: 0,
   bottom: 0,
   zIndex: 8,
+  display: 'none',
   width: '100%',
   margin: 'auto',
   position: 'absolute',
+  [theme.breakpoints.up('md')]: {
+    left: 0,
+    width: 'auto',
+    height: '300px',
+    display: 'block'
+  },
   [theme.breakpoints.up('lg')]: {
     left: 0,
     width: 'auto',
-    height: '500px'
+    height: '500px',
+    display: 'block'
   }
 }));
 
@@ -82,6 +94,9 @@ const HeroImageLogo = styled(motion.img)(({ theme }) => ({
   }
 }));
 
+const PoppinsBlack = "'PoppinsBlack', sans-serif";
+const ManropeRegular = "'ManropeRegular', sans-serif";
+const PoppinsRegular = "'PoppinsRegular', sans-serif";
 // ----------------------------------------------------------------------
 
 export default function LandingHero() {
@@ -105,7 +120,11 @@ export default function LandingHero() {
             <motion.div variants={varFadeInRight}>
               <Typography
                 variant="h1"
-                sx={{ color: 'primary.main', textAlign: 'center' }}
+                sx={{
+                  color: '#2E2836',
+                  textAlign: 'center',
+                  fontFamily: PoppinsBlack
+                }}
               >
                 Hybrid work coordination
                 <br />
@@ -115,7 +134,12 @@ export default function LandingHero() {
 
             <motion.div variants={varFadeInRight}>
               <Typography
-                sx={{ py: 5, color: 'primary.main', textAlign: 'center' }}
+                sx={{
+                  py: 5,
+                  color: '#2E2836',
+                  textAlign: 'center',
+                  fontFamily: ManropeRegular
+                }}
               >
                 Let employees schedule office time as they need.
               </Typography>
@@ -128,15 +152,23 @@ export default function LandingHero() {
                   variant="contained"
                   component={RouterLink}
                   to={PATH_DASHBOARD.root}
-                  startIcon={<Icon icon={flashFill} width={20} height={20} />}
+                  color="warning"
+                  sx={{
+                    marginTop: '20px',
+                    backgroundColor: '#2E2836',
+                    color: 'white',
+                    fontSize: '24px',
+                    paddingTop: '33px',
+                    paddingBottom: '35px',
+                    fontFamily: PoppinsRegular,
+                    '&:hover': {
+                      backgroundColor: '#575058'
+                    }
+                  }}
                 >
                   Get started for free
                 </Button>
-                <Box
-                  sx={{
-                    ml: 2
-                  }}
-                >
+                <Box sx={{ fontFamily: ManropeRegular }}>
                   No credit card required
                 </Box>
               </Box>
@@ -145,53 +177,32 @@ export default function LandingHero() {
         </Container>
         <Container sx={{ backgroundColor: '#2E2836' }} maxWidth={false}>
           <ContentStyle>
-            <motion.div variants={varFadeInRight} maxWidth="lg">
-              <Box sx={{ textAlign: 'center', color: 'white' }}>
-                Trusted by <b>top businesses</b> to build
-                <b> dynamic workplaces</b>
-              </Box>
-              <Box
-                sx={{
-                  width: '100%',
-                  mt: 5,
-                  mb: 5,
-                  display: 'flex',
-                  justifyContent: { xs: 'center', md: 'center' },
-                  '& > :not(:last-of-type)': { mr: 1.5 }
-                }}
-              >
-                <HeroImageLogo
-                  alt="hero"
-                  src="/static/home/ref2.png"
-                  variants={varFadeInUp}
-                />
-                <HeroImageLogo
-                  alt="hero"
-                  src="/static/home/ref6.png"
-                  variants={varFadeInUp}
-                />
-                <HeroImageLogo
-                  alt="hero"
-                  src="/static/home/ref5.png"
-                  variants={varFadeInUp}
-                />
-                <HeroImageLogo
-                  alt="hero"
-                  src="/static/home/ref1.png"
-                  variants={varFadeInUp}
-                />
-                <HeroImageLogo
-                  alt="hero"
-                  src="/static/home/ref3.png"
-                  variants={varFadeInUp}
-                />
-                <HeroImageLogo
-                  alt="hero"
-                  src="/static/home/ref4.png"
-                  variants={varFadeInUp}
-                />
-              </Box>
-            </motion.div>
+            <Box sx={{ textAlign: 'center', color: 'white', mt: 3 }}>
+              Trusted by <b>top businesses</b> to build
+              <b> dynamic workplaces</b>
+            </Box>
+            <Container maxWidth="lg" sx={{ mt: 7, mb: 3 }}>
+              <Grid container spacing={3}>
+                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
+                  <HeroImageLogo alt="hero" src="/static/home/ref2.png" />
+                </Grid>
+                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
+                  <HeroImageLogo alt="hero" src="/static/home/ref6.png" />
+                </Grid>
+                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
+                  <HeroImageLogo alt="hero" src="/static/home/ref5.png" />
+                </Grid>
+                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
+                  <HeroImageLogo alt="hero" src="/static/home/ref1.png" />
+                </Grid>
+                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
+                  <HeroImageLogo alt="hero" src="/static/home/ref5.png" />
+                </Grid>
+                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
+                  <HeroImageLogo alt="hero" src="/static/home/ref1.png" />
+                </Grid>
+              </Grid>
+            </Container>
           </ContentStyle>
         </Container>
       </RootStyle>
