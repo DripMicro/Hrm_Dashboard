@@ -21,7 +21,7 @@ import {
   ListItemText
 } from '@material-ui/core';
 // routes
-import { PATH_HOME } from '../../routes/paths';
+import { PATH_HOME, PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
@@ -32,7 +32,7 @@ import HomeTopBar from './HomeTopbar';
 // ----------------------------------------------------------------------
 
 const MENU_LINKS = [
-  { title: 'How it works', icon: homeFill, href: '/' },
+  { title: 'How it works', icon: homeFill, href: PATH_HOME.how_it_works },
   { title: 'Pricing', icon: roundSpeed, href: PATH_HOME.dashboard }
 ];
 
@@ -192,13 +192,7 @@ export default function HomeNavbar() {
 
             <Hidden mdDown>{renderMenuDesktop}</Hidden>
 
-            <Button
-              variant="outlined"
-              // sx={{ color: 'black' }}
-              target="_blank"
-              href={PATH_HOME.purchase}
-              // color="info"
-            >
+            <Button variant="outlined" href={PATH_DASHBOARD.root}>
               Get Started
             </Button>
 
