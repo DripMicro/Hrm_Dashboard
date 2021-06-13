@@ -42,7 +42,7 @@ export default function LandingPlugPlay() {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const PoppinsLight = "'PoppinsLight', sans-serif";
-
+  const PoppinsRegular = "'PoppinsRegular', sans-serif";
   const textAnimate = upMd ? varFadeInRight : varFadeInUp;
 
   return (
@@ -59,7 +59,11 @@ export default function LandingPlugPlay() {
                   justifyContent: 'center'
                 }}
               >
-                <Typography variant="h2" paragraph>
+                <Typography
+                  variant="h3"
+                  paragraph
+                  sx={{ fontFamily: PoppinsRegular }}
+                >
                   Just plug and play
                 </Typography>
                 <Box
@@ -92,7 +96,7 @@ export default function LandingPlugPlay() {
                   src="/static/home/slack.png"
                   sx={{
                     width: 'auto',
-                    height: '40px',
+                    height: '30px',
                     marginLeft: '10px',
                     mt: 3
                   }}

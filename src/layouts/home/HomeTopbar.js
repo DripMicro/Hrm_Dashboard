@@ -1,63 +1,62 @@
 // material
-import { Box } from '@material-ui/core';
 import { motion } from 'framer-motion';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 // ----------------------------------------------------------------------
 
-export default function HomeTopbar() {
-  const ProductHuntImg = styled(motion.img)(({ theme }) => ({
-    zIndex: 8,
-    width: '100%',
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      left: 0,
-      display: 'block',
-      width: 'auto',
-      height: '40px',
-      marginRight: 10
-    }
-  }));
+const ProductHuntImg = styled(motion.img)(({ theme }) => ({
+  zIndex: 8,
+  width: '100%',
+  display: 'none',
+  [theme.breakpoints.up('md')]: {
+    left: 0,
+    display: 'block',
+    width: 'auto',
+    height: '40px',
+    marginRight: 10
+  }
+}));
 
-  const TechCrunchImg = styled(motion.img)(({ theme }) => ({
-    zIndex: 8,
-    width: '100%',
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      left: 0,
-      display: 'block',
-      width: 'auto',
-      height: '19px',
-      marginRight: 10
-    }
-  }));
+const TechCrunchImg = styled(motion.img)(({ theme }) => ({
+  zIndex: 8,
+  width: '100%',
+  display: 'none',
+  [theme.breakpoints.up('md')]: {
+    left: 0,
+    display: 'block',
+    width: 'auto',
+    height: '19px',
+    marginRight: 10
+  }
+}));
 
-  const IsDesktopTopbar = styled('div')(({ theme }) => ({
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-      justifyContent: 'center',
-      width: '100%',
-      textAlign: 'center',
-      marginTop: '10px',
-      marginBottom: '10px',
-      alignItems: 'center'
-    }
-  }));
-
-  const IsMobileTopbar = styled('div')(({ theme }) => ({
+const IsDesktopTopbar = styled('div')(({ theme }) => ({
+  display: 'none',
+  [theme.breakpoints.up('md')]: {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
     textAlign: 'center',
     marginTop: '10px',
     marginBottom: '10px',
-    alignItems: 'center',
-    [theme.breakpoints.up('md')]: {
-      display: 'none'
-    }
-  }));
+    alignItems: 'center'
+  }
+}));
 
+const IsMobileTopbar = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+  textAlign: 'center',
+  marginTop: '10px',
+  marginBottom: '10px',
+  alignItems: 'center',
+  [theme.breakpoints.up('md')]: {
+    display: 'none'
+  }
+}));
+
+export default function HomeTopbar() {
   return (
     <>
       <IsDesktopTopbar>

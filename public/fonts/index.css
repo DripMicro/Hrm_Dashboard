@@ -36,6 +36,17 @@
   src: local('PoppinsRegular'), url('Poppins-Bold.ttf') format('opentype');
 }
 
+@font-face {
+  font-family: 'PoppinsMedium';
+  font-style: normal;
+  src: local('PoppinsMedium'), url('Poppins-Medium.ttf') format('opentype');
+}
+
+@font-face {
+  font-family: 'PoppinsStandard';
+  font-style: normal;
+  src: local('PoppinsStandard'), url('Poppins-Regular.ttf') format('opentype');
+}
 
 @font-face {
   font-family: 'ManropeLight';

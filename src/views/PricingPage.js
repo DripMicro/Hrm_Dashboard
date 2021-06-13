@@ -5,11 +5,8 @@ import Page from '../components/Page';
 import {
   LandingHero,
   LandingFooter,
-  LandingTryCafe,
-  LandingMakeDecision,
-  LandingPluginView,
-  LandingSchedule
-} from '../components/how-it-works';
+  LandingTryCafe
+} from '../components/pricing-page';
 
 // ----------------------------------------------------------------------
 
@@ -27,12 +24,9 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function HowitworksPage() {
   return (
-    <RootStyle title="Human Resource | How it works" id="move_top">
+    <RootStyle title="Human Resource | Pricing" id="move_top">
       <LandingHero />
       <ContentStyle>
-        <LandingMakeDecision />
-        <LandingSchedule />
-        <LandingPluginView />
         <LandingTryCafe />
         <LandingFooter />
       </ContentStyle>

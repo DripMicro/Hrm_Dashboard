@@ -42,6 +42,7 @@ export default function LandingSafeFlexible() {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const PoppinsLight = "'PoppinsLight', sans-serif";
+  const PoppinsRegular = "'PoppinsRegular', sans-serif";
   const textAnimate = upMd ? varFadeInRight : varFadeInUp;
   return (
     <RootStyle>
@@ -57,7 +58,11 @@ export default function LandingSafeFlexible() {
                   justifyContent: 'center'
                 }}
               >
-                <Typography variant="h2" paragraph>
+                <Typography
+                  variant="h2"
+                  paragraph
+                  sx={{ fontFamily: PoppinsRegular }}
+                >
                   Safe and Flexible
                 </Typography>
                 <Box

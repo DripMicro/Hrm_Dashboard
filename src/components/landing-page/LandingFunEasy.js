@@ -43,7 +43,7 @@ export default function LandingFunEasy() {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const PoppinsLight = "'PoppinsLight', sans-serif";
-
+  const PoppinsRegular = "'PoppinsRegular', sans-serif";
   const textAnimate = upMd ? varFadeInRight : varFadeInUp;
 
   return (
@@ -60,7 +60,11 @@ export default function LandingFunEasy() {
                   justifyContent: 'center'
                 }}
               >
-                <Typography variant="h2" paragraph>
+                <Typography
+                  variant="h2"
+                  paragraph
+                  sx={{ fontFamily: PoppinsRegular }}
+                >
                   Fun & easy to use
                 </Typography>
                 <Box

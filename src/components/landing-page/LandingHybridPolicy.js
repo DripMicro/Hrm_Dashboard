@@ -43,7 +43,7 @@ export default function LandingHybridPolicy() {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const PoppinsLight = "'PoppinsLight', sans-serif";
-
+  const PoppinsRegular = "'PoppinsRegular', sans-serif";
   const textAnimate = upMd ? varFadeInRight : varFadeInUp;
 
   return (
@@ -62,7 +62,11 @@ export default function LandingHybridPolicy() {
               >
                 <Typography
                   paragraph
-                  sx={{ fontSize: '2.2rem', fontWeight: 700 }}
+                  sx={{
+                    fontSize: '2.2rem',
+                    fontWeight: 700,
+                    fontFamily: PoppinsRegular
+                  }}
                 >
                   Monitor your hybrid policy
                 </Typography>

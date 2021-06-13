@@ -28,12 +28,11 @@ import useOffSetTop from '../../hooks/useOffSetTop';
 import { MIconButton } from '../../components/@material-extend';
 import Logo from '../../components/Logo';
 import MenuPopover from '../../components/MenuPopover';
-import HomeTopBar from './HomeTopbar';
 // ----------------------------------------------------------------------
 
 const MENU_LINKS = [
   { title: 'How it works', icon: homeFill, href: PATH_HOME.how_it_works },
-  { title: 'Pricing', icon: roundSpeed, href: PATH_HOME.dashboard }
+  { title: 'Pricing', icon: roundSpeed, href: PATH_HOME.pricing }
 ];
 
 const APP_BAR_MOBILE = 64;
@@ -155,7 +154,6 @@ export default function HomeNavbar() {
 
   return (
     <>
-      <HomeTopBar />
       <RootStyle
         color="transparent"
         sx={{
