@@ -6,7 +6,11 @@ import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
+import {
+  withStyles,
+  alpha,
+  experimentalStyled as styled
+} from '@material-ui/core/styles';
 import {
   Box,
   List,
@@ -75,9 +79,27 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
   boxShadow: theme.customShadows.z8
 }));
 
-const ToolbarHeight = styled('div')(() => ({
-  height: '76px'
+const ToolbarHeight = styled('div')(({ theme }) => ({
+  height: '68px',
+  [theme.breakpoints.up('md')]: { height: '76px' }
 }));
+
+const GetStartedButton = withStyles(() => ({
+  root: {
+    borderRadius: '3px',
+    fontSize: '1rem',
+    fontWeight: 800,
+    marginLeft: '1rem',
+    marginRight: '1rem',
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
+    textTransform: 'none',
+    borderColor: '#C2B7AE',
+    '&:hover': {
+      borderColor: '#C2B7AE'
+    }
+  }
+}))(Button);
 
 const ManropeRegular = "'ManropeRegular', sans-serif";
 // ----------------------------------------------------------------------
@@ -85,9 +107,22 @@ const ManropeRegular = "'ManropeRegular', sans-serif";
 export default function HomeNavbar() {
   const anchorRef = useRef(null);
   const { pathname } = useLocation();
-  const offset = useOffSetTop(64);
   const [openMenu, setOpenMenu] = useState(false);
   const isHome = pathname === '/';
+
+  const screenWidth = window.innerWidth;
+  let widthValue = 64;
+  if (isHome) {
+    if (screenWidth > 960) {
+      widthValue = 64;
+    } else {
+      widthValue = 44;
+    }
+  } else {
+    widthValue = 1;
+  }
+
+  const offset = useOffSetTop(widthValue);
 
   const renderMenuDesktop = (
     <>
@@ -190,9 +225,13 @@ export default function HomeNavbar() {
 
             <Hidden mdDown>{renderMenuDesktop}</Hidden>
 
-            <Button variant="outlined" href={PATH_DASHBOARD.root}>
+            <GetStartedButton
+              variant="outlined"
+              href={PATH_DASHBOARD.root}
+              sx={{ fontFamily: ManropeRegular }}
+            >
               Get Started
-            </Button>
+            </GetStartedButton>
 
             <Hidden mdUp>
               <MIconButton

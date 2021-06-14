@@ -10,7 +10,32 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import { varWrapEnter, varFadeInUp, varFadeInRight } from '../animate';
 
 // ----------------------------------------------------------------------
-
+const Image = [
+  {
+    id: 0,
+    img_src: '/static/home/ref2.png'
+  },
+  {
+    id: 1,
+    img_src: '/static/home/ref6.png'
+  },
+  {
+    id: 2,
+    img_src: '/static/home/ref5.png'
+  },
+  {
+    id: 3,
+    img_src: '/static/home/ref1.png'
+  },
+  {
+    id: 4,
+    img_src: '/static/home/ref3.png'
+  },
+  {
+    id: 5,
+    img_src: '/static/home/ref4.png'
+  }
+];
 const RootStyle = styled(motion.div)(({ theme }) => ({
   position: 'relative',
   backgroundColor: '#F2F3F5',
@@ -181,24 +206,18 @@ export default function LandingHero() {
             </Box>
             <Container maxWidth="lg" sx={{ mt: 7, mb: 3 }}>
               <Grid container spacing={3}>
-                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
-                  <HeroImageLogo alt="hero" src="/static/home/ref2.png" />
-                </Grid>
-                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
-                  <HeroImageLogo alt="hero" src="/static/home/ref6.png" />
-                </Grid>
-                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
-                  <HeroImageLogo alt="hero" src="/static/home/ref5.png" />
-                </Grid>
-                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
-                  <HeroImageLogo alt="hero" src="/static/home/ref1.png" />
-                </Grid>
-                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
-                  <HeroImageLogo alt="hero" src="/static/home/ref5.png" />
-                </Grid>
-                <Grid item sx={{ color: 'white' }} xs={4} sm={4} md={2}>
-                  <HeroImageLogo alt="hero" src="/static/home/ref1.png" />
-                </Grid>
+                {Image.map((item) => (
+                  <Grid
+                    item
+                    sx={{ color: 'white' }}
+                    xs={4}
+                    sm={4}
+                    md={2}
+                    key={item.id}
+                  >
+                    <HeroImageLogo alt="hero" src={item.img_src} />
+                  </Grid>
+                ))}
               </Grid>
             </Container>
           </ContentStyle>

@@ -7,7 +7,7 @@ import Page from '../components/Page';
 
 export default function PageThree() {
   return (
-    <Page title="Page Three | Minimal-UI">
+    <Page title="Thimble | Page Three">
       <Container maxWidth="xl">
         <Typography variant="h3" component="h1" paragraph>
           Page Three

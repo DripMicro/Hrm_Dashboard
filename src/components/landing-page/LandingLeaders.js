@@ -120,7 +120,7 @@ export default function LandingLeaders() {
                   <Typography variant="h5" paragraph>
                     {card.title}
                   </Typography>
-                  <Typography sx={{ color: 'text.secondary', fontFamily: PoppinsLight }}>
+                  <Typography sx={{ color: 'text.primary', fontFamily: PoppinsLight }}>
                     {card.description}
                   </Typography>
                   <CardArrow />
@@ -130,10 +130,10 @@ export default function LandingLeaders() {
               <Typography variant="h4" paragraph sx={{ textAlign: 'center', fontFamily: PoppinsRegular }}>
                 {card.name}
               </Typography>
-              <Typography sx={{ color: 'text.secondary', textAlign: 'center', fontFamily: PoppinsLight }}>
+              <Typography sx={{ color: 'text.primary', textAlign: 'center', fontFamily: PoppinsLight }}>
                 {card.duty}
               </Typography>
-              <Typography sx={{ color: 'text.secondary', textAlign: 'center', fontFamily: PoppinsLight }}>
+              <Typography sx={{ color: 'text.primary', textAlign: 'center', fontFamily: PoppinsLight }}>
                 {card.contact}
               </Typography>
             </Grid>

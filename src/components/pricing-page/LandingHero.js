@@ -1,10 +1,7 @@
 import { motion } from 'framer-motion';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Button, Box, Container, Typography } from '@material-ui/core';
-// routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { Container, Typography } from '@material-ui/core';
 //
 import { varWrapEnter, varFadeInRight } from '../animate';
 
@@ -36,7 +33,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 }));
 
 const PoppinsBlack = "'PoppinsBlack', sans-serif";
-const ManropeRegular = "'ManropeRegular', sans-serif";
 const PoppinsRegular = "'PoppinsRegular', sans-serif";
 // ----------------------------------------------------------------------
 
@@ -55,7 +51,7 @@ export default function LandingHero() {
                   fontFamily: PoppinsBlack
                 }}
               >
-                Find the best days to team up.
+                Coordinate your team, for free.
               </Typography>
             </motion.div>
 
@@ -69,37 +65,9 @@ export default function LandingHero() {
                   fontFamily: PoppinsRegular
                 }}
               >
-                No more boring spreadsheet.
+                Get advanced features, <br />
+                if necessary.
               </Typography>
-            </motion.div>
-
-            <motion.div variants={varFadeInRight}>
-              <Box sx={{ textAlign: 'center' }}>
-                <Button
-                  size="large"
-                  variant="contained"
-                  component={RouterLink}
-                  to={PATH_DASHBOARD.root}
-                  color="warning"
-                  sx={{
-                    marginTop: '20px',
-                    backgroundColor: '#2E2836',
-                    color: 'white',
-                    fontSize: '24px',
-                    paddingTop: '33px',
-                    paddingBottom: '35px',
-                    fontFamily: PoppinsRegular,
-                    '&:hover': {
-                      backgroundColor: '#575058'
-                    }
-                  }}
-                >
-                  Get started for free
-                </Button>
-                <Box sx={{ fontFamily: ManropeRegular }}>
-                  Available on iOS, Android & Desktop
-                </Box>
-              </Box>
             </motion.div>
           </ContentStyle>
         </Container>

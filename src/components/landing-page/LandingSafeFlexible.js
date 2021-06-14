@@ -74,7 +74,7 @@ export default function LandingSafeFlexible() {
 
               <MotionInView variants={textAnimate} sx={{ maxWidth: '350px' }}>
                 <Typography
-                  sx={{ color: 'text.secondary', fontFamily: PoppinsLight }}
+                  sx={{ color: 'text.primary', fontFamily: PoppinsLight }}
                 >
                   No more spreadsheet to manage your flexible office.
                 </Typography>
@@ -85,7 +85,7 @@ export default function LandingSafeFlexible() {
                 sx={{ mt: 5, maxWidth: '350px' }}
               >
                 <Typography
-                  sx={{ color: 'text.secondary', fontFamily: PoppinsLight }}
+                  sx={{ color: 'text.primary', fontFamily: PoppinsLight }}
                 >
                   Return to the office with effortless Contact Tracing.
                 </Typography>

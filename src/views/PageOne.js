@@ -7,7 +7,7 @@ import Page from '../components/Page';
 
 export default function PageOne() {
   return (
-    <Page title="Page One | Minimal-UI">
+    <Page title="Thimble | Page One">
       <Container maxWidth="xl">
         <Typography variant="h3" component="h1" paragraph>
           Page One

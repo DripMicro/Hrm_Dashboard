@@ -75,7 +75,7 @@ export default function LandingPlugPlay() {
 
               <MotionInView variants={textAnimate} sx={{ maxWidth: '350px' }}>
                 <Typography
-                  sx={{ color: 'text.secondary', fontFamily: PoppinsLight }}
+                  sx={{ color: 'text.primary', fontFamily: PoppinsLight }}
                 >
                   Facilitate people’s onboarding with our <b>HRIS</b>{' '}
                   integrations.
@@ -87,7 +87,7 @@ export default function LandingPlugPlay() {
                 sx={{ mt: 5, maxWidth: '350px' }}
               >
                 <Typography
-                  sx={{ color: 'text.secondary', fontFamily: PoppinsLight }}
+                  sx={{ color: 'text.primary', fontFamily: PoppinsLight }}
                 >
                   Our <b>Slack</b> plugin gives you context in real-time!
                 </Typography>

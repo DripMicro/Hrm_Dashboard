@@ -68,6 +68,7 @@ const PopupMenu = withStyles(() => ({
 const ManropeRegular = "'ManropeRegular', sans-serif";
 
 export default function SchedulePopover(props) {
+  // eslint-disable-next-line react/prop-types
   const { title } = props;
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);

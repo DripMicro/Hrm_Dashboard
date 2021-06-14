@@ -5,7 +5,11 @@ import Page from '../components/Page';
 import {
   LandingHero,
   LandingFooter,
-  LandingTryCafe
+  LandingTryCafe,
+  LandingPrice,
+  LandingComparePlan,
+  LandingForEveryone,
+  LandingFrequentlyAsk
 } from '../components/pricing-page';
 
 // ----------------------------------------------------------------------
@@ -24,9 +28,13 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function HowitworksPage() {
   return (
-    <RootStyle title="Human Resource | Pricing" id="move_top">
+    <RootStyle title="Thimble | Pricing" id="move_top">
       <LandingHero />
       <ContentStyle>
+        <LandingPrice />
+        <LandingComparePlan />
+        <LandingForEveryone />
+        <LandingFrequentlyAsk />
         <LandingTryCafe />
         <LandingFooter />
       </ContentStyle>

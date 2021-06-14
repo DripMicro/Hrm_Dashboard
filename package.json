@@ -1,7 +1,7 @@
 {
-  "name": "human_resource",
-  "author": "Alexander Ryndin",
-  "licence": "by @author",
+  "name": "@minimal/material-kit-react",
+  "author": "Minimal",
+  "licence": "UNLICENSED",
   "version": "2.0.0",
   "private": true,
   "scripts": {

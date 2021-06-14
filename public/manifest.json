@@ -1,6 +1,6 @@
 {
-  "short_name": "Human Resource App",
-  "name": "Human Resource WebApp Platform",
+  "short_name": "Thimble App",
+  "name": "Thimble WebApp Platform",
   "icons": [
     {
       "src": "favicon/android-chrome-192x192.png",

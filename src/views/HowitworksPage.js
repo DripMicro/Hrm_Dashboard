@@ -27,7 +27,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function HowitworksPage() {
   return (
-    <RootStyle title="Human Resource | How it works" id="move_top">
+    <RootStyle title="Thimble | How it works" id="move_top">
       <LandingHero />
       <ContentStyle>
         <LandingMakeDecision />

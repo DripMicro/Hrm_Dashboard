@@ -106,7 +106,7 @@ export default function LandingMyTeamCafe() {
                     {card.title}
                   </Typography>
                   <Typography
-                    sx={{ color: 'text.secondary', fontFamily: PoppinsLight }}
+                    sx={{ color: 'text.primary', fontFamily: PoppinsLight }}
                   >
                     {card.description}
                   </Typography>

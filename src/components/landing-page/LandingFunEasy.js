@@ -77,7 +77,7 @@ export default function LandingFunEasy() {
               <MotionInView variants={textAnimate}>
                 <Typography
                   sx={{
-                    color: 'text.secondary',
+                    color: 'text.primary',
                     textAlign: 'center',
                     fontFamily: PoppinsLight,
                     [theme.breakpoints.up('md')]: {
@@ -96,7 +96,7 @@ export default function LandingFunEasy() {
               >
                 <Typography
                   sx={{
-                    color: 'text.secondary',
+                    color: 'text.primary',
                     textAlign: 'center',
                     fontFamily: PoppinsLight,
                     [theme.breakpoints.up('md')]: {

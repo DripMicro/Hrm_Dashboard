@@ -80,7 +80,7 @@ export default function LandingHybridPolicy() {
               <MotionInView variants={textAnimate}>
                 <Typography
                   sx={{
-                    color: 'text.secondary',
+                    color: 'text.primary',
                     textAlign: 'center',
                     fontFamily: PoppinsLight,
                     [theme.breakpoints.up('md')]: {
@@ -99,7 +99,7 @@ export default function LandingHybridPolicy() {
               >
                 <Typography
                   sx={{
-                    color: 'text.secondary',
+                    color: 'text.primary',
                     textAlign: 'center',
                     fontFamily: PoppinsLight,
                     [theme.breakpoints.up('md')]: {
