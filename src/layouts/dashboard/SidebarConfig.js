@@ -24,49 +24,108 @@ const sidebarConfig = [
     subheader: 'general',
     items: [
       {
-        title: 'Page One',
-        href: PATH_DASHBOARD.general.pageOne,
+        title: 'Home',
+        href: PATH_DASHBOARD.general.home,
         icon: ICONS.page
       },
       {
-        title: 'Page Two',
-        href: PATH_DASHBOARD.general.pageTwo,
+        title: 'Calendar',
+        href: PATH_DASHBOARD.general.calendar,
         icon: ICONS.page
       },
       {
-        title: 'Page Three',
-        href: PATH_DASHBOARD.general.pageThree,
+        title: 'Directory',
+        href: PATH_DASHBOARD.general.directory,
+        icon: ICONS.page
+      },
+      {
+        title: 'Display Name',
+        href: PATH_DASHBOARD.general.user,
         icon: ICONS.page
       }
     ]
   },
 
-  // APP
-  // ----------------------------------------------------------------------
+  // admin setting
   {
-    subheader: 'app',
+    subheader: 'admin settings',
     items: [
       {
-        title: 'Drop',
-        href: PATH_DASHBOARD.app.root,
-        icon: ICONS.dashboard,
-        items: [
-          {
-            title: 'page Four',
-            href: PATH_DASHBOARD.app.pageFour
-          },
-          {
-            title: 'Page Five',
-            href: PATH_DASHBOARD.app.pageFive
-          },
-          {
-            title: 'Page Six',
-            href: PATH_DASHBOARD.app.pageSix
-          }
-        ]
+        title: 'Offices',
+        href: PATH_DASHBOARD.admin.offices,
+        icon: ICONS.page
+      },
+      {
+        title: 'Teams',
+        href: PATH_DASHBOARD.admin.teams,
+        icon: ICONS.page
+      },
+      {
+        title: 'Organization',
+        href: PATH_DASHBOARD.admin.organization,
+        icon: ICONS.page
+      },
+      {
+        title: 'Dashboard',
+        href: PATH_DASHBOARD.admin.dashboard,
+        icon: ICONS.page
+      }
+    ]
+  },
+
+  // integration & contact us
+  {
+    subheader: '',
+    items: [
+      {
+        title: 'Sync with Slack',
+        href: PATH_DASHBOARD.other.slack,
+        icon: ICONS.page
+      },
+      {
+        title: 'Invite',
+        href: PATH_DASHBOARD.other.invite,
+        icon: ICONS.page
+      },
+      {
+        title: 'Get Mobile App',
+        href: PATH_DASHBOARD.other.mobile,
+        icon: ICONS.page
+      },
+      {
+        title: 'Contact Support',
+        href: PATH_DASHBOARD.other.contact,
+        icon: ICONS.page
       }
     ]
   }
+
+  // APP
+  // ----------------------------------------------------------------------
+  // {
+  //   subheader: 'app',
+  //   items: [
+  //     {
+  //       title: 'Drop',
+  //       href: PATH_DASHBOARD.app.root,
+  //       icon: ICONS.dashboard,
+  //       items: [
+  //         {
+  //           title: 'page Four',
+  //           href: PATH_DASHBOARD.app.pageFour
+  //         },
+  //         {
+  //           title: 'Page Five',
+  //           href: PATH_DASHBOARD.app.pageFive
+  //         },
+  //         {
+  //           title: 'Page Six',
+  //           href: PATH_DASHBOARD.app.pageSix
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // }
 ];
 
 export default sidebarConfig;

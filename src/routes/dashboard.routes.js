@@ -15,48 +15,69 @@ const DashboardRoutes = {
     // ----------------------------------------------------------------------
     {
       exact: true,
-      path: PATH_DASHBOARD.general.pageOne,
-      component: lazy(() => import('../views/PageOne'))
+      path: PATH_DASHBOARD.general.home,
+      component: lazy(() => import('../views/DashboardHomePage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.general.pageTwo,
-      component: lazy(() => import('../views/PageTwo'))
+      path: PATH_DASHBOARD.general.calendar,
+      component: lazy(() => import('../views/DashboardCalendarPage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.general.pageThree,
-      component: lazy(() => import('../views/PageThree'))
+      path: PATH_DASHBOARD.general.directory,
+      component: lazy(() => import('../views/DashboardDirectoryPage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.root,
-      component: () => <Redirect to={PATH_DASHBOARD.general.pageOne} />
+      path: PATH_DASHBOARD.general.user,
+      component: lazy(() => import('../views/DashboardUserPage'))
     },
-
-    // APP
+    // admin
     // ----------------------------------------------------------------------
     {
       exact: true,
-      path: PATH_DASHBOARD.app.pageFour,
-      component: lazy(() => import('../views/PageFour'))
+      path: PATH_DASHBOARD.admin.offices,
+      component: lazy(() => import('../views/DashboardOfficesPage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.app.pageFive,
-      component: lazy(() => import('../views/PageFive'))
+      path: PATH_DASHBOARD.admin.teams,
+      component: lazy(() => import('../views/DashboardTeamsPage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.app.pageSix,
-      component: lazy(() => import('../views/PageSix'))
+      path: PATH_DASHBOARD.admin.organization,
+      component: lazy(() => import('../views/DashboardOrganizationPage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.app.root,
-      component: () => <Redirect to={PATH_DASHBOARD.app.pageFour} />
+      path: PATH_DASHBOARD.admin.dashboard,
+      component: lazy(() => import('../views/DashboardPage'))
     },
 
+    // other
+    // ----------------------------------------------------------------------
+    {
+      exact: true,
+      path: PATH_DASHBOARD.other.slack,
+      component: lazy(() => import('../views/DashboardOfficesPage'))
+    },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.other.invite,
+      component: lazy(() => import('../views/DashboardInvitePage'))
+    },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.other.mobile,
+      component: lazy(() => import('../views/DashboardOrganizationPage'))
+    },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.other.contact,
+      component: lazy(() => import('../views/DashboardPage'))
+    },
     // ----------------------------------------------------------------------
 
     {

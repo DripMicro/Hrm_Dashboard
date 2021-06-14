@@ -27,7 +27,7 @@ export default function App() {
           <ThemeConfig>
             <RtlLayout>
               <Router history={history}>
-                <Settings />
+                {/* <Settings /> */}
                 <ScrollToTop />
                 {renderRoutes(routes)}
               </Router>

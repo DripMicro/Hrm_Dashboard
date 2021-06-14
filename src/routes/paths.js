@@ -5,8 +5,17 @@ function path(root, sublink) {
 }
 
 const ROOTS_DASHBOARD = '/dashboard';
-
+const ROOTS_AUTH = '/auth';
 // ----------------------------------------------------------------------
+export const PATH_AUTH = {
+  root: ROOTS_AUTH,
+  login: path(ROOTS_AUTH, '/login'),
+  loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
+  register: path(ROOTS_AUTH, '/register'),
+  registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
+  resetPassword: path(ROOTS_AUTH, '/reset-password'),
+  verify: path(ROOTS_AUTH, '/verify')
+};
 
 export const PATH_HOME = {
   components: '/components',
@@ -20,9 +29,22 @@ export const PATH_HOME = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
-    pageOne: path(ROOTS_DASHBOARD, '/one'),
-    pageTwo: path(ROOTS_DASHBOARD, '/two'),
-    pageThree: path(ROOTS_DASHBOARD, '/three')
+    home: path(ROOTS_DASHBOARD, '/home'),
+    calendar: path(ROOTS_DASHBOARD, '/calendar'),
+    directory: path(ROOTS_DASHBOARD, '/directory'),
+    user: path(ROOTS_DASHBOARD, '/user')
+  },
+  admin: {
+    offices: path(ROOTS_DASHBOARD, '/offices'),
+    teams: path(ROOTS_DASHBOARD, '/teams'),
+    organization: path(ROOTS_DASHBOARD, '/organization'),
+    dashboard: path(ROOTS_DASHBOARD, '/dashboard')
+  },
+  other: {
+    slack: path(ROOTS_DASHBOARD, '/aa'),
+    invite: path(ROOTS_DASHBOARD, '/invite'),
+    mobile: path(ROOTS_DASHBOARD, '/bb'),
+    contact: path(ROOTS_DASHBOARD, '/cc')
   },
   app: {
     root: path(ROOTS_DASHBOARD, '/drop'),

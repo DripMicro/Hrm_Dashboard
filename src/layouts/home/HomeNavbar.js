@@ -25,7 +25,7 @@ import {
   ListItemText
 } from '@material-ui/core';
 // routes
-import { PATH_HOME, PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_HOME, PATH_DASHBOARD, PATH_AUTH } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
@@ -227,7 +227,7 @@ export default function HomeNavbar() {
 
             <GetStartedButton
               variant="outlined"
-              href={PATH_DASHBOARD.root}
+              href={PATH_AUTH.login}
               sx={{ fontFamily: ManropeRegular }}
             >
               Get Started

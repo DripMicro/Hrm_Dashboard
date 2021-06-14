@@ -15,11 +15,16 @@ HomeLayout.propTypes = {
 };
 
 export default function HomeLayout({ children }) {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const isHome = pathname === '/';
+  const isAuth =
+    pathname === '/auth/register' ||
+    pathname === '/auth/login' ||
+    pathname === '/auth/reset-password';
   return (
     <Box sx={{ height: '100%' }}>
-      {location.pathname === '/' && <HomeTopBar />}
-      <HomeNavbar />
+      {isHome && <HomeTopBar />}
+      {!isAuth && <HomeNavbar />}
       <Box sx={{ height: '100%' }}>{children}</Box>
     </Box>
   );
