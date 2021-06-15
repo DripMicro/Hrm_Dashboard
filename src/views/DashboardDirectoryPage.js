@@ -7,10 +7,10 @@ import Page from '../components/Page';
 
 export default function PageThree() {
   return (
-    <Page title="Thimble | Page Three">
+    <Page title="Thimble | Directory">
       <Container maxWidth="xl">
         <Typography variant="h3" component="h1" paragraph>
-          Page Three
+          Directory Page
         </Typography>
         <Typography gutterBottom>
           Curabitur turpis. Vestibulum facilisis, purus nec pulvinar iaculis,

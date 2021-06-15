@@ -15,7 +15,7 @@ export default function MCircularProgress({ color = 'primary', sx, ...other }) {
   return (
     <CircularProgress
       sx={{
-        color: theme.palette[color].main,
+        color: 'theme.palette[color].main',
         ...sx
       }}
       {...other}

@@ -147,7 +147,10 @@ export default function HomeNavbar() {
             sx={{
               color: 'black',
               fontWeight: 400,
-              fontFamily: ManropeRegular
+              fontFamily: ManropeRegular,
+              '&:hover': {
+                background: 'rgb(0 0 0 / 5%)'
+              }
             }}
           >
             {link.title}
@@ -228,7 +231,13 @@ export default function HomeNavbar() {
             <GetStartedButton
               variant="outlined"
               href={PATH_AUTH.login}
-              sx={{ fontFamily: ManropeRegular }}
+              sx={{
+                fontFamily: ManropeRegular,
+                color: 'black',
+                '&:hover': {
+                  background: 'rgb(0 0 0 / 5%)'
+                }
+              }}
             >
               Get Started
             </GetStartedButton>

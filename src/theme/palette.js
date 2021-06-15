@@ -7,20 +7,20 @@ function createGradient(color1, color2) {
 }
 
 // SETUP COLORS
-// const PRIMARY = {
-//   lighter: '#C8FACD',
-//   light: '#5BE584',
-//   main: '#00AB55',
-//   dark: '#007B55',
-//   darker: '#005249'
-// };
 const PRIMARY = {
-  lighter: '#cfd4d3',
-  light: '#9fa1a0',
-  main: '#111a19',
-  dark: '#373838',
-  darker: '#0a0a0a'
+  lighter: '#C8FACD',
+  light: '#5BE584',
+  main: '#00AB55',
+  dark: '#007B55',
+  darker: '#005249'
 };
+// const PRIMARY = {
+//   lighter: '#f7f3f0',
+//   light: '#ffead9',
+//   main: '#FCEEE2',
+//   dark: '#bd6419',
+//   darker: '#5c300b'
+// };
 const SECONDARY = {
   lighter: '#D6E4FF',
   light: '#84A9FF',

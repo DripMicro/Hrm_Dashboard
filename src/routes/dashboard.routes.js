@@ -60,7 +60,7 @@ const DashboardRoutes = {
     // ----------------------------------------------------------------------
     {
       exact: true,
-      path: PATH_DASHBOARD.other.slack,
+      path: 'slack',
       component: lazy(() => import('../views/DashboardOfficesPage'))
     },
     {
@@ -70,12 +70,12 @@ const DashboardRoutes = {
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.other.mobile,
+      path: '/download',
       component: lazy(() => import('../views/DashboardOrganizationPage'))
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.other.contact,
+      path: '/contact',
       component: lazy(() => import('../views/DashboardPage'))
     },
     // ----------------------------------------------------------------------

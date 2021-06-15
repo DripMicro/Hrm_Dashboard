@@ -102,7 +102,7 @@ export default function PricingPlanCard({ card, index }) {
       <Typography
         variant="body2"
         sx={{
-          color: 'primary.main',
+          color: 'black',
           textTransform: 'capitalize',
           fontFamily: ManropeRegular
         }}

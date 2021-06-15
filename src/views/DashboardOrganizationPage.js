@@ -7,10 +7,10 @@ import Page from '../components/Page';
 
 export default function PageSix() {
   return (
-    <Page title="Thimble | Page Six">
+    <Page title="Thimble | Organization">
       <Container maxWidth="xl">
         <Typography variant="h3" component="h1" paragraph>
-          Page Six
+          Organization Page
         </Typography>
         <Typography gutterBottom>
           Curabitur turpis. Vestibulum facilisis, purus nec pulvinar iaculis,

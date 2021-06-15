@@ -10,7 +10,7 @@ import { store, persistor } from './redux/store';
 // theme
 import ThemeConfig from './theme';
 // components
-import Settings from './components/settings';
+// import Settings from './components/settings';
 import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import LoadingScreen from './components/LoadingScreen';

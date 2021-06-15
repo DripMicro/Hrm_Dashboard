@@ -5,7 +5,7 @@ import { LinearProgress } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
-export default function MLinearProgress({ color = 'primary', sx, ...other }) {
+export default function MLinearProgress({ color = 'secondary', sx, ...other }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 

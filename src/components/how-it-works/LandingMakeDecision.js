@@ -50,7 +50,7 @@ export default function LandingMakeDecision() {
   const PoppinsStandard = "'PoppinsStandard', sans-serif";
   const PoppinsRegular = "'PoppinsRegular', sans-serif";
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState('panel1');
   const [imageSrc, setImage] = React.useState(
     '/static/how-it-works/product1.webp'
   );

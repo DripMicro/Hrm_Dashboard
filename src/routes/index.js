@@ -22,8 +22,7 @@ const nprogressStyle = makeStyles((theme) => ({
         width: '100%',
         position: 'fixed',
         zIndex: theme.zIndex.snackbar,
-        backgroundColor: theme.palette.primary.main,
-        boxShadow: `0 0 2px ${theme.palette.primary.main}`
+        backgroundColor: '#2E2836'
       },
       '& .peg': {
         right: 0,
@@ -33,7 +32,7 @@ const nprogressStyle = makeStyles((theme) => ({
         display: 'block',
         position: 'absolute',
         transform: 'rotate(3deg) translate(0px, -4px)',
-        boxShadow: `0 0 10px ${theme.palette.primary.main}, 0 0 5px ${theme.palette.primary.main}`
+        boxShadow: `0 0 10px #2E2836, 0 0 5px #2E2836`
       }
     }
   }

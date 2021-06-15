@@ -49,7 +49,7 @@ export default function LandingPluginView() {
   const PoppinsMedium = "'PoppinsMedium', sans-serif";
   const PoppinsStandard = "'PoppinsStandard', sans-serif";
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState('panel1');
   const [imageSrc, setImage] = React.useState(
     '/static/how-it-works/product4.webp'
   );

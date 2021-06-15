@@ -7,10 +7,10 @@ import Page from '../components/Page';
 
 export default function PageTwo() {
   return (
-    <Page title="Thimble | Page Two">
+    <Page title="Thimble | Calendar">
       <Container maxWidth="xl">
         <Typography variant="h3" component="h1" paragraph>
-          Page Two
+          Calendar Page
         </Typography>
         <Typography gutterBottom>
           Curabitur turpis. Vestibulum facilisis, purus nec pulvinar iaculis,

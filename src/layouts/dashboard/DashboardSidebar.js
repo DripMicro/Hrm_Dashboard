@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation, matchPath } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {
@@ -148,7 +149,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
                 mt: 3,
                 mb: 2,
                 pl: 5,
-                color: 'text.primary',
+                color: 'text.secondary',
                 typography: 'overline'
               }}
             >
@@ -183,7 +184,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           open
           variant="persistent"
           PaperProps={{
-            sx: { width: DRAWER_WIDTH, bgcolor: 'background.default' }
+            sx: { width: DRAWER_WIDTH }
           }}
         >
           {renderContent}

@@ -5,16 +5,29 @@ import SvgIconStyle from '../../components/SvgIconStyle';
 
 // ----------------------------------------------------------------------
 
-const getIcon = (name) => (
+const getIcon = (name, type) => (
   <SvgIconStyle
-    src={`/static/icons/navbar/${name}.svg`}
+    src={`/static/icons/navbar/new/${name}.svg`}
     sx={{ width: 22, height: 22 }}
+    type={type}
   />
 );
 
 const ICONS = {
-  page: getIcon('ic_page'),
-  dashboard: getIcon('ic_dashboard')
+  page: getIcon('ic_page', 'general'),
+  dashboard: getIcon('ic_dashboard', 'admin'),
+  ndashboard: getIcon('dashboard', 'admin'),
+  organization: getIcon('organization-line', 'admin'),
+  home: getIcon('home-line', 'general'),
+  calendar: getIcon('calendar-date', 'general'),
+  directory: getIcon('directory-line', 'general'),
+  user: getIcon('user-avatar', 'general'),
+  offices: getIcon('office', 'admin'),
+  teams: getIcon('team-outlined', 'admin'),
+  slack: getIcon('slack', 'app'),
+  invite: getIcon('invite', 'app'),
+  mobile: getIcon('mobile-phone-with-arrow', 'app'),
+  contact: getIcon('online-support', 'app')
 };
 
 const sidebarConfig = [
@@ -26,22 +39,22 @@ const sidebarConfig = [
       {
         title: 'Home',
         href: PATH_DASHBOARD.general.home,
-        icon: ICONS.page
+        icon: ICONS.home
       },
       {
         title: 'Calendar',
         href: PATH_DASHBOARD.general.calendar,
-        icon: ICONS.page
+        icon: ICONS.calendar
       },
       {
         title: 'Directory',
         href: PATH_DASHBOARD.general.directory,
-        icon: ICONS.page
+        icon: ICONS.directory
       },
       {
         title: 'Display Name',
         href: PATH_DASHBOARD.general.user,
-        icon: ICONS.page
+        icon: ICONS.user
       }
     ]
   },
@@ -53,22 +66,22 @@ const sidebarConfig = [
       {
         title: 'Offices',
         href: PATH_DASHBOARD.admin.offices,
-        icon: ICONS.page
+        icon: ICONS.offices
       },
       {
         title: 'Teams',
         href: PATH_DASHBOARD.admin.teams,
-        icon: ICONS.page
+        icon: ICONS.teams
       },
       {
         title: 'Organization',
         href: PATH_DASHBOARD.admin.organization,
-        icon: ICONS.page
+        icon: ICONS.organization
       },
       {
         title: 'Dashboard',
         href: PATH_DASHBOARD.admin.dashboard,
-        icon: ICONS.page
+        icon: ICONS.ndashboard
       }
     ]
   },
@@ -80,22 +93,22 @@ const sidebarConfig = [
       {
         title: 'Sync with Slack',
         href: PATH_DASHBOARD.other.slack,
-        icon: ICONS.page
+        icon: ICONS.slack
       },
       {
         title: 'Invite',
         href: PATH_DASHBOARD.other.invite,
-        icon: ICONS.page
+        icon: ICONS.invite
       },
       {
         title: 'Get Mobile App',
         href: PATH_DASHBOARD.other.mobile,
-        icon: ICONS.page
+        icon: ICONS.mobile
       },
       {
         title: 'Contact Support',
         href: PATH_DASHBOARD.other.contact,
-        icon: ICONS.page
+        icon: ICONS.contact
       }
     ]
   }

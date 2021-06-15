@@ -19,8 +19,8 @@ export const PATH_AUTH = {
 
 export const PATH_HOME = {
   components: '/components',
-  cloud: 'https://www.sketch.com/s/0fa4699d-a3ff-4cd5-a3a7-d851eb7e17f0',
-  purchase: 'https://material-ui.com/store/items/minimal-dashboard/',
+  cloud: '/',
+  purchase: '/',
   dashboard: ROOTS_DASHBOARD,
   how_it_works: '/how-it-works',
   pricing: '/pricing'
@@ -41,10 +41,10 @@ export const PATH_DASHBOARD = {
     dashboard: path(ROOTS_DASHBOARD, '/dashboard')
   },
   other: {
-    slack: path(ROOTS_DASHBOARD, '/aa'),
+    slack: path(ROOTS_DASHBOARD, '/slack'),
     invite: path(ROOTS_DASHBOARD, '/invite'),
-    mobile: path(ROOTS_DASHBOARD, '/bb'),
-    contact: path(ROOTS_DASHBOARD, '/cc')
+    mobile: path(ROOTS_DASHBOARD, '/download'),
+    contact: path(ROOTS_DASHBOARD, '/contact')
   },
   app: {
     root: path(ROOTS_DASHBOARD, '/drop'),
