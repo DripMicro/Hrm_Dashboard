@@ -79,12 +79,7 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
   boxShadow: theme.customShadows.z8
 }));
 
-const ToolbarHeight = styled('div')(({ theme }) => ({
-  height: '68px',
-  [theme.breakpoints.up('md')]: { height: '76px' }
-}));
-
-const GetStartedButton = withStyles(() => ({
+const GetStartedButton = withStyles((theme) => ({
   root: {
     borderRadius: '3px',
     fontSize: '1rem',
@@ -97,6 +92,10 @@ const GetStartedButton = withStyles(() => ({
     borderColor: '#C2B7AE',
     '&:hover': {
       borderColor: '#C2B7AE'
+    },
+    [theme.breakpoints.down('md')]: {
+      paddingLeft: '1rem',
+      paddingRight: '1rem'
     }
   }
 }))(Button);
@@ -110,19 +109,7 @@ export default function HomeNavbar() {
   const [openMenu, setOpenMenu] = useState(false);
   const isHome = pathname === '/';
 
-  const screenWidth = window.innerWidth;
-  let widthValue = 64;
-  if (isHome) {
-    if (screenWidth > 960) {
-      widthValue = 64;
-    } else {
-      widthValue = 44;
-    }
-  } else {
-    widthValue = 1;
-  }
-
-  const offset = useOffSetTop(widthValue);
+  const offset = useOffSetTop(100);
 
   const renderMenuDesktop = (
     <>
@@ -192,16 +179,7 @@ export default function HomeNavbar() {
 
   return (
     <>
-      <RootStyle
-        color="transparent"
-        sx={{
-          position: 'relative',
-          ...(offset && {
-            position: 'fixed'
-          })
-        }}
-      >
-        {/* {!offset && <HomeTopBar sx={{ transition: 'all 5s' }} />} */}
+      <RootStyle color="transparent">
         <ToolbarStyle
           disableGutters
           position="static"
@@ -261,7 +239,6 @@ export default function HomeNavbar() {
 
         {offset && <ToolbarShadowStyle />}
       </RootStyle>
-      {offset && <ToolbarHeight />}
     </>
   );
 }

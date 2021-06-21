@@ -73,10 +73,6 @@ const HeroImageLogo = styled('img')(({ theme }) => ({
 
 const Image = [
   {
-    id: 0,
-    img_src: '/static/how-it-works/hris1.webp'
-  },
-  {
     id: 1,
     img_src: '/static/how-it-works/hris2.webp'
   },
@@ -120,9 +116,9 @@ export default function LandingPrice() {
                   <Grid
                     item
                     sx={{ color: 'white' }}
-                    xs={3}
-                    sm={3}
-                    md={3}
+                    xs={4}
+                    sm={4}
+                    md={4}
                     key={item.id}
                   >
                     <HeroImageLogo alt="hero" src={item.img_src} />

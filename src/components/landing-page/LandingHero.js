@@ -13,27 +13,27 @@ import { varWrapEnter, varFadeInUp, varFadeInRight } from '../animate';
 const Image = [
   {
     id: 0,
-    img_src: '/static/home/ref2.png'
+    img_src: '/static/home/company.svg'
   },
   {
     id: 1,
-    img_src: '/static/home/ref6.png'
+    img_src: '/static/home/company.svg'
   },
   {
     id: 2,
-    img_src: '/static/home/ref5.png'
+    img_src: '/static/home/company.svg'
   },
   {
     id: 3,
-    img_src: '/static/home/ref1.png'
+    img_src: '/static/home/company.svg'
   },
   {
     id: 4,
-    img_src: '/static/home/ref3.png'
+    img_src: '/static/home/company.svg'
   },
   {
     id: 5,
-    img_src: '/static/home/ref4.png'
+    img_src: '/static/home/company.svg'
   }
 ];
 const RootStyle = styled(motion.div)(({ theme }) => ({

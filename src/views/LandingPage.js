@@ -4,14 +4,12 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import Page from '../components/Page';
 import {
   LandingHero,
-  LandingFooter,
   LandingPlugPlay,
   LandingFunEasy,
   LandingHybridPolicy,
-  LandingMyTeamCafe,
-  LandingSafeFlexible,
-  LandingTryCafe,
-  LandingLeaders
+  LandingMyTeam,
+  LandingSafeFlexible
+  // LandingLeaders
 } from '../components/landing-page';
 
 // ----------------------------------------------------------------------
@@ -37,10 +35,8 @@ export default function LandingPage() {
         <LandingFunEasy />
         <LandingPlugPlay />
         <LandingHybridPolicy />
-        <LandingMyTeamCafe />
-        <LandingLeaders />
-        <LandingTryCafe />
-        <LandingFooter />
+        <LandingMyTeam />
+        {/* <LandingLeaders /> */}
       </ContentStyle>
     </RootStyle>
   );

@@ -2,10 +2,15 @@ import PropTypes from 'prop-types';
 // material
 import { Box } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
+
+// material
+import { useTheme } from '@material-ui/core/styles';
+
 //
 // hooks
 import HomeNavbar from './HomeNavbar';
-import HomeTopBar from './HomeTopbar';
+import LandingFooter from './LandingFooter';
+import LandingTryBottom from './LandingTryBottom';
 
 // material
 // ----------------------------------------------------------------------
@@ -16,16 +21,28 @@ HomeLayout.propTypes = {
 
 export default function HomeLayout({ children }) {
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const theme = useTheme();
   const isAuth =
     pathname === '/auth/register' ||
     pathname === '/auth/login' ||
     pathname === '/auth/reset-password';
   return (
-    <Box sx={{ height: '100%' }}>
-      {isHome && <HomeTopBar />}
-      {!isAuth && <HomeNavbar />}
-      <Box sx={{ height: '100%' }}>{children}</Box>
-    </Box>
+    <>
+      <Box sx={{ height: '100%' }}>
+        {!isAuth && <HomeNavbar />}
+        <Box
+          sx={{
+            marginTop: '64px',
+            [theme.breakpoints.up('md')]: {
+              marginTop: '96px'
+            }
+          }}
+        >
+          {children}
+        </Box>
+        <LandingTryBottom />
+        <LandingFooter />
+      </Box>
+    </>
   );
 }

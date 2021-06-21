@@ -4,8 +4,6 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 import Page from '../components/Page';
 import {
   LandingHero,
-  LandingFooter,
-  LandingTryCafe,
   LandingMakeDecision,
   LandingPluginView,
   LandingSchedule
@@ -33,8 +31,6 @@ export default function HowitworksPage() {
         <LandingMakeDecision />
         <LandingSchedule />
         <LandingPluginView />
-        <LandingTryCafe />
-        <LandingFooter />
       </ContentStyle>
     </RootStyle>
   );

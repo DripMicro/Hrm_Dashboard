@@ -7,7 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // ----------------------------------------------------------------------
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
-import { varFadeInUp } from '../animate';
+import { varFadeInUp } from '../../components/animate';
 
 const RootStyle = styled('div')(({ theme }) => ({
   paddingTop: theme.spacing(2),
@@ -57,12 +57,12 @@ const PoppinsBlack = "'PoppinsBlack', sans-serif";
 const PoppinsRegular = "'PoppinsRegular', sans-serif";
 // ----------------------------------------------------------------------
 
-export default function LandingTryCafe() {
+export default function LandingTryBottom() {
   return (
     <RootStyle sx={{ position: 'relative' }}>
       <HeroImgStyleRight
         alt="hero"
-        src="/static/home/footerRight.webp"
+        src="/static/home/footerRight.svg"
         variants={varFadeInUp}
       />
 
@@ -81,7 +81,7 @@ export default function LandingTryCafe() {
               color: '#FCEEE2'
             }}
           >
-            Try Café with your
+            Try Thimble with your
             <br />
             team today
           </Typography>

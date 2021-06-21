@@ -87,7 +87,7 @@ export default function LandingMyTeamCafe() {
               align="center"
               sx={{ fontFamily: PoppinsRegular }}
             >
-              Is Café right for my team?
+              Is Thimble right for my team?
             </Typography>
           </MotionInView>
         </Box>

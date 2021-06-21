@@ -19,20 +19,20 @@ import { varFadeInUp, MotionInView, varFadeInDown } from '../animate';
 const CARDS = [
   {
     id: 0,
-    icon: '/static/pricing/platform1.webp',
+    icon: '/static/pricing/platform.svg',
     title: 'Web app',
     description: 'Desktop and Mobile'
   },
   {
     id: 1,
-    icon: '/static/pricing/platform2.webp',
+    icon: '/static/pricing/platform.svg',
     title: 'Mobile app',
     description: 'App Store',
     description1: 'Google Play Store'
   },
   {
     id: 2,
-    icon: '/static/pricing/platform3.webp',
+    icon: '/static/pricing/platform.svg',
     title: 'Slack plugin',
     description: 'Real-time status'
   }

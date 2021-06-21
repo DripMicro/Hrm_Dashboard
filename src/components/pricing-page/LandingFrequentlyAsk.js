@@ -21,7 +21,7 @@ const CARDS = [
     icon: '/static/pricing/faq1.webp',
     title: 'Will I pay for every employees?',
     description:
-      'No, with Café you only get billed for what you use. You will get billed for each active user, meaning people going to an office every month (i.e. 100% remote workers can use Café for free). Also, you can cancel at any time.'
+      'No, with Thimble you only get billed for what you use. You will get billed for each active user, meaning people going to an office every month (i.e. 100% remote workers can use Thimble for free). Also, you can cancel at any time.'
   },
   {
     icon: '/static/pricing/faq2.webp',

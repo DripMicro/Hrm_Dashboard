@@ -6,38 +6,38 @@ import {
   experimentalStyled as styled
 } from '@material-ui/core/styles';
 //
-import Logo from '../Logo';
+import Logo from '../../components/Logo';
 
 // ----------------------------------------------------------------------
 
 const LINKS = [
   {
     title: 'We are hiring!',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   },
   {
     title: 'LinkedIn',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   },
   {
     title: 'Press',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   },
   {
     title: 'Privacy and Conditions',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   },
   {
     title: 'Terms and Conditions',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   },
   {
     title: 'Terms of Use',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   },
   {
     title: 'Contact',
-    href: 'https://www.notion.so/Caf-is-hiring-1b7ccd5e78fb4e6c965a98602f58f830'
+    href: '/'
   }
 ];
 
@@ -80,7 +80,6 @@ export default function LandingFooter() {
             size="large"
             key={link.title}
             href={link.href}
-            target="_blank"
             sx={{
               color: 'black',
               fontWeight: 400,

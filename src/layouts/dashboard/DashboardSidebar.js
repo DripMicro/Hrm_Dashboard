@@ -26,7 +26,7 @@ import SidebarItem from './SidebarItem';
 const DRAWER_WIDTH = 280;
 
 const RootStyle = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('md')]: {
     flexShrink: 0,
     width: DRAWER_WIDTH
   }
@@ -179,7 +179,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           {renderContent}
         </Drawer>
       </Hidden>
-      <Hidden lgDown>
+      <Hidden mdDown>
         <Drawer
           open
           variant="persistent"
