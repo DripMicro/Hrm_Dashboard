@@ -1,7 +1,5 @@
 import { useState } from 'react';
 // material
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import {
   useTheme,
   experimentalStyled as styled
@@ -13,17 +11,14 @@ import {
   Typography,
   ListItem,
   Button,
-  CardHeader,
   CardContent,
   ListItemText,
   ListItemIcon
 } from '@material-ui/core';
 
-import CheckIcon from '@material-ui/icons/Check';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import BlockSchedule from './BlockSchedule';
 import TypeButton from './TypeButton';
@@ -69,7 +64,7 @@ const Schedule = [
   }
 ];
 
-const ListWrapperStyle = styled('div')(({ theme }) => ({
+const ListWrapperStyle = styled('div')(() => ({
   width: '100%'
 }));
 
@@ -88,17 +83,6 @@ export default function ListsComponent() {
 
   const theme = useTheme();
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
-
   const handleListItemClickMorning = (event, index) => {
     setSelectedMorning(index);
   };
@@ -111,13 +95,9 @@ export default function ListsComponent() {
     setOpen(!open);
   };
 
-  const handleSetting = () => {
-    console.log('Hello');
-  };
-
   return (
     <>
-      <Card sx={{ width: 360, borderRadius: theme.spacing(2.4) }}>
+      <Card sx={{ width: 343, borderRadius: theme.spacing(2.4) }}>
         <Box
           sx={{
             padding: '24px 24px 0',

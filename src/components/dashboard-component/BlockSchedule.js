@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
+
 // material
-import { useTheme } from '@material-ui/core/styles';
 import { Box, Typography, Paper } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
@@ -12,9 +12,6 @@ Block.propTypes = {
 };
 
 export default function Block({ title, children, sx, ...other }) {
-  const theme = useTheme();
-  const isLight = theme.palette.mode === 'light';
-
   return (
     <Box sx={{ position: 'relative' }} {...other}>
       {title && (

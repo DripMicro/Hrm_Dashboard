@@ -1,16 +1,10 @@
 import React from 'react';
-import { withStyles, useTheme, makeStyles } from '@material-ui/core/styles';
+import { withStyles, useTheme } from '@material-ui/core/styles';
 
 import { Button, Popover, Typography, Box } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 
 import PopupContent from './SchedulePopupContent';
-
-const useStyles = makeStyles((theme) => ({
-  typography: {
-    padding: theme.spacing(2)
-  }
-}));
 
 const PopoverStyle = withStyles(() => ({
   paper: {
@@ -19,7 +13,6 @@ const PopoverStyle = withStyles(() => ({
 }))(Popover);
 
 export default function SimplePopover() {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {

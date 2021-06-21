@@ -4,11 +4,12 @@ import {
   experimentalStyled as styled
 } from '@material-ui/core/styles';
 
-import { Container } from '@material-ui/core';
+import { Container, Card, CardContent } from '@material-ui/core';
 // ----------------------------------------------------------------------
 
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
+import UserLists from './UserLists';
 
 const DayCategories = [
   {
@@ -67,6 +68,8 @@ export default function DirectoryContent() {
       >
         <DayStatusButtonGroup daygroups={DayCategories} isMulti />
         <TeamCategoryGroup daygroups={TeamCategories} />
+        <SpaceStyle />
+        <UserLists />
       </Container>
     </Container>
   );

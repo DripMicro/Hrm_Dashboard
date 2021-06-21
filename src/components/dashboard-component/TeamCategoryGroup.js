@@ -2,20 +2,16 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 
-// material
-import { useTheme } from '@material-ui/core/styles';
-
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 TeamCategoryGroup.propTypes = {
   daygroups: PropTypes.array
 };
 
 export default function TeamCategoryGroup({ daygroups }) {
-  const theme = useTheme();
   const [categories, setCategories] = React.useState([]);
 
   const handleCategories = (event, newCategories) => {
