@@ -42,15 +42,18 @@ const DayCategories = [
 const TeamCategories = [
   {
     id: 0,
-    label: 'Web Team'
+    label: 'Web Team',
+    selected: false
   },
   {
     id: 1,
-    label: 'Design Team'
+    label: 'Design Team',
+    selected: false
   },
   {
     id: 2,
-    label: 'Backend Team'
+    label: 'Backend Team',
+    selected: false
   }
 ];
 

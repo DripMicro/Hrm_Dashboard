@@ -5,7 +5,7 @@ import { DirectoryContent } from '../components/dashboard-directory';
 
 // ----------------------------------------------------------------------
 
-export default function CalendarPage() {
+export default function DirectoryPage() {
   return (
     <Page title="Thimble | Directory">
       <DirectoryContent />

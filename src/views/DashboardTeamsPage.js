@@ -5,7 +5,7 @@ import { TeamsContent } from '../components/dashboard-teams';
 
 // ----------------------------------------------------------------------
 
-export default function OfficesPage() {
+export default function TeamsPage() {
   return (
     <Page title="Thimble | Teams">
       <TeamsContent />

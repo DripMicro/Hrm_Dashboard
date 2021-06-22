@@ -40,7 +40,7 @@ export default function EmojiButton({ icon, changeIconProps, index }) {
   const theme = useTheme();
   return (
     <div>
-      <Box sx={{ width: 64, mr: 0, [theme.breakpoints.up('md')]: { mr: 9 } }}>
+      <Box sx={{ width: 64, mr: 0, [theme.breakpoints.up('md')]: { mr: 1 } }}>
         <Button
           onClick={handleClick}
           sx={{

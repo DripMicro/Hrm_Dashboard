@@ -5,7 +5,7 @@ import Page from '../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function PageSix() {
+export default function InvitePage() {
   return (
     <Page title="Thimble | Invite">
       <Container maxWidth="xl">

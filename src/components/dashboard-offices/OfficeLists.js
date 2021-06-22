@@ -98,87 +98,86 @@ export default function OfficeLists() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {offices.map((row) => (
-                  <>
-                    <TableRow key={row.no}>
-                      <TableCell component="th" scope="row" rowSpan={2}>
-                        {row.no + 1}
-                      </TableCell>
-                      <TableCell align="right">
-                        <EmojiButton
-                          icon={row.emoji}
-                          index={row.no}
-                          changeIconProps={changeIcon}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <TextField
-                          id="outlined-basic"
-                          label="Office Name"
-                          variant="outlined"
-                          value={row.officeName}
-                          onChange={handleChangeOfficeName}
-                          sx={{ width: '100%' }}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <TextField
-                          id="outlined-basic"
-                          label="Capacity"
-                          variant="outlined"
-                          type="number"
-                          value={row.capacity}
-                          onChange={handleChangeCapacity}
-                          sx={{
-                            width: '50px',
-                            [theme.breakpoints.up('md')]: { width: '100%' }
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <Button
-                          onClick={handleClick}
-                          color="error"
-                          sx={{
-                            borderRadius: '50%',
-                            minWidth: '0px',
-                            width: 50,
-                            height: 50
-                          }}
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow
-                      sx={{
-                        boxShadow:
-                          '1px 2px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
-                        borderBottomLeftRadius: '15px',
-                        borderBottomRightRadius: '15px'
-                      }}
-                    >
-                      <TableCell colSpan={5}>
-                        <Autocomplete
-                          multiple
-                          id="tags-outlined"
-                          options={Users}
-                          getOptionLabel={(option) => option.name}
-                          defaultValue={[Users[0]]}
-                          filterSelectedOptions
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              label="Office Manger"
-                              placeholder="Select office manager..."
-                            />
-                          )}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  </>
-                ))}
+                {offices.map((row) => [
+                  <TableRow key={row.no}>
+                    <TableCell component="th" scope="row" rowSpan={2}>
+                      {row.no + 1}
+                    </TableCell>
+                    <TableCell align="right">
+                      <EmojiButton
+                        icon={row.emoji}
+                        index={row.no}
+                        changeIconProps={changeIcon}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <TextField
+                        id="outlined-basic"
+                        label="Office Name"
+                        variant="outlined"
+                        value={row.officeName}
+                        onChange={handleChangeOfficeName}
+                        sx={{ width: '100%' }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <TextField
+                        id="outlined-basic"
+                        label="Capacity"
+                        variant="outlined"
+                        type="number"
+                        value={row.capacity}
+                        onChange={handleChangeCapacity}
+                        sx={{
+                          width: '50px',
+                          [theme.breakpoints.up('md')]: { width: '100%' }
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Button
+                        onClick={handleClick}
+                        color="error"
+                        sx={{
+                          borderRadius: '50%',
+                          minWidth: '0px',
+                          width: 50,
+                          height: 50
+                        }}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
+                  </TableRow>,
+                  <TableRow
+                    sx={{
+                      boxShadow:
+                        '1px 2px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
+                      borderBottomLeftRadius: '15px',
+                      borderBottomRightRadius: '15px'
+                    }}
+                    key={`sub${row.no}`}
+                  >
+                    <TableCell colSpan={5}>
+                      <Autocomplete
+                        multiple
+                        id="tags-outlined"
+                        options={Users}
+                        getOptionLabel={(option) => option.name}
+                        defaultValue={[Users[0]]}
+                        filterSelectedOptions
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            label="Office Manger"
+                            placeholder="Select office manager..."
+                          />
+                        )}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ])}
               </TableBody>
             </Table>
           </TableContainer>

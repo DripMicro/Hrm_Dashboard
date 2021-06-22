@@ -32,6 +32,7 @@ export default function TeamCategoryGroup({ daygroups, sx }) {
           value={item.id}
           style={{ height: '42px' }}
           sx={{
+            px: 3,
             mr: 1,
             mb: 1,
             heigth: '42px !important',
