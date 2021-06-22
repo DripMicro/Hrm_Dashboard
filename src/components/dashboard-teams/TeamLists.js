@@ -32,7 +32,7 @@ const rows = [
   createData(2, '#EB144C', 'Quia iste')
 ];
 
-export default function OfficeLists() {
+export default function TeamLists() {
   const classes = useStyles();
   const theme = useTheme();
 

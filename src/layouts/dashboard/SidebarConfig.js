@@ -80,7 +80,7 @@ const sidebarConfig = [
       },
       {
         title: 'Dashboard',
-        href: PATH_DASHBOARD.admin.dashboard,
+        href: PATH_DASHBOARD.admin.analytics,
         icon: ICONS.ndashboard
       }
     ]

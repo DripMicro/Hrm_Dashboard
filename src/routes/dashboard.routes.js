@@ -52,8 +52,8 @@ const DashboardRoutes = {
     },
     {
       exact: true,
-      path: PATH_DASHBOARD.admin.dashboard,
-      component: lazy(() => import('../views/DashboardPage'))
+      path: PATH_DASHBOARD.admin.analytics,
+      component: lazy(() => import('../views/DashboardAnalyticsPage'))
     },
 
     // other
@@ -76,7 +76,7 @@ const DashboardRoutes = {
     {
       exact: true,
       path: '/contact',
-      component: lazy(() => import('../views/DashboardPage'))
+      component: lazy(() => import('../views/DashboardAnalyticsPage'))
     },
     // ----------------------------------------------------------------------
 
