@@ -8,10 +8,11 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { Typography } from '@material-ui/core';
 
 TeamCategoryGroup.propTypes = {
-  daygroups: PropTypes.array
+  daygroups: PropTypes.array,
+  sx: PropTypes.object
 };
 
-export default function TeamCategoryGroup({ daygroups }) {
+export default function TeamCategoryGroup({ daygroups, sx }) {
   const [categories, setCategories] = React.useState([]);
 
   const handleCategories = (event, newCategories) => {
@@ -23,7 +24,7 @@ export default function TeamCategoryGroup({ daygroups }) {
       value={categories}
       onChange={handleCategories}
       aria-label="team category"
-      sx={{ display: 'block', textAlign: 'center', mb: 3 }}
+      sx={{ display: 'block', textAlign: 'center', mb: 3, ...sx }}
     >
       {daygroups.map((item) => (
         <ToggleButton

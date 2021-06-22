@@ -9,10 +9,11 @@ import { Box, Typography } from '@material-ui/core';
 
 DayStatusButtonGroup.propTypes = {
   daygroups: PropTypes.array.isRequired,
-  isMulti: PropTypes.bool
+  isMulti: PropTypes.bool,
+  sx: PropTypes.object
 };
 
-export default function DayStatusButtonGroup({ daygroups, isMulti }) {
+export default function DayStatusButtonGroup({ daygroups, isMulti, sx }) {
   const [type, setType] = React.useState(0);
   const [types, setTypes] = React.useState([]);
 
@@ -31,7 +32,7 @@ export default function DayStatusButtonGroup({ daygroups, isMulti }) {
           value={types}
           onChange={handleTypes}
           aria-label="day type"
-          sx={{ display: 'block', textAlign: 'center', mb: 3 }}
+          sx={{ display: 'block', textAlign: 'center', mb: 3, ...sx }}
         >
           {daygroups.map((item) => (
             <ToggleButton

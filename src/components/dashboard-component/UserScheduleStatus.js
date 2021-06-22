@@ -165,14 +165,12 @@ export default function UserScheduleStatus() {
                             width: theme.spacing(5),
                             height: theme.spacing(5),
                             marginLeft: theme.spacing(-1),
-                            backgroundColor: deepOrange[500],
+                            backgroundColor: deepOrange[200],
                             color: theme.palette.getContrastText(
                               deepOrange[500]
                             )
                           }}
-                        >
-                          {item.icon}
-                        </Avatar>
+                        />
                       )}
                     </Box>
                   ))}
