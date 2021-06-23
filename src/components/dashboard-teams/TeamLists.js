@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,17 +10,22 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 
-import { Button, Card, CardContent, TextField } from '@material-ui/core';
+import { Button, Card, CardContent, TextField, Box } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import ColorButton from '../dashboard-component/ColorButton';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650
+const TableCellStyles = withStyles((theme) => ({
+  root: {
+    [theme.breakpoints.down('md')]: {
+      padding: theme.spacing(2, 0),
+      '&:first-of-type': {
+        paddingLeft: 0
+      }
+    }
   }
-});
+}))(TableCell);
 
 function createData(no, color, teamName) {
   return { no, color, teamName };
@@ -33,7 +38,6 @@ const rows = [
 ];
 
 export default function TeamLists() {
-  const classes = useStyles();
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,14 +76,14 @@ export default function TeamLists() {
       <Card>
         <CardContent sx={{ padding: theme.spacing(3, 0) }}>
           <TableContainer component={Paper}>
-            <Table
-              className={classes.table}
-              aria-label="simple table"
-              sx={{ marginBottom: '10px' }}
-            >
+            <Table aria-label="Team Table" sx={{ marginBottom: '10px' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>No</TableCell>
+                  <TableCell
+                    sx={{ [theme.breakpoints.down('md')]: { display: 'none' } }}
+                  >
+                    No
+                  </TableCell>
                   <TableCell>Color</TableCell>
                   <TableCell align="right">Team Name</TableCell>
                   <TableCell align="right" />
@@ -88,17 +92,31 @@ export default function TeamLists() {
               <TableBody>
                 {teams.map((row) => (
                   <TableRow key={row.no}>
-                    <TableCell component="th" scope="row">
+                    <TableCellStyles
+                      component="th"
+                      scope="row"
+                      sx={{
+                        [theme.breakpoints.down('md')]: { display: 'none' }
+                      }}
+                    >
                       {row.no + 1}
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles
+                      align="right"
+                      sx={{ [theme.breakpoints.down('md')]: { width: '80px' } }}
+                    >
                       <ColorButton
                         color={row.color}
                         index={row.no}
                         changeColorProps={changeColor}
                       />
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles
+                      align="right"
+                      sx={{
+                        [theme.breakpoints.down('md')]: { width: '235px' }
+                      }}
+                    >
                       <TextField
                         id="outlined-basic"
                         label="Team Name"
@@ -107,8 +125,8 @@ export default function TeamLists() {
                         onChange={handleChangeTeamName}
                         sx={{ width: '100%' }}
                       />
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles align="right">
                       <Button
                         onClick={handleClick}
                         color="error"
@@ -121,19 +139,21 @@ export default function TeamLists() {
                       >
                         <DeleteIcon />
                       </Button>
-                    </TableCell>
+                    </TableCellStyles>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-          <Button
-            onClick={handleAddTeam}
-            variant="contained"
-            sx={{ width: '100%', mt: 2 }}
-          >
-            <AddIcon />
-          </Button>
+          <Box sx={{ width: '100%', px: 3 }}>
+            <Button
+              onClick={handleAddTeam}
+              variant="contained"
+              sx={{ width: '100%', mt: 2 }}
+            >
+              <AddIcon />
+            </Button>
+          </Box>
         </CardContent>
       </Card>
     </>

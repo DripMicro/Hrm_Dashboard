@@ -1,8 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
@@ -11,6 +10,12 @@ import DatePicker from '@material-ui/lab/DatePicker';
 
 import { Card, CardContent, Grid, Box } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+
+const TextFieldStyle = withStyles(() => ({
+  root: {
+    width: '100% !important'
+  }
+}))(TextField);
 
 export default function AboutProfile() {
   const [value, setValue] = React.useState(null);
@@ -26,7 +31,7 @@ export default function AboutProfile() {
                 onChange={(newValue) => {
                   setValue(newValue);
                 }}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextFieldStyle {...params} />}
               />
             </LocalizationProvider>
           </Grid>

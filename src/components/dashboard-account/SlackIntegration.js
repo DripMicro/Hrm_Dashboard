@@ -22,6 +22,7 @@ export default function SlackIntegration() {
           px: theme.spacing(3),
           borderRadius: theme.spacing(3),
           [theme.breakpoints.down('md')]: {
+            px: theme.spacing(2),
             width: '100%'
           }
         }}

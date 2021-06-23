@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import AddIcon from '@material-ui/icons/Add';
 
-import { Button, Card, CardContent, TextField } from '@material-ui/core';
+import { Button, Card, CardContent, TextField, Box } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EmojiButton from '../dashboard-component/EmojiButton';
@@ -91,7 +91,7 @@ export default function OfficeLists() {
               <TableHead>
                 <TableRow>
                   <TableCell>No</TableCell>
-                  <TableCell align="right">Emoji</TableCell>
+                  <TableCell align="center">Emoji</TableCell>
                   <TableCell align="right">Office Name</TableCell>
                   <TableCell align="right">Capacity</TableCell>
                   <TableCell align="right" />
@@ -152,7 +152,7 @@ export default function OfficeLists() {
                   <TableRow
                     sx={{
                       boxShadow:
-                        '1px 2px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
+                        '1px 4px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
                       borderBottomLeftRadius: '15px',
                       borderBottomRightRadius: '15px'
                     }}
@@ -181,13 +181,15 @@ export default function OfficeLists() {
               </TableBody>
             </Table>
           </TableContainer>
-          <Button
-            onClick={handleAddOffice}
-            variant="contained"
-            sx={{ width: '100%', mt: 2 }}
-          >
-            <AddIcon />
-          </Button>
+          <Box sx={{ width: '100%', px: 3 }}>
+            <Button
+              onClick={handleAddOffice}
+              variant="contained"
+              sx={{ width: '100%', mt: 2 }}
+            >
+              <AddIcon />
+            </Button>
+          </Box>
         </CardContent>
       </Card>
     </>

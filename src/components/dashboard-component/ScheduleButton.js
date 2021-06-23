@@ -50,7 +50,15 @@ export default function ScheduleButton({ weekday, icon, halfday, work }) {
   const theme = useTheme();
   return (
     <div>
-      <Box sx={{ width: 64, mr: 0, [theme.breakpoints.up('md')]: { mr: 9 } }}>
+      <Box
+        sx={{
+          width: 64,
+          mr: 0,
+          [theme.breakpoints.up('sm')]: { mr: 5 },
+          [theme.breakpoints.up('md')]: { mr: 3 },
+          [theme.breakpoints.up(1600)]: { mr: 9 }
+        }}
+      >
         <Typography
           variant="body2"
           sx={{ pl: 1, [theme.breakpoints.up('md')]: { textAlign: 'center' } }}

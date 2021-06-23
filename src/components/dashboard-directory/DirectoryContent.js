@@ -66,7 +66,7 @@ export default function DirectoryContent() {
   return (
     <Container maxWidth="xl">
       <Container
-        maxWidth="md"
+        maxWidth="lg"
         sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
       >
         <DayStatusButtonGroup daygroups={DayCategories} isMulti />

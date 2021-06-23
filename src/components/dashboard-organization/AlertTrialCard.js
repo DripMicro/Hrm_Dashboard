@@ -36,22 +36,46 @@ export default function AlertTrialCard() {
   const theme = useTheme();
   return (
     <Card>
-      <CardContent>
+      <CardContent
+        sx={{
+          [theme.breakpoints.down('sm')]: { padding: theme.spacing(2.5, 0) }
+        }}
+      >
         <Box
           sx={{
             width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            padding: theme.spacing(2)
+            padding: theme.spacing(2),
+            [theme.breakpoints.down('sm')]: {
+              display: 'block',
+              textAlign: 'center'
+            }
           }}
         >
-          <Box sx={{ display: 'flex' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              [theme.breakpoints.down('sm')]: {
+                mb: 1,
+                display: 'block'
+              }
+            }}
+          >
             <Typography variant="subtitle1" sx={{ mr: 1 }}>
               Subscription
             </Typography>
             <YellowBadge>TRIAL</YellowBadge>
           </Box>
-          <Box sx={{ display: 'flex' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              [theme.breakpoints.down('sm')]: {
+                display: 'block',
+                mb: 1
+              }
+            }}
+          >
             <Typography>ends on</Typography>
             <Box m={1} />
             <GreyBadge>July 5, 2021</GreyBadge>

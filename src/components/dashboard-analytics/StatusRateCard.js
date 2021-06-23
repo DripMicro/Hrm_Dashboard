@@ -11,7 +11,7 @@ const CHART_DATA = [
   {
     name: 'has status',
     data: [
-      97,
+      0,
       95,
       97,
       97,

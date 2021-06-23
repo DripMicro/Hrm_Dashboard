@@ -82,7 +82,7 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
 const GetStartedButton = withStyles((theme) => ({
   root: {
     borderRadius: '3px',
-    fontSize: '1rem',
+    fontSize: '15px',
     fontWeight: 800,
     marginLeft: '1rem',
     marginRight: '1rem',
@@ -95,6 +95,7 @@ const GetStartedButton = withStyles((theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       paddingLeft: '1rem',
+      fontSize: '13px',
       paddingRight: '1rem'
     }
   }

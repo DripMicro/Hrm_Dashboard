@@ -84,18 +84,17 @@ export default function CalendarCard() {
           </Grid>
           <Grid item xs={12}>
             <Grid container spacing={2}>
-              <Grid item md={4} xs={12}>
+              <Grid item lg={4} md={12} sm={12} xs={12}>
                 <Typography variant="body1" sx={{ py: 1 }}>
                   You start to work on
                 </Typography>
               </Grid>
-              <Grid item md={8} xs={12}>
+              <Grid item lg={8} md={12} sm={12} xs={12}>
                 <Autocomplete
                   id="combo-box-demo"
                   options={WeekDays}
                   getOptionLabel={(option) => option.weekday}
                   defaultValue={WeekDays[0]}
-                  style={{ width: 300 }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
