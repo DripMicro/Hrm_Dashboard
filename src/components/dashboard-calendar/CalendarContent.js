@@ -7,45 +7,170 @@ import {
 import { Container } from '@material-ui/core';
 // ----------------------------------------------------------------------
 
-import WeekScheduleCard from './WeekScheduleCard';
+import CalendarCard from './CalendarCard';
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
 
-const ThisWeekSchedule = [
+const DaySchedules = [
   {
     id: 0,
-    weekday: 'Mon 21',
     icon: '💼🚶‍♂️',
-    halfday: true,
-    work: true
+    halfday: true
   },
   {
     id: 1,
-    weekday: 'Tue 22',
     icon: '🚶‍♂️🏝',
-    halfday: true,
-    work: true
+    halfday: true
   },
   {
     id: 2,
-    weekday: 'Wed 23',
     icon: '👨‍👨‍👦‍👦',
-    halfday: false,
-    work: true
+    halfday: false
   },
   {
     id: 3,
-    weekday: 'Thu 24',
     icon: '🤒🏡',
-    halfday: true,
-    work: true
+    halfday: true
   },
   {
     id: 4,
-    weekday: 'Fri 25',
-    icon: '?',
-    halfday: false,
-    work: false
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 5,
+    icon: '💼🚶‍♂️',
+    halfday: true
+  },
+  {
+    id: 6,
+    icon: '🚶‍♂️🏝',
+    halfday: true
+  },
+  {
+    id: 7,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 8,
+    icon: '🤒🏡',
+    halfday: true
+  },
+  {
+    id: 9,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 10,
+    icon: '💼🚶‍♂️',
+    halfday: true
+  },
+  {
+    id: 11,
+    icon: '🚶‍♂️🏝',
+    halfday: true
+  },
+  {
+    id: 12,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 13,
+    icon: '🤒🏡',
+    halfday: true
+  },
+  {
+    id: 14,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 15,
+    icon: '💼🚶‍♂️',
+    halfday: true
+  },
+  {
+    id: 16,
+    icon: '🚶‍♂️🏝',
+    halfday: true
+  },
+  {
+    id: 17,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 18,
+    icon: '🤒🏡',
+    halfday: true
+  },
+  {
+    id: 19,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 20,
+    icon: '🤒🏡',
+    halfday: true
+  },
+  {
+    id: 21,
+    icon: '🤒',
+    halfday: false
+  },
+  {
+    id: 22,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 23,
+    icon: '🏡',
+    halfday: false
+  },
+  {
+    id: 24,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 25,
+    icon: '🏡',
+    halfday: false
+  },
+  {
+    id: 26,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 27,
+    icon: '🚶‍♂️🏝',
+    halfday: true
+  },
+  {
+    id: 28,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 29,
+    icon: '🚶‍♂️',
+    halfday: false
+  },
+  {
+    id: 30,
+    icon: '👨‍👨‍👦‍👦',
+    halfday: false
+  },
+  {
+    id: 31,
+    icon: '🏡',
+    halfday: false
   }
 ];
 
@@ -109,11 +234,7 @@ export default function CalendarContent() {
       >
         <DayStatusButtonGroup daygroups={DayCategories} isMulti={false} />
         <TeamCategoryGroup daygroups={TeamCategories} />
-        <WeekScheduleCard
-          title="This Week "
-          period="Jun 21 - Jun 25"
-          daystatus={ThisWeekSchedule}
-        />
+        <CalendarCard daystatus={DaySchedules} />
       </Container>
     </Container>
   );
