@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   withStyles,
   useTheme,
@@ -28,21 +28,39 @@ const ScheduleDivider = styled('div')(() => ({
 }));
 
 ScheduleButton.propTypes = {
+  index: PropTypes.number,
+  schedule: PropTypes.array,
   weekday: PropTypes.string,
   icon: PropTypes.string,
   halfday: PropTypes.bool,
-  work: PropTypes.bool
+  work: PropTypes.bool,
+  iconProps: PropTypes.func
 };
 
-export default function ScheduleButton({ weekday, icon, halfday, work }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+export default function ScheduleButton({
+  index,
+  schedule,
+  weekday,
+  icon,
+  halfday,
+  work,
+  iconProps
+}) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isHalf, setHalf] = useState(false);
 
+  console.log('M:', schedule);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const changeIcon = (icon1, icon2, status) => {
+    setHalf(status);
+    iconProps(icon1, icon2, status, index);
   };
 
   const open = Boolean(anchorEl);
@@ -71,6 +89,8 @@ export default function ScheduleButton({ weekday, icon, halfday, work }) {
             border: '1px solid #E7ECF5',
             borderRadius: '40%',
             padding: theme.spacing(1.7, 0),
+            maxWidth: '66px',
+            maxHeight: '67px',
             position: 'relative',
             [theme.breakpoints.down('md')]: {
               minWidth: '0px',
@@ -83,7 +103,10 @@ export default function ScheduleButton({ weekday, icon, halfday, work }) {
             aria-label="Panda"
             sx={{
               fontSize: '15px',
-              [theme.breakpoints.up('md')]: { fontSize: '20px' }
+              [theme.breakpoints.up('md')]: {
+                fontSize: '20px',
+                ...(isHalf && { fontSize: '20px' })
+              }
             }}
           >
             {icon}
@@ -131,7 +154,7 @@ export default function ScheduleButton({ weekday, icon, halfday, work }) {
         }}
         sx={{ backgroundColor: '#00000040' }}
       >
-        <PopupContent />
+        <PopupContent Schedule={schedule} iconProps={changeIcon} />
       </PopoverStyle>
     </div>
   );

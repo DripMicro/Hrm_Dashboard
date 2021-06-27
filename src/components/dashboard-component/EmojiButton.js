@@ -46,7 +46,7 @@ export default function EmojiButton({ icon, changeIconProps, index }) {
           sx={{
             border: '1px solid #E7ECF5',
             borderRadius: '40%',
-            padding: theme.spacing(1.7, 0),
+            padding: theme.spacing(1, 0),
             position: 'relative',
             [theme.breakpoints.down('md')]: {
               minWidth: '0px',
@@ -58,8 +58,8 @@ export default function EmojiButton({ icon, changeIconProps, index }) {
             role="img"
             aria-label="Panda"
             sx={{
-              fontSize: '15px',
-              [theme.breakpoints.up('md')]: { fontSize: '20px' }
+              fontSize: '22px',
+              [theme.breakpoints.up('md')]: { fontSize: '28px' }
             }}
           >
             {icon}

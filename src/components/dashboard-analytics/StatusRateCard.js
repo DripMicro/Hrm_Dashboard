@@ -126,7 +126,7 @@ export default function AppAreaInstalled() {
       />
       <Box sx={{ mt: 3, mx: 3 }} dir="ltr">
         <ReactApexChart
-          type="area"
+          type="line"
           series={CHART_DATA}
           options={chartOptions}
           height={300}

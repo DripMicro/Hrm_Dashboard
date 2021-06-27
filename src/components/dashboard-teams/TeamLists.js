@@ -22,19 +22,23 @@ const TableCellStyles = withStyles((theme) => ({
       padding: theme.spacing(2, 0),
       '&:first-of-type': {
         paddingLeft: 0
+      },
+      '&:last-of-type': {
+        paddingRight: '1px !important',
+        boxShadow: 'inset 0px 0 0 #fff'
       }
     }
   }
 }))(TableCell);
 
-function createData(no, color, teamName) {
-  return { no, color, teamName };
+function createData(no, color, teamName, capacity) {
+  return { no, color, teamName, capacity };
 }
 
 const rows = [
-  createData(0, '#00D084', 'Maxime quidem provident'),
-  createData(1, '#0693E3', 'Atque pariatur'),
-  createData(2, '#EB144C', 'Quia iste')
+  createData(0, '#00D084', 'Maxime quidem provident', 12),
+  createData(1, '#0693E3', 'Atque pariatur', 3),
+  createData(2, '#EB144C', 'Quia iste', 5)
 ];
 
 export default function TeamLists() {
@@ -85,8 +89,9 @@ export default function TeamLists() {
                     No
                   </TableCell>
                   <TableCell>Color</TableCell>
-                  <TableCell align="right">Team Name</TableCell>
-                  <TableCell align="right" />
+                  <TableCellStyles align="center">Team Name</TableCellStyles>
+                  <TableCellStyles align="right">Capacity</TableCellStyles>
+                  <TableCellStyles align="right" />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -124,6 +129,19 @@ export default function TeamLists() {
                         value={row.teamName}
                         onChange={handleChangeTeamName}
                         sx={{ width: '100%' }}
+                      />
+                    </TableCellStyles>
+                    <TableCellStyles align="right">
+                      <TextField
+                        id="outlined-basic"
+                        label="Team Name"
+                        variant="outlined"
+                        value={row.capacity}
+                        onChange={handleChangeTeamName}
+                        sx={{
+                          width: '50px',
+                          [theme.breakpoints.up('md')]: { width: '100%' }
+                        }}
                       />
                     </TableCellStyles>
                     <TableCellStyles align="right">

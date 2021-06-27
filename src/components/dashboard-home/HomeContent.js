@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 // material
 import {
   useTheme,
@@ -162,12 +163,77 @@ const NextWeekList = [
   }
 ];
 
+const Schedule = [
+  {
+    value: 0,
+    label: 'Working remotely',
+    icon: '🏡'
+  },
+  {
+    value: 1,
+    label: 'On the go',
+    icon: '🚶‍♂️'
+  },
+  {
+    value: 2,
+    label: 'Not working',
+    icon: '🏝'
+  },
+  {
+    value: 3,
+    label: 'At the office',
+    icon: '💼'
+  },
+  {
+    value: 4,
+    label: 'Sick',
+    icon: '🤒'
+  },
+  {
+    value: 5,
+    label: 'With family',
+    icon: '👨‍👨‍👦‍👦'
+  },
+  {
+    value: 6,
+    label: 'lol',
+    icon: '😫'
+  }
+];
+
 const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
 }));
 
 export default function HomeContent() {
   const theme = useTheme();
+  const [thisWeekSchedule, setThisWeekSchedule] = useState(ThisWeekSchedule);
+  const changeIcon = (icon1, icon2, status, index) => {
+    console.log('this is props icon:', icon1, icon2, status, index);
+    let emoji1 = '';
+    let emoji2 = '';
+    let resIcon = '';
+    // eslint-disable-next-line array-callback-return
+    Schedule.map((item) => {
+      console.log(item.value);
+      if (item.value === icon1) emoji1 = item.icon;
+      if (item.value === icon2) emoji2 = item.icon;
+    });
+    console.log('M:', emoji1, emoji2, icon1, icon2);
+    let dayStatus = status;
+    if (icon1 === icon2) dayStatus = false;
+    resIcon = dayStatus ? `${emoji1}${emoji2}` : emoji1;
+    // eslint-disable-next-line array-callback-return
+    thisWeekSchedule.map((schedule, sIndex) => {
+      if (sIndex === index) {
+        ThisWeekSchedule[sIndex].icon = resIcon;
+        ThisWeekSchedule[sIndex].halfday = dayStatus;
+        ThisWeekSchedule[sIndex].work = true;
+      }
+    });
+    setThisWeekSchedule([...ThisWeekSchedule]);
+  };
+
   return (
     <Container maxWidth="xl">
       <Typography
@@ -185,7 +251,9 @@ export default function HomeContent() {
         <WeekScheduleCard
           title="This Week "
           period="Jun 21 - Jun 25"
-          daystatus={ThisWeekSchedule}
+          daystatus={thisWeekSchedule}
+          schedule={Schedule}
+          iconProps={changeIcon}
         />
         <SpaceStyle />
         <WeekList daystatus={ThisWeekList} />
@@ -194,6 +262,8 @@ export default function HomeContent() {
           title="Next Week "
           period="Jun 28 - July 2"
           daystatus={NextWeekSchedule}
+          schedule={Schedule}
+          iconProps={changeIcon}
         />
         <SpaceStyle />
         <WeekList daystatus={NextWeekList} />

@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -16,24 +16,32 @@ import { Button, Card, CardContent, TextField, Box } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EmojiButton from '../dashboard-component/EmojiButton';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650
-  }
-});
-
 function createData(no, emoji, officeName, capacity) {
   return { no, emoji, officeName, capacity };
 }
 
 const rows = [
-  createData(0, '👨‍👨‍👦‍👦', 'Maxime quidem provident', 15),
+  createData(0, '📙', 'Maxime quidem provident', 15),
   createData(1, '🏡', 'Atque pariatur', 7),
   createData(2, '💼', 'Quia iste', 28)
 ];
 
+const TableCellStyles = withStyles((theme) => ({
+  root: {
+    [theme.breakpoints.down('md')]: {
+      padding: theme.spacing(2, 0.1),
+      '&:first-of-type': {
+        paddingLeft: 1
+      },
+      '&:last-of-type': {
+        paddingRight: '1px !important',
+        boxShadow: 'inset 0px 0 0 #fff'
+      }
+    }
+  }
+}))(TableCell);
+
 export default function OfficeLists() {
-  const classes = useStyles();
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -83,34 +91,41 @@ export default function OfficeLists() {
       <Card>
         <CardContent sx={{ padding: theme.spacing(3, 0) }}>
           <TableContainer component={Paper}>
-            <Table
-              className={classes.table}
-              aria-label="simple table"
-              sx={{ marginBottom: '10px' }}
-            >
+            <Table aria-label="simple table" sx={{ marginBottom: '10px' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>No</TableCell>
-                  <TableCell align="center">Emoji</TableCell>
-                  <TableCell align="right">Office Name</TableCell>
-                  <TableCell align="right">Capacity</TableCell>
-                  <TableCell align="right" />
+                  <TableCellStyles
+                    sx={{ [theme.breakpoints.down('md')]: { display: 'none' } }}
+                  >
+                    No
+                  </TableCellStyles>
+                  <TableCellStyles align="center">Emoji</TableCellStyles>
+                  <TableCellStyles align="center">Office Name</TableCellStyles>
+                  <TableCellStyles align="right">Capacity</TableCellStyles>
+                  <TableCellStyles align="right" />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {offices.map((row) => [
                   <TableRow key={row.no}>
-                    <TableCell component="th" scope="row" rowSpan={2}>
+                    <TableCellStyles
+                      component="th"
+                      scope="row"
+                      rowSpan={2}
+                      sx={{
+                        [theme.breakpoints.down('md')]: { display: 'none' }
+                      }}
+                    >
                       {row.no + 1}
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles align="right" sx={{ textAlign: 'center' }}>
                       <EmojiButton
                         icon={row.emoji}
                         index={row.no}
                         changeIconProps={changeIcon}
                       />
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles align="right">
                       <TextField
                         id="outlined-basic"
                         label="Office Name"
@@ -119,8 +134,8 @@ export default function OfficeLists() {
                         onChange={handleChangeOfficeName}
                         sx={{ width: '100%' }}
                       />
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles align="right">
                       <TextField
                         id="outlined-basic"
                         label="Capacity"
@@ -133,8 +148,8 @@ export default function OfficeLists() {
                           [theme.breakpoints.up('md')]: { width: '100%' }
                         }}
                       />
-                    </TableCell>
-                    <TableCell align="right">
+                    </TableCellStyles>
+                    <TableCellStyles align="right">
                       <Button
                         onClick={handleClick}
                         color="error"
@@ -147,18 +162,18 @@ export default function OfficeLists() {
                       >
                         <DeleteIcon />
                       </Button>
-                    </TableCell>
+                    </TableCellStyles>
                   </TableRow>,
                   <TableRow
-                    sx={{
-                      boxShadow:
-                        '1px 4px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
-                      borderBottomLeftRadius: '15px',
-                      borderBottomRightRadius: '15px'
-                    }}
+                    // sx={{
+                    //   boxShadow:
+                    //     '1px 4px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
+                    //   borderBottomLeftRadius: '15px',
+                    //   borderBottomRightRadius: '15px'
+                    // }}
                     key={`sub${row.no}`}
                   >
-                    <TableCell colSpan={5}>
+                    <TableCellStyles colSpan={5}>
                       <Autocomplete
                         multiple
                         id="tags-outlined"
@@ -175,7 +190,7 @@ export default function OfficeLists() {
                           />
                         )}
                       />
-                    </TableCell>
+                    </TableCellStyles>
                   </TableRow>
                 ])}
               </TableBody>

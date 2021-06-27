@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 // material
 import {
@@ -24,45 +25,12 @@ import BlockSchedule from './BlockSchedule';
 import TypeButton from './TypeButton';
 import SimpleDialogDemo from './SettingDialog';
 
-// ----------------------------------------------------------------------
+SchedulePopupContent.propTypes = {
+  Schedule: PropTypes.array,
+  iconProps: PropTypes.func
+};
 
-const Schedule = [
-  {
-    value: 0,
-    label: 'Working remotely',
-    icon: '🏡'
-  },
-  {
-    value: 1,
-    label: 'On the go',
-    icon: '🚶‍♂️'
-  },
-  {
-    value: 2,
-    label: 'Not working',
-    icon: '🏝'
-  },
-  {
-    value: 3,
-    label: 'At the office',
-    icon: '💼'
-  },
-  {
-    value: 4,
-    label: 'Sick',
-    icon: '🤒'
-  },
-  {
-    value: 5,
-    label: 'With family',
-    icon: '👨‍👨‍👦‍👦'
-  },
-  {
-    value: 6,
-    label: 'lol',
-    icon: '😫'
-  }
-];
+// ----------------------------------------------------------------------
 
 const ListWrapperStyle = styled('div')(() => ({
   width: '100%'
@@ -70,28 +38,26 @@ const ListWrapperStyle = styled('div')(() => ({
 
 // ----------------------------------------------------------------------
 
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
-
-export default function ListsComponent() {
+export default function SchedulePopupContent({ Schedule, iconProps }) {
   const [open, setOpen] = useState(true);
   const [selectedMorning, setSelectedMorning] = useState(1);
   const [selectedAfternoon, setSelectedAfternoon] = useState(3);
-  const [checked, setChecked] = useState([0]);
   const [selected, setSelected] = useState(false);
 
   const theme = useTheme();
 
   const handleListItemClickMorning = (event, index) => {
+    console.log('morning:', index, 'half:', selected);
     setSelectedMorning(index);
   };
 
   const handleListItemClickAfternoon = (event, index) => {
+    console.log('afternoon:', index);
     setSelectedAfternoon(index);
   };
 
   const handleClick = () => {
+    iconProps(selectedMorning, selectedAfternoon, !selected);
     setOpen(!open);
   };
 

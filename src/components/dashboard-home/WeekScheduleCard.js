@@ -11,11 +11,23 @@ import ScheduleButton from '../dashboard-component/ScheduleButton';
 WeekSchedule.propTypes = {
   title: PropTypes.string,
   period: PropTypes.string,
-  daystatus: PropTypes.array
+  daystatus: PropTypes.array,
+  schedule: PropTypes.array,
+  iconProps: PropTypes.func
 };
 
-export default function WeekSchedule({ title, period, daystatus }) {
+export default function WeekSchedule({
+  title,
+  period,
+  daystatus,
+  schedule,
+  iconProps
+}) {
   const theme = useTheme();
+  const changeIcon = (icon1, icon2, status, index) => {
+    iconProps(icon1, icon2, status, index);
+  };
+
   return (
     <Card>
       <CardContent
@@ -32,13 +44,16 @@ export default function WeekSchedule({ title, period, daystatus }) {
           <span style={{ fontSize: '15px', color: 'grey' }}>({period})</span>
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          {daystatus.map((day) => (
+          {daystatus.map((day, index) => (
             <ScheduleButton
               key={day.id}
               weekday={day.weekday}
               icon={day.icon}
               halfday={day.halfday}
               work={day.work}
+              schedule={schedule}
+              index={index}
+              iconProps={changeIcon}
             />
           ))}
         </Box>

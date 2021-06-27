@@ -6,7 +6,6 @@ import {
 } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import { CardContent, IconButton, Box } from '@material-ui/core';
@@ -121,7 +120,6 @@ export default function CalendarCard({ daystatus }) {
 
   const [month, setMonth] = useState(init().getMonth());
   const [year, setYear] = useState(init().getFullYear());
-  const [selected, setSelected] = useState(false);
   const [calendar, setCalendar] = useState([]);
 
   useEffect(() => {
