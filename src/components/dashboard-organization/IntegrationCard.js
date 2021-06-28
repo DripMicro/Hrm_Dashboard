@@ -1,10 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useState } from 'react';
+import React from 'react';
 
-import {
-  useTheme,
-  experimentalStyled as styled
-} from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
 import {
   Card,
@@ -13,8 +10,7 @@ import {
   Typography,
   Box,
   Button,
-  Grid,
-  Avatar
+  Grid
 } from '@material-ui/core';
 
 export default function IntegrationCard() {

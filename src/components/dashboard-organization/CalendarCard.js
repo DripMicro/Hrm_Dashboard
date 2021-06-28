@@ -1,9 +1,4 @@
-import React, { useState } from 'react';
-
-import {
-  useTheme,
-  experimentalStyled as styled
-} from '@material-ui/core/styles';
+import React from 'react';
 
 import {
   Card,
@@ -12,10 +7,7 @@ import {
   Typography,
   Box,
   TextField,
-  Grid,
-  FormGroup,
-  FormControlLabel,
-  Checkbox
+  Grid
 } from '@material-ui/core';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -61,18 +53,18 @@ const days = [
 ];
 
 export default function CalendarCard() {
-  const [state, setState] = useState({
-    gilad: true,
-    jason: false,
-    antoine: false,
-    okata: false
-  });
+  // const [state, setState] = React.useState({
+  //   gilad: true,
+  //   jason: false,
+  //   antoine: false,
+  //   okata: false
+  // });
 
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
+  // const handleChange = (event) => {
+  //   setState({ ...state, [event.target.name]: event.target.checked });
+  // };
 
-  const { gilad, jason, antoine, okata } = state;
+  // const { gilad, jason, antoine, okata } = state;
 
   return (
     <Card>

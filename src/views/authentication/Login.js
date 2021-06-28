@@ -7,7 +7,7 @@ import {
   Link,
   Alert,
   Hidden,
-  Tooltip,
+  // Tooltip,
   Container,
   Typography
 } from '@material-ui/core';

@@ -4,6 +4,7 @@ import { Box } from '@material-ui/core';
 // ----------------------------------------------------------------------
 
 SvgIconStyle.propTypes = {
+  type: PropTypes.string,
   src: PropTypes.string.isRequired,
   color: PropTypes.string,
   sx: PropTypes.object

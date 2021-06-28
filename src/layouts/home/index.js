@@ -30,18 +30,22 @@ export default function HomeLayout({ children }) {
     <>
       <Box sx={{ height: '100%' }}>
         {!isAuth && <HomeNavbar />}
-        <Box
-          sx={{
-            marginTop: '64px',
-            [theme.breakpoints.up('md')]: {
-              marginTop: '96px'
-            }
-          }}
-        >
-          {children}
-        </Box>
-        <LandingTryBottom />
-        <LandingFooter />
+        {isAuth ? (
+          <Box>{children}</Box>
+        ) : (
+          <Box
+            sx={{
+              marginTop: '64px',
+              [theme.breakpoints.up('md')]: {
+                marginTop: '96px'
+              }
+            }}
+          >
+            {children}
+          </Box>
+        )}
+        {!isAuth && <LandingTryBottom />}
+        {!isAuth && <LandingFooter />}
       </Box>
     </>
   );

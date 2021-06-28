@@ -1,3 +1,6 @@
+// mock api
+import './_apis_';
+
 // scroll bar
 import 'simplebar/src/simplebar.css';
 

@@ -1,8 +1,7 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { useTheme } from '@material-ui/core/styles';
@@ -24,7 +23,7 @@ import {
   MenuItem
 } from '@material-ui/core';
 // redux
-import { getUserList } from '../../redux/slices/user';
+// import { getUserList } from '../../redux/slices/user';
 // routes
 // components
 import Label from '../Label';

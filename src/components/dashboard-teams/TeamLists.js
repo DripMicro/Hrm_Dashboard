@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect } from 'react';
-import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { useTheme, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -44,18 +44,18 @@ const rows = [
 export default function TeamLists() {
   const theme = useTheme();
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  // const [anchorEl, setAnchorEl] = useState(null);
   const [teamName, setTeamName] = useState('');
 
   const [teams, setTeams] = useState(rows);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
   const handleAddTeam = () => {
     rows.push(createData(rows.length, '🙂', '', ''));
@@ -146,7 +146,7 @@ export default function TeamLists() {
                     </TableCellStyles>
                     <TableCellStyles align="right">
                       <Button
-                        onClick={handleClick}
+                        // onClick={handleClick}
                         color="error"
                         sx={{
                           borderRadius: '50%',
@@ -178,8 +178,8 @@ export default function TeamLists() {
   );
 }
 
-const Users = [
-  { name: 'Alexander Ryndin' },
-  { name: 'Zlenko Sofia' },
-  { name: 'Oleg Pablo' }
-];
+// const Users = [
+//   { name: 'Alexander Ryndin' },
+//   { name: 'Zlenko Sofia' },
+//   { name: 'Oleg Pablo' }
+// ];

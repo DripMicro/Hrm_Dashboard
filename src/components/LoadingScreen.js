@@ -8,7 +8,7 @@ import LoadingIcon from './LoadingIcon';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
-  height: '100%',
+  height: '100vh',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -30,7 +30,7 @@ export default function LoadingScreen({ ...other }) {
           repeat: Infinity
         }}
       >
-        <LoadingIcon sx={{ height: 64 }} />
+        <LoadingIcon />
       </motion.div>
 
       <Box

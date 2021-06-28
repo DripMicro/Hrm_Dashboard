@@ -25,7 +25,7 @@ import {
   ListItemText
 } from '@material-ui/core';
 // routes
-import { PATH_HOME, PATH_DASHBOARD, PATH_AUTH } from '../../routes/paths';
+import { PATH_HOME, PATH_AUTH } from '../../routes/paths';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components

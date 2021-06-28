@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
+// import { useSnackbar } from 'notistack';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import {
@@ -8,8 +8,7 @@ import {
   Card,
   Typography,
   TextField,
-  CardContent,
-  FormControlLabel
+  CardContent
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
@@ -112,8 +111,8 @@ export default function AccountGeneral() {
 
   const {
     values,
-    errors,
-    touched,
+    // errors,
+    // touched,
     isSubmitting,
     handleSubmit,
     getFieldProps,

@@ -11,7 +11,7 @@ export default function EmojiAPI({ updateIcon }) {
   const [chosenEmoji, setChosenEmoji] = useState(null);
 
   const onEmojiClick = (event, emojiObject) => {
-    console.log(emojiObject.emoji);
+    console.log(emojiObject.emoji, chosenEmoji);
     setChosenEmoji(emojiObject);
     updateIcon(emojiObject.emoji);
   };

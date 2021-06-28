@@ -123,6 +123,7 @@ export default function AlertDialog() {
 
           return (
             <ListItem
+              labelId={labelId}
               key={item.value}
               role="listitem"
               button

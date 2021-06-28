@@ -1,8 +1,5 @@
 // material
-import {
-  useTheme,
-  experimentalStyled as styled
-} from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
 import { Container } from '@material-ui/core';
 // ----------------------------------------------------------------------
@@ -219,10 +216,6 @@ const TeamCategories = [
     selected: false
   }
 ];
-
-const SpaceStyle = styled('div')(({ theme }) => ({
-  height: theme.spacing(4)
-}));
 
 export default function CalendarContent() {
   const theme = useTheme();

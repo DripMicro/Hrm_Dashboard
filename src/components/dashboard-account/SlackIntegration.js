@@ -1,7 +1,7 @@
 import React from 'react';
-import { withStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
-import { Button, Popover, Typography, Box } from '@material-ui/core';
+import { Button, Typography, Box } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 
 export default function SlackIntegration() {

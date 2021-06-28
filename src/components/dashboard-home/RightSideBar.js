@@ -1,24 +1,16 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Link as RouterLink, useLocation, matchPath } from 'react-router-dom';
-import { Icon } from '@iconify/react';
+import { useLocation } from 'react-router-dom';
+// import { Link as RouterLink, useLocation, matchPath } from 'react-router-dom';
+// import { Icon } from '@iconify/react';
 // material
 import {
   useTheme,
   experimentalStyled as styled
 } from '@material-ui/core/styles';
-import {
-  Box,
-  Link,
-  List,
-  Avatar,
-  Drawer,
-  Hidden,
-  Typography,
-  ListSubheader
-} from '@material-ui/core';
+import { Box, Drawer, Hidden, Typography } from '@material-ui/core';
 // components
-import Logo from '../Logo';
+// import Logo from '../Logo';
 import Scrollbar from '../Scrollbar';
 //
 import SelfSettingButton from '../dashboard-component/SelftSettingButton';

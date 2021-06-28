@@ -17,9 +17,12 @@ export default function useAuth() {
 
   // JWT Auth
   const dispatch = useDispatch();
-  const { user, isLoading, isAuthenticated } = useSelector(
-    (state) => state.authJwt
-  );
+  const user = useSelector((state) => state.user);
+  const isLoading = useSelector((state) => state.isLoading);
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  // const { user, isLoading, isAuthenticated } = useSelector(
+  //   (state) => state.authJwt
+  // );
 
   // JWT Auth
   return {

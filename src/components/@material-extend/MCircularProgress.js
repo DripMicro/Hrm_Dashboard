@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 // material
-import { useTheme } from '@material-ui/core/styles';
+// import { useTheme } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
 export default function MCircularProgress({ color = 'primary', sx, ...other }) {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   if (color === 'inherit' || color === 'primary' || color === 'secondary') {
     return <CircularProgress color={color} sx={sx} {...other} />;

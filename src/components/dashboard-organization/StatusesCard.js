@@ -2,10 +2,7 @@
 import React, { useState } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 
-import {
-  useTheme,
-  experimentalStyled as styled
-} from '@material-ui/core/styles';
+// import { useTheme } from '@material-ui/core/styles';
 
 import {
   Card,
@@ -42,7 +39,7 @@ const customeList = [customData(0, '🙂', 'Custom 1', true)];
 export default function StatusesCard() {
   const [basics, setBasics] = useState(basicList);
   const [customes, setCustomes] = useState(customeList);
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const changeIcon = (icon, index) => {
     // eslint-disable-next-line array-callback-return

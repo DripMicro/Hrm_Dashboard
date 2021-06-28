@@ -131,7 +131,7 @@ export default function CalendarCard({ daystatus }) {
   useEffect(() => {
     const days = getDaybyWeek(year, month);
     setCalendar(getCalendar(days, daystatus));
-  }, [month, year]);
+  }, [daystatus, month, year]);
 
   const handleBackMonth = () => {
     let m = month - 1;

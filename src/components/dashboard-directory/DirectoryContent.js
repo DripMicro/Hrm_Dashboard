@@ -4,7 +4,7 @@ import {
   experimentalStyled as styled
 } from '@material-ui/core/styles';
 
-import { Container, Card, CardContent } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 // ----------------------------------------------------------------------
 
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';

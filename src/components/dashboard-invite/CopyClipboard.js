@@ -2,10 +2,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 // import { useSnackbar } from 'notistack';
-import Snackbar from '@material-ui/core/Snackbar';
+// import Snackbar from '@material-ui/core/Snackbar';
 import copyFill from '@iconify/icons-eva/copy-fill';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import MuiAlert from '@material-ui/lab/Alert';
+// import MuiAlert from '@material-ui/lab/Alert';
 // material
 import {
   Tooltip,
@@ -15,9 +15,9 @@ import {
 } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+// function Alert(props) {
+//   return <MuiAlert elevation={6} variant="filled" {...props} />;
+// }
 
 CopyClipboard.propTypes = {
   value: PropTypes.string
@@ -35,12 +35,12 @@ export default function CopyClipboard({ value, ...other }) {
     setState({ value: event.target.value, copied: false });
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
+  // const handleClose = (event, reason) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+  //   setOpen(false);
+  // };
 
   const onCopy = () => {
     setState({ ...state, copied: true });
@@ -48,6 +48,7 @@ export default function CopyClipboard({ value, ...other }) {
       setOpen(true);
       // enqueueSnackbar('Copied', { variant: 'success' });
     }
+    console.log(open);
   };
 
   return (

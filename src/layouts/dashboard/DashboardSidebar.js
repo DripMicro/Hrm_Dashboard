@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation, matchPath } from 'react-router-dom';
-import { Icon } from '@iconify/react';
+// import { Icon } from '@iconify/react';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import {

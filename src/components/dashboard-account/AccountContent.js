@@ -17,43 +17,43 @@ import AboutProfile from './AboutProfile';
 import ContactProfile from './ContactProfile';
 
 // ----------------------------------------------------------------------
-const ThisWeekSchedule = [
-  {
-    id: 0,
-    weekday: 'Mon 21',
-    icon: '💼🚶‍♂️',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 1,
-    weekday: 'Tue 22',
-    icon: '🚶‍♂️🏝',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 2,
-    weekday: 'Wed 23',
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false,
-    work: true
-  },
-  {
-    id: 3,
-    weekday: 'Thu 24',
-    icon: '🤒🏡',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 4,
-    weekday: 'Fri 25',
-    icon: '?',
-    halfday: false,
-    work: false
-  }
-];
+// const ThisWeekSchedule = [
+//   {
+//     id: 0,
+//     weekday: 'Mon 21',
+//     icon: '💼🚶‍♂️',
+//     halfday: true,
+//     work: true
+//   },
+//   {
+//     id: 1,
+//     weekday: 'Tue 22',
+//     icon: '🚶‍♂️🏝',
+//     halfday: true,
+//     work: true
+//   },
+//   {
+//     id: 2,
+//     weekday: 'Wed 23',
+//     icon: '👨‍👨‍👦‍👦',
+//     halfday: false,
+//     work: true
+//   },
+//   {
+//     id: 3,
+//     weekday: 'Thu 24',
+//     icon: '🤒🏡',
+//     halfday: true,
+//     work: true
+//   },
+//   {
+//     id: 4,
+//     weekday: 'Fri 25',
+//     icon: '?',
+//     halfday: false,
+//     work: false
+//   }
+// ];
 
 export default function UserAccount() {
   const [currentTab, setCurrentTab] = useState('informations');
