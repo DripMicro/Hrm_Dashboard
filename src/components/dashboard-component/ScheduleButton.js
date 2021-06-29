@@ -49,7 +49,6 @@ export default function ScheduleButton({
   const [anchorEl, setAnchorEl] = useState(null);
   const [isHalf, setHalf] = useState(false);
 
-  console.log('M:', schedule);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

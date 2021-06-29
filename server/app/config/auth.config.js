@@ -1,3 +1,3 @@
 module.exports = {
-  secret: "thimble-secret-key"
+  secret: 'thimble-secret-key'
 };

@@ -2,7 +2,8 @@ import { lazy } from 'react';
 import { Redirect } from 'react-router-dom';
 // layouts
 import HomeLayout from '../layouts/home';
-
+// guards
+import GuestGuard from '../guards/GuestGuard';
 // ----------------------------------------------------------------------
 
 const HomeRoutes = {
@@ -24,22 +25,15 @@ const HomeRoutes = {
       path: '/pricing',
       component: lazy(() => import('../views/PricingPage'))
     },
-    // export const PATH_AUTH = {
-    //   root: ROOTS_AUTH,
-    //   login: path(ROOTS_AUTH, '/login'),
-    //   loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
-    //   register: path(ROOTS_AUTH, '/register'),
-    //   registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
-    //   resetPassword: path(ROOTS_AUTH, '/reset-password'),
-    //   verify: path(ROOTS_AUTH, '/verify')
-    // };
     {
       exact: true,
+      guard: GuestGuard,
       path: '/auth/register',
       component: lazy(() => import('../views/authentication/Register'))
     },
     {
       exact: true,
+      guard: GuestGuard,
       path: '/auth/login',
       component: lazy(() => import('../views/authentication/Login'))
     },

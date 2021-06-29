@@ -17,7 +17,7 @@ import {
 // components
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
-
+import useAuth from '../../hooks/useAuth';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -42,7 +42,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-
+  const { logout } = useAuth();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -120,7 +120,7 @@ export default function AccountPopover() {
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button fullWidth color="inherit" variant="outlined" onClick={logout}>
             Logout
           </Button>
         </Box>

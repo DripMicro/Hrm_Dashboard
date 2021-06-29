@@ -17,6 +17,9 @@
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
+    "requireConfigFile": false,
+    "allowImplicit": false,
+    "checkForEach": false,
     "ecmaVersion": 8,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,

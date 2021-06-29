@@ -10,19 +10,12 @@ useAuth.propTypes = {
 };
 
 export default function useAuth() {
-  // Firebase Auth
-  // const firebase = useFirebase();
-  // const firestore = useFirestore();
-  // const { auth, profile } = useSelector((state) => state.firebase);
-
   // JWT Auth
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const isLoading = useSelector((state) => state.isLoading);
-  const isAuthenticated = useSelector((state) => state.isAuthenticated);
-  // const { user, isLoading, isAuthenticated } = useSelector(
-  //   (state) => state.authJwt
-  // );
+
+  const { user, isLoading, isAuthenticated } = useSelector(
+    (state) => state.authJwt
+  );
 
   // JWT Auth
   return {
@@ -39,13 +32,14 @@ export default function useAuth() {
         })
       ),
 
-    register: ({ email, password, firstName, lastName }) =>
+    register: ({ email, password, firstname, lastname, roles }) =>
       dispatch(
         register({
           email,
           password,
-          firstName,
-          lastName
+          firstname,
+          lastname,
+          roles
         })
       ),
 

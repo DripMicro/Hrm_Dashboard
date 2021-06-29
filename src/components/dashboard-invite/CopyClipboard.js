@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-// import { useSnackbar } from 'notistack';
-// import Snackbar from '@material-ui/core/Snackbar';
 import copyFill from '@iconify/icons-eva/copy-fill';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-// import MuiAlert from '@material-ui/lab/Alert';
 // material
 import {
   Tooltip,
@@ -14,17 +11,13 @@ import {
   InputAdornment
 } from '@material-ui/core';
 
-// ----------------------------------------------------------------------
-// function Alert(props) {
-//   return <MuiAlert elevation={6} variant="filled" {...props} />;
-// }
+import EnqueueSnackBar from '../dashboard-component/EnqueueSnackBar';
 
 CopyClipboard.propTypes = {
   value: PropTypes.string
 };
 
 export default function CopyClipboard({ value, ...other }) {
-  // const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
     value,
     copied: false
@@ -35,29 +28,26 @@ export default function CopyClipboard({ value, ...other }) {
     setState({ value: event.target.value, copied: false });
   };
 
-  // const handleClose = (event, reason) => {
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
-  //   setOpen(false);
-  // };
-
   const onCopy = () => {
     setState({ ...state, copied: true });
     if (state.value) {
       setOpen(true);
-      // enqueueSnackbar('Copied', { variant: 'success' });
     }
-    console.log(open);
+
+    setTimeout(() => {
+      setOpen(false);
+    }, 4000);
   };
 
   return (
     <>
-      {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
-        </Alert>
-      </Snackbar> */}
+      <EnqueueSnackBar
+        message="Copied in Clipboard!"
+        isOpen={open}
+        status="info"
+        vertical="bottom"
+        horizontal="right"
+      />
       <TextField
         value={state.value}
         onChange={handleChange}

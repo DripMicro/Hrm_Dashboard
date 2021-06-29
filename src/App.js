@@ -15,7 +15,7 @@ import ThemeConfig from './theme';
 import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import LoadingScreen from './components/LoadingScreen';
-
+import NotistackProvider from './components/NotistackProvider';
 // ----------------------------------------------------------------------
 
 const history = createBrowserHistory();
@@ -27,11 +27,13 @@ export default function App() {
         <PersistGate loading={<LoadingScreen />} persistor={persistor}>
           <ThemeConfig>
             <RtlLayout>
-              <Router history={history}>
-                {/* <Settings /> */}
-                <ScrollToTop />
-                {renderRoutes(routes)}
-              </Router>
+              <NotistackProvider>
+                <Router history={history}>
+                  {/* <Settings /> */}
+                  <ScrollToTop />
+                  {renderRoutes(routes)}
+                </Router>
+              </NotistackProvider>
             </RtlLayout>
           </ThemeConfig>
         </PersistGate>

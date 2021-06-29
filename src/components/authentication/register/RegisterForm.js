@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
-// import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
-// import closeFill from '@iconify/icons-eva/close-fill';
+import closeFill from '@iconify/icons-eva/close-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 // material
 import {
@@ -15,21 +15,20 @@ import {
   InputAdornment
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+import { MIconButton } from '../../@material-extend';
 // hooks
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // utils
 import { emailError, passwordError } from '../../../utils/helpError';
-//
-// import { MIconButton } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
   const { register } = useAuth();
   const isMountedRef = useIsMountedRef();
-  // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -59,18 +58,17 @@ export default function RegisterForm() {
         await register({
           email: values.email,
           password: values.password,
-          firstName: values.firstName,
-          lastName: values.lastName
+          firstname: values.firstName,
+          lastname: values.lastName
         });
-
-        // enqueueSnackbar('Login success', {
-        //   variant: 'success',
-        //   action: (key) => (
-        //     <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-        //       <Icon icon={closeFill} />
-        //     </MIconButton>
-        //   )
-        // });
+        enqueueSnackbar('Register success', {
+          variant: 'success',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
         if (isMountedRef.current) {
           setSubmitting(false);
         }

@@ -219,7 +219,6 @@ export default function HomeContent() {
       if (item.value === icon1) emoji1 = item.icon;
       if (item.value === icon2) emoji2 = item.icon;
     });
-    console.log('M:', emoji1, emoji2, icon1, icon2);
     let dayStatus = status;
     if (icon1 === icon2) dayStatus = false;
     resIcon = dayStatus ? `${emoji1}${emoji2}` : emoji1;

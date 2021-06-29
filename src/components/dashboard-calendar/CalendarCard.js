@@ -72,7 +72,6 @@ function getCalendar(days, status) {
   const calendar = [];
   // eslint-disable-next-line array-callback-return
   days.map((weekdays) => {
-    console.log(weekdays);
     const weeks = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const day of weekdays) {
@@ -125,7 +124,6 @@ export default function CalendarCard({ daystatus }) {
   useEffect(() => {
     const days = getDaybyWeek(init().getFullYear(), init().getMonth());
     setCalendar(getCalendar(days, daystatus));
-    console.log('this is first:', getCalendar(days, daystatus));
   }, [daystatus]);
 
   useEffect(() => {
@@ -153,7 +151,6 @@ export default function CalendarCard({ daystatus }) {
 
   const handleSelected = (selected, selectedDay) => {
     const agenda = calendar;
-    console.log('S:', selected, selectedDay);
     // eslint-disable-next-line array-callback-return
     calendar.map((weeks, wIndex) => {
       // eslint-disable-next-line array-callback-return

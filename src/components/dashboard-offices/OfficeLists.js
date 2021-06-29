@@ -78,9 +78,7 @@ export default function OfficeLists() {
   };
   const changeIcon = (icon, index) => {
     offices.map((office, offIndex) => {
-      console.log('M:', index, offIndex);
       if (index === offIndex) {
-        console.log('U:', index);
         rows[offIndex].emoji = icon;
       }
     });

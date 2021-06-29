@@ -4,11 +4,13 @@ import { Redirect } from 'react-router-dom';
 import DashboardLayout from '../layouts/dashboard';
 //
 import { PATH_DASHBOARD } from './paths';
-
+// guards
+import AuthGuard from '../guards/AuthGuard';
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = {
   path: PATH_DASHBOARD.root,
+  guard: AuthGuard,
   layout: DashboardLayout,
   routes: [
     // GENERAL

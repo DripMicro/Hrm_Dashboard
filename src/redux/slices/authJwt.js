@@ -58,7 +58,6 @@ const isValidToken = (accessToken) => {
   }
   const decoded = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
-
   return decoded.exp > currentTime;
 };
 
@@ -76,30 +75,41 @@ const setSession = (accessToken) => {
 
 export function login({ email, password }) {
   return async (dispatch) => {
-    const response = await axios.post('/api/account/login', {
+    const response = await axios.post('/api/auth/signin', {
       email,
       password
     });
     const { accessToken, user } = response.data;
     setSession(accessToken);
     dispatch(slice.actions.loginSuccess({ user }));
+    // const response = await axios.post('/api/account/login', {
+    //   email,
+    //   password
+    // });
+    // const { accessToken, user } = response.data;
+    // setSession(accessToken);
+    // dispatch(slice.actions.loginSuccess({ user }));
   };
 }
 
 // ----------------------------------------------------------------------
 
-export function register({ email, password, firstName, lastName }) {
+export function register({ email, password, firstname, lastname, roles }) {
+  const data = {
+    firstname,
+    lastname,
+    email,
+    password,
+    roles
+  };
+  console.log(data);
   return async (dispatch) => {
-    const response = await axios.post('/api/account/register', {
-      email,
-      password,
-      firstName,
-      lastName
-    });
-    const { accessToken, user } = response.data;
+    const response = await axios.post('/api/auth/signup', data);
+    console.log(response);
+    const { userInfo } = response.data;
 
-    window.localStorage.setItem('accessToken', accessToken);
-    dispatch(slice.actions.registerSuccess({ user }));
+    window.localStorage.setItem('accessToken', userInfo.accessToken);
+    dispatch(slice.actions.registerSuccess({ userInfo }));
   };
 }
 
