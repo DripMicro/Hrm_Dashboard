@@ -32,23 +32,6 @@ exports.signup = (req, res) => {
           }
         }).then((roles) => {
           userData.setRoles(roles).then(() => {
-            // user = {
-            //   id: faker.datatype.uuid(),
-            //   displayName: `${firstName} ${lastName}`,
-            //   email,
-            //   password,
-            //   photoURL: null,
-            //   phoneNumber: null,
-            //   country: null,
-            //   address: null,
-            //   state: null,
-            //   city: null,
-            //   zipCode: null,
-            //   about: null,
-            //   role: 'user',
-            //   isPublic: true
-            // };
-
             const accessToken = jwt.sign({ userId: userData.id }, JWT_SECRET, {
               expiresIn: JWT_EXPIRES_IN
             });
@@ -57,7 +40,6 @@ exports.signup = (req, res) => {
           });
         });
       } else {
-        console.log(userData);
         const accessToken = jwt.sign({ userId: userData.id }, JWT_SECRET, {
           expiresIn: JWT_EXPIRES_IN
         });
@@ -89,7 +71,7 @@ exports.signin = (req, res) => {
   })
     .then((userData) => {
       if (!userData) {
-        return res.status(404).send({ message: 'User Not found.' });
+        return res.status(400).send({ message: 'auth/user-not-found' });
       }
 
       const passwordIsValid = bcrypt.compareSync(
@@ -98,9 +80,9 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(401).send({
+        return res.status(400).send({
           accessToken: null,
-          message: 'Invalid Password!'
+          message: 'auth/wrong-password'
         });
       }
 
@@ -111,7 +93,7 @@ exports.signin = (req, res) => {
       const authorities = [];
       userData.getRoles().then((roles) => {
         for (let i = 0; i < roles.length; i += 1) {
-          authorities.push(`ROLE_${roles[i].name.toUpperCase()}`);
+          authorities.push(`${roles[i].name.toUpperCase()}`);
         }
         const user = {
           id: userData.id,

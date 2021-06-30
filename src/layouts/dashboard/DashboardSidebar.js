@@ -20,7 +20,8 @@ import Scrollbar from '../../components/Scrollbar';
 //
 import MenuLinks from './SidebarConfig';
 import SidebarItem from './SidebarItem';
-
+// hooks
+import useAuth from '../../hooks/useAuth';
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
@@ -104,7 +105,8 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
-
+  const { user } = useAuth();
+  console.log(user);
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
@@ -128,10 +130,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           />
           <Box sx={{ ml: 2 }}>
             <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-              displayName
+              {user.firstname} {user.lastname}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              role
+              {user.roles}
             </Typography>
           </Box>
         </AccountStyle>

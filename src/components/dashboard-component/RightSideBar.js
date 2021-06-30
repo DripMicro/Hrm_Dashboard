@@ -6,14 +6,51 @@ import {
   useTheme,
   experimentalStyled as styled
 } from '@material-ui/core/styles';
-import { Box, Drawer, Typography, Hidden } from '@material-ui/core';
+import { Box, Drawer, Hidden, Typography } from '@material-ui/core';
 // components
 import Scrollbar from '../Scrollbar';
 //
-import SelfSettingButton from '../dashboard-component/SelftSettingButton';
-import UserScheduleStatus from '../dashboard-component/UserScheduleStatus';
+import SelfSettingButton from './SelftSettingButton';
+import UserScheduleStatus from './UserScheduleStatus';
 
 // ----------------------------------------------------------------------
+const Schedule = [
+  {
+    value: 0,
+    label: 'Working remotely',
+    icon: '🏡'
+  },
+  {
+    value: 1,
+    label: 'On the go',
+    icon: '🚶‍♂️'
+  },
+  {
+    value: 2,
+    label: 'Not working',
+    icon: '🏝'
+  },
+  {
+    value: 3,
+    label: 'At the office',
+    icon: '💼'
+  },
+  {
+    value: 4,
+    label: 'Sick',
+    icon: '🤒'
+  },
+  {
+    value: 5,
+    label: 'With family',
+    icon: '👨‍👨‍👦‍👦'
+  },
+  {
+    value: 6,
+    label: 'lol',
+    icon: '😫'
+  }
+];
 
 const DRAWER_WIDTH = 480;
 
@@ -39,19 +76,18 @@ export default function RightSideBar({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [isOpenSidebar, onCloseSidebar, pathname]);
 
   const renderContent = (
     <Scrollbar>
-      <Box sx={{ px: 2.5, py: 3 }}>
+      <Box sx={{ px: 2.5, py: 3, mt: 10 }}>
         <Typography
           variant="h4"
           sx={{ color: 'text.primary', textAlign: 'center' }}
         >
           Monday 21st Jun. 2021
         </Typography>
-        <SelfSettingButton />
+        <SelfSettingButton schedule={Schedule} />
         <Box m={5} />
         <UserScheduleStatus />
       </Box>

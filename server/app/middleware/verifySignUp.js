@@ -4,7 +4,27 @@ const db = require('../models');
 const { ROLES } = db;
 const User = db.user;
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
+checkBusinessEmail = (req, res, next) => {
+  // valid email as business mail
+  const emailLists = ['gmail', 'yahoo', 'mail', 'inbox', 'bk', 'internet'];
+  const reqEmail = req.body.email.split('@')[1].split('.')[0];
+  let isApproved = true;
+  // eslint-disable-next-line array-callback-return
+  emailLists.map((mail) => {
+    if (mail === reqEmail) {
+      isApproved = false;
+    }
+  });
+
+  console.log('M:', isApproved);
+  if (!isApproved) {
+    res.status(400).send({ message: 'auth/business-email' });
+    return;
+  }
+  next();
+};
+
+checkDuplicateEmail = (req, res, next) => {
   // Username
   User.findOne({
     where: {
@@ -13,26 +33,11 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   }).then((user) => {
     if (user) {
       res.status(400).send({
-        message: 'Failed! Username is already in use!'
+        message: 'auth/email-already-in-use'
       });
       return;
     }
-
-    // Email
-    User.findOne({
-      where: {
-        email: req.body.email
-      }
-    }).then((user) => {
-      if (user) {
-        res.status(400).send({
-          message: 'Failed! Email is already in use!'
-        });
-        return;
-      }
-
-      next();
-    });
+    next();
   });
 };
 
@@ -52,7 +57,8 @@ checkRolesExisted = (req, res, next) => {
 };
 
 const verifySignUp = {
-  checkDuplicateUsernameOrEmail,
+  checkBusinessEmail,
+  checkDuplicateEmail,
   checkRolesExisted
 };
 

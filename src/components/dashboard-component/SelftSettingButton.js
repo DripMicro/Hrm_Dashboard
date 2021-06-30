@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { withStyles, useTheme } from '@material-ui/core/styles';
 
@@ -12,7 +14,11 @@ const PopoverStyle = withStyles(() => ({
   }
 }))(Popover);
 
-export default function SimplePopover() {
+SelfSettingButton.propTypes = {
+  schedule: PropTypes.array
+};
+
+export default function SelfSettingButton({ schedule }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -30,7 +36,7 @@ export default function SimplePopover() {
     <div>
       <Button
         aria-describedby={id}
-        variant="contained"
+        variant="outlined"
         color="primary"
         onClick={handleClick}
         sx={{
@@ -91,7 +97,7 @@ export default function SimplePopover() {
         }}
         sx={{ backgroundColor: '#00000040' }}
       >
-        <PopupContent />
+        <PopupContent Schedule={schedule} />
       </PopoverStyle>
     </div>
   );

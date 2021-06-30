@@ -67,18 +67,10 @@ export default function ScheduleButton({
   const theme = useTheme();
   return (
     <div>
-      <Box
-        sx={{
-          width: 64,
-          mr: 0,
-          [theme.breakpoints.up('sm')]: { mr: 5 },
-          [theme.breakpoints.up('md')]: { mr: 3 },
-          [theme.breakpoints.up(1600)]: { mr: 9 }
-        }}
-      >
+      <Box sx={{ textAlign: 'center' }}>
         <Typography
           variant="body2"
-          sx={{ pl: 1, [theme.breakpoints.up('md')]: { textAlign: 'center' } }}
+          sx={{ [theme.breakpoints.up('md')]: { textAlign: 'center' } }}
         >
           {weekday}
         </Typography>

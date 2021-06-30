@@ -82,13 +82,6 @@ export function login({ email, password }) {
     const { accessToken, user } = response.data;
     setSession(accessToken);
     dispatch(slice.actions.loginSuccess({ user }));
-    // const response = await axios.post('/api/account/login', {
-    //   email,
-    //   password
-    // });
-    // const { accessToken, user } = response.data;
-    // setSession(accessToken);
-    // dispatch(slice.actions.loginSuccess({ user }));
   };
 }
 
@@ -102,7 +95,6 @@ export function register({ email, password, firstname, lastname, roles }) {
     password,
     roles
   };
-  console.log(data);
   return async (dispatch) => {
     const response = await axios.post('/api/auth/signup', data);
     console.log(response);

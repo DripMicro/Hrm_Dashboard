@@ -111,7 +111,7 @@ export default function FeaturesCard() {
                   sx={{
                     width: 100,
                     fontWeight: 900,
-                    fontSize: 15,
+                    fontSize: 14,
                     backgroundColor: 'white',
                     px: 2,
                     py: 1,

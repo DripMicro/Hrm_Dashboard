@@ -123,8 +123,7 @@ export default function AlertDialog() {
 
           return (
             <ListItem
-              labelId={labelId}
-              key={item.value}
+              key={labelId}
               role="listitem"
               button
               onClick={handleToggle(item)}

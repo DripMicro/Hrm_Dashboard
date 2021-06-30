@@ -43,7 +43,14 @@ export default function WeekSchedule({
           {title}
           <span style={{ fontSize: '15px', color: 'grey' }}>({period})</span>
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            maxWidth: 550,
+            margin: 'auto'
+          }}
+        >
           {daystatus.map((day, index) => (
             <ScheduleButton
               key={day.id}

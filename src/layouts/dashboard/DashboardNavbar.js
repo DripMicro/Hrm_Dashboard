@@ -5,10 +5,10 @@ import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, AppBar, Hidden, Toolbar, IconButton } from '@material-ui/core';
 //
-// import Searchbar from './Searchbar';
+import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-// import LanguagePopover from './LanguagePopover';
-// import NotificationsPopover from './NotificationsPopover';
+import LanguagePopover from './LanguagePopover';
+import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(6px)',
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   backgroundColor: alpha(theme.palette.background.default, 0.72),
+  zIndex: 1201,
   [theme.breakpoints.up('lg')]: {
     width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   }
@@ -53,7 +54,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           </IconButton>
         </Hidden>
 
-        {/* <Searchbar /> */}
+        <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
         <Box
@@ -65,8 +66,8 @@ export default function DashboardNavbar({ onOpenSidebar }) {
             }
           }}
         >
-          {/* <LanguagePopover />
-          <NotificationsPopover /> */}
+          <LanguagePopover />
+          <NotificationsPopover />
           <AccountPopover />
         </Box>
       </ToolbarStyle>
