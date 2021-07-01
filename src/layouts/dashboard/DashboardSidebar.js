@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation, matchPath } from 'react-router-dom';
@@ -106,13 +107,23 @@ DashboardSidebar.propTypes = {
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const { user } = useAuth();
-  console.log(user);
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [isOpenSidebar, onCloseSidebar, pathname]);
+
+  console.log(user.roles);
+  let NewMenuLinks = [];
+  if (user.roles === 'SUPER ADMIN' || user.roles === 'ADMIN') {
+    NewMenuLinks = MenuLinks;
+  } else {
+    MenuLinks.map((links) => {
+      if (links.subheader !== 'admin settings') {
+        NewMenuLinks.push(links);
+      }
+    });
+  }
 
   const renderContent = (
     <Scrollbar>
@@ -139,7 +150,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </AccountStyle>
       </Link>
 
-      {MenuLinks.map((list) => (
+      {NewMenuLinks.map((list) => (
         <List
           disablePadding
           key={list.subheader}

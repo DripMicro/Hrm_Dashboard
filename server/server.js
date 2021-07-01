@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 
@@ -20,8 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('./app/models');
 
 const Role = db.role;
+const User = db.user;
 const { ROLES } = db;
 
+// eslint-disable-next-line no-unused-vars
 function initial() {
   ROLES.forEach((role, index) => {
     Role.create({
@@ -29,11 +32,21 @@ function initial() {
       name: role
     });
   });
+  User.create({
+    id: 1,
+    firstname: 'Mo',
+    lastname: 'Riss',
+    email: 'thimble@root.com',
+    password: bcrypt.hashSync('asdf', 8)
+  }).then((userData) => {
+    userData.setRoles([1]);
+  });
 }
 
-db.sequelize.sync().then(() => {
-  // initial();
-});
+// db.sequelize.sync().then(() => {
+//   initial();
+// });
+
 // force: true will drop the table if it already exists
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');

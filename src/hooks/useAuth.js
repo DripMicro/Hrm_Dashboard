@@ -32,14 +32,13 @@ export default function useAuth() {
         })
       ),
 
-    register: ({ email, password, firstname, lastname, roles }) =>
+    register: ({ email, password, firstname, lastname }) =>
       dispatch(
         register({
           email,
           password,
           firstname,
-          lastname,
-          roles
+          lastname
         })
       ),
 

@@ -6,6 +6,7 @@ import DashboardLayout from '../layouts/dashboard';
 import { PATH_DASHBOARD } from './paths';
 // guards
 import AuthGuard from '../guards/AuthGuard';
+import AdminGuard from '../guards/AdminGuard';
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = {
@@ -40,21 +41,25 @@ const DashboardRoutes = {
     {
       exact: true,
       path: PATH_DASHBOARD.admin.offices,
+      guard: AdminGuard,
       component: lazy(() => import('../views/DashboardOfficesPage'))
     },
     {
       exact: true,
       path: PATH_DASHBOARD.admin.teams,
+      guard: AdminGuard,
       component: lazy(() => import('../views/DashboardTeamsPage'))
     },
     {
       exact: true,
       path: PATH_DASHBOARD.admin.organization,
+      guard: AdminGuard,
       component: lazy(() => import('../views/DashboardOrganizationPage'))
     },
     {
       exact: true,
       path: PATH_DASHBOARD.admin.analytics,
+      guard: AdminGuard,
       component: lazy(() => import('../views/DashboardAnalyticsPage'))
     },
 

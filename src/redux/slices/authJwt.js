@@ -87,21 +87,20 @@ export function login({ email, password }) {
 
 // ----------------------------------------------------------------------
 
-export function register({ email, password, firstname, lastname, roles }) {
+export function register({ email, password, firstname, lastname }) {
   const data = {
     firstname,
     lastname,
     email,
-    password,
-    roles
+    password
   };
   return async (dispatch) => {
     const response = await axios.post('/api/auth/signup', data);
     console.log(response);
-    const { userInfo } = response.data;
+    const { accessToken, user } = response.data;
 
-    window.localStorage.setItem('accessToken', userInfo.accessToken);
-    dispatch(slice.actions.registerSuccess({ userInfo }));
+    window.localStorage.setItem('accessToken', accessToken);
+    dispatch(slice.actions.registerSuccess({ user }));
   };
 }
 

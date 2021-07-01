@@ -16,7 +16,6 @@ checkBusinessEmail = (req, res, next) => {
     }
   });
 
-  console.log('M:', isApproved);
   if (!isApproved) {
     res.status(400).send({ message: 'auth/business-email' });
     return;
