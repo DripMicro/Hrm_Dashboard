@@ -8,20 +8,29 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { Box, Typography } from '@material-ui/core';
 
 DayStatusButtonGroup.propTypes = {
-  daygroups: PropTypes.array.isRequired,
+  officeGroups: PropTypes.array.isRequired,
+  statusProps: PropTypes.func,
+  officePropos: PropTypes.array,
   isMulti: PropTypes.bool,
   sx: PropTypes.object
 };
 
-export default function DayStatusButtonGroup({ daygroups, isMulti, sx }) {
+export default function DayStatusButtonGroup({
+  officeGroups,
+  statusProps,
+  officePropos,
+  isMulti,
+  sx
+}) {
   const [type, setType] = React.useState(0);
-  const [types, setTypes] = React.useState([]);
+  const [types, setTypes] = React.useState(officePropos);
 
   const handleType = (event, newType) => {
     setType(newType);
   };
 
   const handleTypes = (event, newTypes) => {
+    statusProps(newTypes);
     setTypes(newTypes);
   };
 
@@ -34,7 +43,7 @@ export default function DayStatusButtonGroup({ daygroups, isMulti, sx }) {
           aria-label="day type"
           sx={{ display: 'block', textAlign: 'center', mb: 3, ...sx }}
         >
-          {daygroups.map((item) => (
+          {officeGroups.map((item) => (
             <ToggleButton
               key={item.id}
               value={item.id}
@@ -75,7 +84,7 @@ export default function DayStatusButtonGroup({ daygroups, isMulti, sx }) {
           aria-label="day type"
           sx={{ display: 'block', textAlign: 'center', mb: 3 }}
         >
-          {daygroups.map((item) => (
+          {officeGroups.map((item) => (
             <ToggleButton
               key={item.id}
               value={item.id}

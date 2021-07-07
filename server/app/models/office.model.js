@@ -1,19 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define('users', {
-    firstname: {
+  const Role = sequelize.define('offices', {
+    emoji: {
       type: Sequelize.STRING
     },
-    lastname: {
+    name: {
       type: Sequelize.STRING
     },
-    email: {
-      type: Sequelize.STRING
-    },
-    password: {
-      type: Sequelize.STRING
-    },
-    roleId: {
-      type: Sequelize.INTEGER
+    capacity: {
+      type: Sequelize.INTEGER.UNSIGNED
     },
     createdAt: {
       type: 'TIMESTAMP',
@@ -27,5 +21,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
 
-  return User;
+  return Role;
 };

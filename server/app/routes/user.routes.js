@@ -25,4 +25,11 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+
+  app.get('/api/user/manage-users', controller.getMembers);
+  app.get('/api/user/profile', controller.getProfile);
+
+  // -----------------------------------------------------------------------------------
+
+  app.post('/api/user/updateProfile', controller.updateProfile);
 };

@@ -20,26 +20,41 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // database
 const db = require('./app/models');
 
+const { sequelize } = db;
+
 const Role = db.role;
 const User = db.user;
-const { ROLES } = db;
+const Office = db.office;
+const { ROLES, OFFICES } = db;
 
 // eslint-disable-next-line no-unused-vars
 function initial() {
+  // user roles initialize ...
   ROLES.forEach((role, index) => {
     Role.create({
       id: index + 1,
       name: role
     });
   });
+
+  // user office initialize ...
+  OFFICES.forEach((office, index) => {
+    Office.create({
+      id: index + 1,
+      emoji: office.emoji,
+      name: office.name,
+      capacity: office.capacity
+    });
+  });
+
+  // admin setting
   User.create({
     id: 1,
     firstname: 'Mo',
     lastname: 'Riss',
     email: 'thimble@root.com',
+    roleId: 1,
     password: bcrypt.hashSync('asdf', 8)
-  }).then((userData) => {
-    userData.setRoles([1]);
   });
 }
 
@@ -48,6 +63,7 @@ function initial() {
 // });
 
 // force: true will drop the table if it already exists
+
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
 //   initial();

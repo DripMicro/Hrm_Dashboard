@@ -22,14 +22,14 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   backgroundColor: alpha(theme.palette.background.default, 0.72),
   zIndex: 1201,
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('md')]: {
     width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   }
 }));
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   minHeight: APPBAR_MOBILE,
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('md')]: {
     minHeight: APPBAR_DESKTOP,
     padding: theme.spacing(0, 5)
   }
@@ -45,7 +45,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
       <ToolbarStyle>
-        <Hidden lgUp>
+        <Hidden mdUp>
           <IconButton
             onClick={onOpenSidebar}
             sx={{ mr: 1, color: 'text.primary' }}

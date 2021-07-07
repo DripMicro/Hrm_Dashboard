@@ -52,7 +52,7 @@ const sidebarConfig = [
         icon: ICONS.directory
       },
       {
-        title: 'Display Name',
+        title: 'My Info',
         href: PATH_DASHBOARD.general.user,
         icon: ICONS.user
       }

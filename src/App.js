@@ -18,6 +18,7 @@ import LoadingScreen from './components/LoadingScreen';
 import NotistackProvider from './components/NotistackProvider';
 import Settings from './components/settings';
 // ----------------------------------------------------------------------
+import JwtProvider from './components/authentication/JwtProvider';
 
 const history = createBrowserHistory();
 
@@ -30,9 +31,11 @@ export default function App() {
             <RtlLayout>
               <NotistackProvider>
                 <Router history={history}>
-                  <Settings />
-                  <ScrollToTop />
-                  {renderRoutes(routes)}
+                  <JwtProvider>
+                    <Settings />
+                    <ScrollToTop />
+                    {renderRoutes(routes)}
+                  </JwtProvider>
                 </Router>
               </NotistackProvider>
             </RtlLayout>

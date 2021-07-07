@@ -162,21 +162,13 @@ export default function OfficeLists() {
                       </Button>
                     </TableCellStyles>
                   </TableRow>,
-                  <TableRow
-                    // sx={{
-                    //   boxShadow:
-                    //     '1px 4px 4px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 4%)',
-                    //   borderBottomLeftRadius: '15px',
-                    //   borderBottomRightRadius: '15px'
-                    // }}
-                    key={`sub${row.no}`}
-                  >
+                  <TableRow key={`sub_${row.no}`}>
                     <TableCellStyles colSpan={5}>
                       <Autocomplete
                         multiple
                         id="tags-outlined"
                         options={Users}
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option) => option}
                         defaultValue={[Users[0]]}
                         filterSelectedOptions
                         renderInput={(params) => (
@@ -209,8 +201,4 @@ export default function OfficeLists() {
   );
 }
 
-const Users = [
-  { name: 'Alexander Ryndin' },
-  { name: 'Zlenko Sofia' },
-  { name: 'Oleg Pablo' }
-];
+const Users = ['Alexander Ryndin', 'Zlenko Sofia', 'Oleg Pablo'];

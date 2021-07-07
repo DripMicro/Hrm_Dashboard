@@ -25,6 +25,7 @@ const slice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
+      console.log('here is initial', state.user);
     },
 
     // LOGIN
@@ -80,6 +81,7 @@ export function login({ email, password }) {
       password
     });
     const { accessToken, user } = response.data;
+    console.log('here is login:', user);
     setSession(accessToken);
     dispatch(slice.actions.loginSuccess({ user }));
   };
@@ -104,6 +106,21 @@ export function register({ email, password, firstname, lastname }) {
   };
 }
 
+export function updateProfile({ email, firstname, lastname, photoURL, roles }) {
+  const data = {
+    firstname,
+    lastname,
+    email,
+    photoURL,
+    roles
+  };
+  return async (dispatch) => {
+    const response = await axios.post('/api/auth/updateProfile', data);
+    console.log(response);
+    // dispatch(slice.actions.registerSuccess({ user }));
+  };
+}
+
 // ----------------------------------------------------------------------
 
 export function logout() {
@@ -121,11 +138,11 @@ export function getInitialize() {
 
     try {
       const accessToken = window.localStorage.getItem('accessToken');
-
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/api/account/my-account');
+        const response = await axios.get('/api/user/profile');
+        console.log('here is initial:', response);
         dispatch(
           slice.actions.getInitialize({
             isAuthenticated: true,

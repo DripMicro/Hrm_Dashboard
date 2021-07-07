@@ -44,8 +44,6 @@ export default function useAuth() {
 
     logout: () => dispatch(logout()),
 
-    resetPassword: () => {},
-
-    updateProfile: () => {}
+    resetPassword: () => {}
   };
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
@@ -111,9 +112,9 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
     }
-  }, [isOpenSidebar, onCloseSidebar, pathname]);
+  }, [pathname]);
 
-  console.log(user.roles);
+  // console.log('Dashboard Sidebar:', user);
   let NewMenuLinks = [];
   if (user.roles === 'SUPER ADMIN' || user.roles === 'ADMIN') {
     NewMenuLinks = MenuLinks;

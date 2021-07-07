@@ -4,6 +4,8 @@
 const db = require('../models');
 const config = require('../config/auth.config');
 
+const { sequelize } = db;
+
 const User = db.user;
 // const Role = db.role;
 const { ROLES } = db;
@@ -49,13 +51,31 @@ exports.signup = (req, res) => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          roles: ROLES[role - 1].toUpperCase()
+          roles: ROLES[role - 1].toUpperCase(),
+          offices: ['1']
         };
 
-        // set user role
-        userData.setRoles([role]).then(() => {
-          res.send({ accessToken, user });
+        const sql = `
+          UPDATE users
+          SET roleId = ${role}
+          WHERE id = ${userData.id};
+        `;
+        sequelize.query(sql, {
+          type: sequelize.QueryTypes.UPDATE
         });
+
+        // set user office
+        userData.setOffices([1]).then(() => {
+          const sql = `
+            UPDATE user_offices
+            SET isManager = 0
+            WHERE userId = ${userData.id} and officeId = 1;
+          `;
+          sequelize.query(sql, {
+            type: sequelize.QueryTypes.UPDATE
+          });
+        });
+        res.send({ accessToken, user });
       });
     })
     .catch((err) => {
@@ -87,20 +107,21 @@ exports.signin = (req, res) => {
       }
 
       const token = jwt.sign({ id: userData.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: 300 // 24 hours 86400
       });
 
-      let authorities = '';
-      userData.getRoles().then((roles) => {
-        for (let i = 0; i < roles.length; i += 1) {
-          authorities = `${roles[i].name.toUpperCase()}`;
+      const officeIds = [];
+      userData.getOffices().then((offices) => {
+        for (let i = 0; i < offices.length; i += 1) {
+          officeIds.push(`${offices[i].id}`);
         }
         const user = {
           id: userData.id,
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          roles: authorities
+          roles: ROLES[userData.roleId - 1].toUpperCase(),
+          offices: officeIds
         };
         const accessToken = token;
         console.log(user);

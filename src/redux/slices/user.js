@@ -1,4 +1,7 @@
-import { map } from 'lodash';
+/* eslint-disable no-continue */
+/* eslint-disable array-callback-return */
+import { useSelector } from 'react-redux';
+import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
@@ -52,6 +55,15 @@ const slice = createSlice({
     getUsersSuccess(state, action) {
       state.isLoading = false;
       state.users = action.payload;
+    },
+
+    // DELETE USERS
+    deleteUser(state, action) {
+      const deleteUser = filter(
+        state.userList,
+        (user) => user.id !== action.payload
+      );
+      state.userList = deleteUser;
     },
 
     // GET FOLLOWERS
@@ -125,8 +137,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { onToggleFollow } = slice.actions;
-
+export const { onToggleFollow, deleteUser } = slice.actions;
 // ----------------------------------------------------------------------
 
 export function getProfile() {
@@ -134,7 +145,7 @@ export function getProfile() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('/api/user/profile');
-      dispatch(slice.actions.getProfileSuccess(response.data.profile));
+      dispatch(slice.actions.getProfileSuccess(response.data.user));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -204,7 +215,7 @@ export function getUserList() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('/api/user/manage-users');
-      dispatch(slice.actions.getUserListSuccess(response.data.users));
+      dispatch(slice.actions.getUserListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

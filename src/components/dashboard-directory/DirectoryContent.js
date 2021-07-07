@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 // material
 import {
   useTheme,
@@ -9,9 +10,9 @@ import { Container } from '@material-ui/core';
 
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
-import UserLists from './UserLists';
+import UserLists from './UserList';
 
-const DayCategories = [
+const OfficeStatus = [
   {
     id: 0,
     label: 'swiss-office',
@@ -57,19 +58,33 @@ const TeamCategories = [
   }
 ];
 
+const initialStatus = [1, 2];
+
 const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
 }));
 
 export default function DirectoryContent() {
   const theme = useTheme();
+  const [offices, setOffices] = useState(initialStatus);
+
+  const setStatusProps = (selectedIds) => {
+    setOffices(selectedIds);
+    console.log('G:', selectedIds);
+  };
+
   return (
     <Container maxWidth="xl">
       <Container
         maxWidth="lg"
         sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
       >
-        <DayStatusButtonGroup daygroups={DayCategories} isMulti />
+        <DayStatusButtonGroup
+          officePropos={offices}
+          statusProps={setStatusProps}
+          officeGroups={OfficeStatus}
+          isMulti
+        />
         <TeamCategoryGroup daygroups={TeamCategories} />
         <SpaceStyle />
         <UserLists />

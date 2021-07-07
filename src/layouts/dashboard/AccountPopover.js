@@ -41,6 +41,7 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const { user } = useAuth();
   const anchorRef = useRef(null);
   const { logout } = useAuth();
   const [open, setOpen] = useState(false);
@@ -88,10 +89,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            displayName
+            {user.firstname} {user.lastname}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            email
+            {user.email}
           </Typography>
         </Box>
 

@@ -1,5 +1,7 @@
+/* eslint-disable array-callback-return */
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-// import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import {
@@ -12,8 +14,9 @@ import {
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 // hooks
-// import useAuth from '../../../hooks/useAuth';
-// import useIsMountedRef from '../../../hooks/useIsMountedRef';
+import useAuth from '../../hooks/useAuth';
+import useUserManage from '../../hooks/useUserManage';
+import useIsMountedRef from '../../hooks/useIsMountedRef';
 import { UploadAvatar } from '../upload';
 //
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
@@ -21,15 +24,17 @@ import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
 
 // ----------------------------------------------------------------------
 
-const user = {
-  firstName: 'Alexander',
-  lastName: 'Ryndin',
-  email: 'ryndinalex112@gmail.com',
-  photoURL: '/static/dashboard/home/2.jpg',
-  position: 'CEO'
-};
+// const user = {
+//   firstName: 'Alexander',
+//   lastName: 'Ryndin',
+//   email: 'ryndinalex112@gmail.com',
+//   photoURL: '/static/dashboard/home/2.jpg',
+//   roles: 'CEO'
+// };
 
-const DayCategories = [
+const initialStatus = [0, 2];
+
+const OfficeStatus = [
   {
     id: 0,
     label: 'swiss-office',
@@ -72,41 +77,57 @@ const TeamCategories = [
   }
 ];
 export default function AccountGeneral() {
-  // const isMountedRef = useIsMountedRef();
-  // const { enqueueSnackbar } = useSnackbar();
-  // const { user, updateProfile } = useAuth();
+  const isMountedRef = useIsMountedRef();
+  const { enqueueSnackbar } = useSnackbar();
+  const { updateProfile } = useUserManage();
+  const { user } = useAuth();
 
-  const UpdateUserSchema = Yup.object().shape({
-    firstName: Yup.string().required('FirstName is required'),
-    lastName: Yup.string().required('LastName is required'),
-    position: Yup.string().required('Position is required')
+  const initialOffices = [];
+  user.offices.map((office) => {
+    initialOffices.push(Number(office) - 1);
   });
 
+  const [offices, setOffices] = useState(initialOffices);
+
+  const UpdateUserSchema = Yup.object().shape({
+    firstname: Yup.string().required('FirstName is required'),
+    lastname: Yup.string().required('LastName is required'),
+    roles: Yup.string().required('Position is required')
+  });
+
+  const setStatusProps = (selectedIds) => {
+    setOffices(selectedIds);
+  };
+
   const formik = useFormik({
-    enableReinitialize: true,
+    enableReinitialize: false,
     initialValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstname: user.firstname,
+      lastname: user.lastname,
       email: user.email,
       photoURL: user.photoURL,
-      position: user.position
+      roles: user.roles
     },
 
-    validationSchema: UpdateUserSchema
-    // onSubmit: async (values, { setErrors, setSubmitting }) => {
-    //   try {
-    //     await updateProfile({ ...values });
-    //     enqueueSnackbar('Update success', { variant: 'success' });
-    //     if (isMountedRef.current) {
-    //       setSubmitting(false);
-    //     }
-    //   } catch (error) {
-    //     if (isMountedRef.current) {
-    //       setErrors({ afterSubmit: error.code });
-    //       setSubmitting(false);
-    //     }
-    //   }
-    // }
+    validationSchema: UpdateUserSchema,
+    onSubmit: async (values, { setErrors, setSubmitting }) => {
+      try {
+        const officeIds = [];
+        offices.map((office) => {
+          officeIds.push(office + 1);
+        });
+        await updateProfile({ ...values, officeIds });
+        enqueueSnackbar('Update success', { variant: 'success' });
+        if (isMountedRef.current) {
+          setSubmitting(false);
+        }
+      } catch (error) {
+        if (isMountedRef.current) {
+          setErrors({ afterSubmit: error.code });
+          setSubmitting(false);
+        }
+      }
+    }
   });
 
   const {
@@ -151,7 +172,7 @@ export default function AccountGeneral() {
                       disabled={user.email === 'demo@minimals.cc'} // You can remove this
                       fullWidth
                       label="First Name"
-                      {...getFieldProps('firstName')}
+                      {...getFieldProps('firstname')}
                     />
                   </Grid>
 
@@ -160,7 +181,7 @@ export default function AccountGeneral() {
                       disabled={user.email === 'demo@minimals.cc'} // You can remove this
                       fullWidth
                       label="Last Name"
-                      {...getFieldProps('lastName')}
+                      {...getFieldProps('lastname')}
                     />
                   </Grid>
 
@@ -177,7 +198,7 @@ export default function AccountGeneral() {
                     <TextField
                       fullWidth
                       label="Position"
-                      {...getFieldProps('position')}
+                      {...getFieldProps('roles')}
                     />
                   </Grid>
                 </Grid>
@@ -185,7 +206,9 @@ export default function AccountGeneral() {
                 <Box>
                   <Typography variant="subtitle1">Offices*</Typography>
                   <DayStatusButtonGroup
-                    daygroups={DayCategories}
+                    officePropos={offices}
+                    statusProps={setStatusProps}
+                    officeGroups={OfficeStatus}
                     isMulti
                     sx={{ textAlign: 'left !important' }}
                   />

@@ -29,8 +29,8 @@ import {
 import Label from '../Label';
 import Scrollbar from '../Scrollbar';
 import SearchNotFound from '../SearchNotFound';
-import UserListToolbar from './UserListToolbar';
-import UserListHead from './UserListHead';
+import UserListToolbar from './_UserListToolbar';
+import UserListHead from './_UserListHead';
 
 // ----------------------------------------------------------------------
 

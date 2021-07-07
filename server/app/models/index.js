@@ -21,18 +21,40 @@ db.sequelize = sequelize;
 
 db.user = require('./user.model.js')(sequelize, Sequelize);
 db.role = require('./role.model.js')(sequelize, Sequelize);
+db.office = require('./office.model.js')(sequelize, Sequelize);
 
-db.role.belongsToMany(db.user, {
-  through: 'user_roles',
-  foreignKey: 'roleId',
+// roles relative
+// db.role.belongsToMany(db.user, {
+//   through: 'user_roles',
+//   foreignKey: 'roleId',
+//   otherKey: 'userId'
+// });
+// db.user.belongsToMany(db.role, {
+//   through: 'user_roles',
+//   foreignKey: 'userId',
+//   otherKey: 'roleId'
+// });
+
+// db.role.hasOne(db.user);
+// db.user.belongsTo(db.role);
+
+// offices relative
+db.office.belongsToMany(db.user, {
+  through: 'user_offices',
+  foreignKey: 'officeId',
   otherKey: 'userId'
 });
-db.user.belongsToMany(db.role, {
-  through: 'user_roles',
+db.user.belongsToMany(db.office, {
+  through: 'user_offices',
   foreignKey: 'userId',
-  otherKey: 'roleId'
+  otherKey: 'officeId'
 });
 
 db.ROLES = ['super admin', 'admin', 'leader', 'member'];
+db.OFFICES = [
+  { emoji: '🙂', name: 'Office1', capacity: 5 },
+  { emoji: '🙂', name: 'Office2', capacity: 6 },
+  { emoji: '🙂', name: 'Office3', capacity: 3 }
+];
 
 module.exports = db;

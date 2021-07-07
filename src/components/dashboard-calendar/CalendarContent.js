@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 // material
 import { useTheme } from '@material-ui/core/styles';
 
@@ -171,7 +172,7 @@ const DaySchedules = [
   }
 ];
 
-const DayCategories = [
+const OfficeStatus = [
   {
     id: 0,
     label: 'swiss-office',
@@ -217,15 +218,28 @@ const TeamCategories = [
   }
 ];
 
+const initialStatus = [0, 2];
+
 export default function CalendarContent() {
   const theme = useTheme();
+  const [offices, setOffices] = useState(initialStatus);
+
+  const setStatusProps = (selectedIds) => {
+    setOffices(selectedIds);
+    console.log('G:', selectedIds);
+  };
   return (
     <Container maxWidth="xl">
       <Container
         maxWidth="md"
         sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
       >
-        <DayStatusButtonGroup daygroups={DayCategories} isMulti={false} />
+        <DayStatusButtonGroup
+          officePropos={offices}
+          statusProps={setStatusProps}
+          officeGroups={OfficeStatus}
+          isMulti
+        />
         <TeamCategoryGroup daygroups={TeamCategories} />
         <CalendarCard daystatus={DaySchedules} />
       </Container>
