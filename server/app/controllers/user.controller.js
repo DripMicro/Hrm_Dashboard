@@ -10,37 +10,20 @@ const JWT_SECRET = config.secret;
 
 const db = require('../models');
 
-// const { sequelize } = db;
 const User = db.user;
 const { ROLES } = db;
 
-exports.allAccess = (req, res) => {
-  res.status(200).send('Public Content.');
-};
-
-exports.userBoard = (req, res) => {
-  res.status(200).send('User Content.');
-};
-
-exports.adminBoard = (req, res) => {
-  res.status(200).send('Admin Content.');
-};
-
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send('Moderator Content.');
-};
-
-exports.getMembers = (req, res) => {
+exports.getUserList = (req, res) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(200).send({ message: 'Authorization token missing' });
+    return res.status(200).send([]);
   }
 
   const accessToken = authorization.split(' ')[1];
-  const { id } = jwt.verify(accessToken, JWT_SECRET);
+  const { userId } = jwt.verify(accessToken, JWT_SECRET);
   User.findOne({
     where: {
-      id
+      id: userId
     }
   }).then((userData) => {
     const officeIds = [];
@@ -125,8 +108,8 @@ exports.updateProfile = (req, res) => {
           email: req.body.email
         }
       }).then((userData) => {
-        console.log('UUUUUUUUUU:', req.body.officeIds);
-        userData.setOffices(req.body.officeIds);
+        userData.setOffices(req.body.officeId);
+        userData.setTeams(req.body.teamId);
         res.status(200).send('success');
       });
     })
@@ -138,31 +121,39 @@ exports.updateProfile = (req, res) => {
 exports.getProfile = (req, res) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(200).send({ message: 'Authorization token missing' });
+    return res.status(200).send([]);
   }
 
   const accessToken = authorization.split(' ')[1];
-  const { id } = jwt.verify(accessToken, JWT_SECRET);
+  const { userId } = jwt.verify(accessToken, JWT_SECRET);
+
   User.findOne({
     where: {
-      id
+      id: userId
     }
   }).then((userData) => {
     const officeIds = [];
+    const teamIds = [];
     userData.getOffices().then((offices) => {
       for (let i = 0; i < offices.length; i += 1) {
         officeIds.push(`${offices[i].id}`);
       }
-      const user = {
-        id: userData.id,
-        firstname: userData.firstname,
-        lastname: userData.lastname,
-        email: userData.email,
-        roles: ROLES[userData.roleId - 1].toUpperCase(),
-        offices: officeIds
-      };
-      console.log(user);
-      res.status(200).send({ user });
+      userData.getTeams().then((teams) => {
+        for (let i = 0; i < teams.length; i += 1) {
+          teamIds.push(`${teams[i].id}`);
+        }
+        const user = {
+          id: userData.id,
+          firstname: userData.firstname,
+          lastname: userData.lastname,
+          email: userData.email,
+          roles: ROLES[userData.roleId - 1].toUpperCase(),
+          offices: officeIds,
+          teams: teamIds
+        };
+        console.log(user);
+        res.status(200).send({ user });
+      });
     });
   });
 };

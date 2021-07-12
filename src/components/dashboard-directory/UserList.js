@@ -55,7 +55,8 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function applySortFilter(array, comparator, query) {
+function applySortFilter(arrays, comparator, query) {
+  const array = arrays || [];
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -84,9 +85,9 @@ export default function UserList() {
 
   useEffect(() => {
     dispatch(getUserList());
+    console.log('This is userList:', userList);
+    console.log('dispatch is changed!');
   }, [dispatch]);
-
-  console.log('getUserList-->:', userList);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

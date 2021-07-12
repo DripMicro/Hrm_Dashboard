@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { Form, FormikProvider, useFormik } from 'formik';
@@ -13,81 +13,81 @@ import {
   CardContent
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getOfficeList, getTeamList } from '../../redux/slices/adminSetting';
 // hooks
 import useAuth from '../../hooks/useAuth';
-import useUserManage from '../../hooks/useUserManage';
+import useAdmin from '../../hooks/useAdmin';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 import { UploadAvatar } from '../upload';
 //
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
-
+// utils
+// import { passwordError, emailError } from '../../utils/helpError';
 // ----------------------------------------------------------------------
+const initialOffices = [];
+const initialTeams = [];
 
-// const user = {
-//   firstName: 'Alexander',
-//   lastName: 'Ryndin',
-//   email: 'ryndinalex112@gmail.com',
-//   photoURL: '/static/dashboard/home/2.jpg',
-//   roles: 'CEO'
-// };
-
-const initialStatus = [0, 2];
-
-const OfficeStatus = [
-  {
-    id: 0,
-    label: 'swiss-office',
-    icon: '💼'
-  },
-  {
-    id: 1,
-    label: 'At Home',
-    icon: '🏡'
-  },
-  {
-    id: 2,
-    label: 'With Family',
-    icon: '👨‍👨‍👦‍👦'
-  },
-  {
-    id: 3,
-    label: 'On the go',
-    icon: '🚶‍♂️'
-  },
-  {
-    id: 4,
-    label: 'Not working',
-    icon: '🏝'
-  }
-];
-
-const TeamCategories = [
-  {
-    id: 0,
-    label: 'Web Team'
-  },
-  {
-    id: 1,
-    label: 'Design Team'
-  },
-  {
-    id: 2,
-    label: 'Backend Team'
-  }
-];
 export default function AccountGeneral() {
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar } = useSnackbar();
-  const { updateProfile } = useUserManage();
+  const { updateProfile } = useAdmin();
   const { user } = useAuth();
+  const dispatch = useDispatch();
+  const { officeList, teamList } = useSelector((state) => state.adminSetting);
 
-  const initialOffices = [];
-  user.offices.map((office) => {
-    initialOffices.push(Number(office) - 1);
-  });
+  const [offices, setOffices] = useState([]);
+  const [officeIds, setOfficeIds] = useState([]);
 
-  const [offices, setOffices] = useState(initialOffices);
+  const [teams, setTeams] = useState([]);
+  const [teamIds, setTeamIds] = useState([]);
+
+  useEffect(() => {
+    dispatch(getOfficeList());
+    dispatch(getTeamList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const OfficeStatus = [];
+    officeList.map((office) => {
+      const data = {
+        id: office.id,
+        label: office.name,
+        icon: office.emoji
+      };
+
+      OfficeStatus.push(data);
+    });
+
+    const TeamStatus = [];
+    teamList.map((team) => {
+      const data = {
+        id: team.id,
+        label: team.name,
+        color: team.color
+      };
+
+      TeamStatus.push(data);
+    });
+
+    setOffices([...OfficeStatus]);
+    setTeams([...TeamStatus]);
+  }, [officeList, teamList]);
+
+  useEffect(() => {
+    user.offices.map((office) => {
+      initialOffices.push(Number(office));
+    });
+    setOfficeIds(initialOffices);
+
+    user.teams.map((team) => {
+      initialTeams.push(Number(team));
+    });
+    console.log(initialTeams);
+    setTeamIds(initialTeams);
+  }, [user]);
 
   const UpdateUserSchema = Yup.object().shape({
     firstname: Yup.string().required('FirstName is required'),
@@ -96,7 +96,11 @@ export default function AccountGeneral() {
   });
 
   const setStatusProps = (selectedIds) => {
-    setOffices(selectedIds);
+    setOfficeIds(selectedIds);
+  };
+
+  const handleTeamSelected = (teamStatus) => {
+    setTeamIds(teamStatus);
   };
 
   const formik = useFormik({
@@ -112,11 +116,10 @@ export default function AccountGeneral() {
     validationSchema: UpdateUserSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        const officeIds = [];
-        offices.map((office) => {
-          officeIds.push(office + 1);
-        });
-        await updateProfile({ ...values, officeIds });
+        const officeId = officeIds;
+        const teamId = teamIds;
+
+        await updateProfile({ ...values, officeId, teamId });
         enqueueSnackbar('Update success', { variant: 'success' });
         if (isMountedRef.current) {
           setSubmitting(false);
@@ -132,8 +135,8 @@ export default function AccountGeneral() {
 
   const {
     values,
-    // errors,
-    // touched,
+    errors,
+    touched,
     isSubmitting,
     handleSubmit,
     getFieldProps,
@@ -173,6 +176,8 @@ export default function AccountGeneral() {
                       fullWidth
                       label="First Name"
                       {...getFieldProps('firstname')}
+                      error={Boolean(touched.firstname && errors.firstname)}
+                      helperText={touched.firstname && errors.firstname}
                     />
                   </Grid>
 
@@ -182,6 +187,8 @@ export default function AccountGeneral() {
                       fullWidth
                       label="Last Name"
                       {...getFieldProps('lastname')}
+                      error={Boolean(touched.lastname && errors.lastname)}
+                      helperText={touched.lastname && errors.lastname}
                     />
                   </Grid>
 
@@ -204,20 +211,26 @@ export default function AccountGeneral() {
                 </Grid>
                 <Box sx={{ mb: 5 }} />
                 <Box>
-                  <Typography variant="subtitle1">Offices*</Typography>
+                  <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
+                    Offices*
+                  </Typography>
                   <DayStatusButtonGroup
-                    officePropos={offices}
+                    officeInitProps={officeIds}
                     statusProps={setStatusProps}
-                    officeGroups={OfficeStatus}
+                    officeGroups={offices}
                     isMulti
                     sx={{ textAlign: 'left !important' }}
                   />
                 </Box>
                 <Box sx={{ mb: 5 }} />
                 <Box>
-                  <Typography variant="subtitle1">My Teams</Typography>
+                  <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
+                    My Teams
+                  </Typography>
                   <TeamCategoryGroup
-                    daygroups={TeamCategories}
+                    teamInitProps={teamIds}
+                    daygroups={teams}
+                    teamStatusProps={handleTeamSelected}
                     sx={{ textAlign: 'left' }}
                   />
                 </Box>

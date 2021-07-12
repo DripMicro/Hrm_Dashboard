@@ -25,7 +25,6 @@ const slice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
-      console.log('here is initial', state.user);
     },
 
     // LOGIN
@@ -100,24 +99,8 @@ export function register({ email, password, firstname, lastname }) {
     const response = await axios.post('/api/auth/signup', data);
     console.log(response);
     const { accessToken, user } = response.data;
-
-    window.localStorage.setItem('accessToken', accessToken);
+    setSession(accessToken);
     dispatch(slice.actions.registerSuccess({ user }));
-  };
-}
-
-export function updateProfile({ email, firstname, lastname, photoURL, roles }) {
-  const data = {
-    firstname,
-    lastname,
-    email,
-    photoURL,
-    roles
-  };
-  return async (dispatch) => {
-    const response = await axios.post('/api/auth/updateProfile', data);
-    console.log(response);
-    // dispatch(slice.actions.registerSuccess({ user }));
   };
 }
 
@@ -142,7 +125,6 @@ export function getInitialize() {
         setSession(accessToken);
 
         const response = await axios.get('/api/user/profile');
-        console.log('here is initial:', response);
         dispatch(
           slice.actions.getInitialize({
             isAuthenticated: true,

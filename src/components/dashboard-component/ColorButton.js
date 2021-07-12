@@ -37,7 +37,7 @@ export default function ColorButton({ color, changeColorProps, index }) {
   };
 
   const uploadColorFromContent = (color) => {
-    console.log('Color:', color);
+    handleClose();
     changeColorProps(color, index);
   };
 

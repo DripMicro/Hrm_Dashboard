@@ -7,10 +7,9 @@ import {
   Typography,
   Box,
   TextField,
-  Grid
+  Grid,
+  Autocomplete
 } from '@material-ui/core';
-
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import DayGroup from '../dashboard-component/TeamCategoryGroup';
 

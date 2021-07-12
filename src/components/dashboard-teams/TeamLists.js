@@ -1,6 +1,7 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme, withStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,12 +10,18 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
+import { LoadingButton } from '@material-ui/lab';
 
 import { Button, Card, CardContent, TextField, Box } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import ColorButton from '../dashboard-component/ColorButton';
+
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getTeamList } from '../../redux/slices/adminSetting';
+import useAdmin from '../../hooks/useAdmin';
 
 const TableCellStyles = withStyles((theme) => ({
   root: {
@@ -31,11 +38,11 @@ const TableCellStyles = withStyles((theme) => ({
   }
 }))(TableCell);
 
-function createData(no, color, teamName, capacity) {
-  return { no, color, teamName, capacity };
+function createData(id, color, name, capacity) {
+  return { id, color, name, capacity };
 }
 
-const rows = [
+let rows = [
   createData(0, '#00D084', 'Maxime quidem provident', 12),
   createData(1, '#0693E3', 'Atque pariatur', 3),
   createData(2, '#EB144C', 'Quia iste', 5)
@@ -43,31 +50,50 @@ const rows = [
 
 export default function TeamLists() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const { addTeam, deleteTeam, updateTeamList } = useAdmin();
+  const { teamList } = useSelector((state) => state.adminSetting);
 
-  // const [anchorEl, setAnchorEl] = useState(null);
-  const [teamName, setTeamName] = useState('');
+  const [teams, setTeams] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isChanged, setIsChanged] = useState(true);
 
-  const [teams, setTeams] = useState(rows);
+  useEffect(() => {
+    dispatch(getTeamList());
+  }, [dispatch]);
 
-  // const handleClick = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  useEffect(() => {
+    rows = [];
+    teamList.map((team) => {
+      rows.push(createData(team.id, team.color, team.name, team.capacity));
+    });
+    setTeams([...rows]);
+  }, [teamList]);
 
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+  const handleSaveChanges = async () => {
+    setIsSubmitting(true);
+    const updatedTeamList = teams;
+    await updateTeamList({ updatedTeamList });
+    setIsChanged(true);
+    setIsSubmitting(false);
+    enqueueSnackbar('Update success', { variant: 'success' });
+  };
 
-  const handleAddTeam = () => {
-    rows.push(createData(rows.length, '🙂', '', ''));
+  const handleAddTeam = async () => {
+    console.log('this is add team button');
+    const id = await addTeam();
+    const data = createData(id, '#9900EF', '', '');
+    rows.push(data);
     setTeams([...rows]);
   };
 
-  const handleChangeTeamName = (event) => {
-    setTeamName(event.target.value);
-    console.log(teamName);
+  const handleDeleteTeam = async (teamId) => {
+    await deleteTeam({ teamId });
   };
 
   const changeColor = (color, index) => {
+    setIsChanged(false);
     teams.map((team, teamIndex) => {
       if (index === teamIndex) {
         rows[teamIndex].color = color;
@@ -77,6 +103,16 @@ export default function TeamLists() {
   };
   return (
     <>
+      <Box sx={{ textAlign: 'right', mb: 1, mr: 1 }}>
+        <LoadingButton
+          disabled={isChanged}
+          variant="contained"
+          pending={isSubmitting}
+          onClick={handleSaveChanges}
+        >
+          Save Changes
+        </LoadingButton>
+      </Box>
       <Card>
         <CardContent sx={{ padding: theme.spacing(3, 0) }}>
           <TableContainer component={Paper}>
@@ -95,8 +131,8 @@ export default function TeamLists() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {teams.map((row) => (
-                  <TableRow key={row.no}>
+                {teams.map((row, index) => (
+                  <TableRow key={index}>
                     <TableCellStyles
                       component="th"
                       scope="row"
@@ -104,7 +140,7 @@ export default function TeamLists() {
                         [theme.breakpoints.down('md')]: { display: 'none' }
                       }}
                     >
-                      {row.no + 1}
+                      {index + 1}
                     </TableCellStyles>
                     <TableCellStyles
                       align="right"
@@ -112,7 +148,7 @@ export default function TeamLists() {
                     >
                       <ColorButton
                         color={row.color}
-                        index={row.no}
+                        index={index}
                         changeColorProps={changeColor}
                       />
                     </TableCellStyles>
@@ -126,18 +162,28 @@ export default function TeamLists() {
                         id="outlined-basic"
                         label="Team Name"
                         variant="outlined"
-                        value={row.teamName}
-                        onChange={handleChangeTeamName}
+                        value={row.name}
+                        onChange={(e) => {
+                          const team = teams;
+                          team[index].name = e.target.value;
+                          setTeams([...team]);
+                          setIsChanged(false);
+                        }}
                         sx={{ width: '100%' }}
                       />
                     </TableCellStyles>
                     <TableCellStyles align="right">
                       <TextField
                         id="outlined-basic"
-                        label="Team Name"
+                        label="Capacity"
                         variant="outlined"
                         value={row.capacity}
-                        onChange={handleChangeTeamName}
+                        onChange={(e) => {
+                          const team = teams;
+                          team[index].capacity = e.target.value;
+                          setTeams([...team]);
+                          setIsChanged(false);
+                        }}
                         sx={{
                           width: '50px',
                           [theme.breakpoints.up('md')]: { width: '100%' }
@@ -146,7 +192,7 @@ export default function TeamLists() {
                     </TableCellStyles>
                     <TableCellStyles align="right">
                       <Button
-                        // onClick={handleClick}
+                        onClick={() => handleDeleteTeam(row.id)}
                         color="error"
                         sx={{
                           borderRadius: '50%',

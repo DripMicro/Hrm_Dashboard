@@ -5,6 +5,7 @@ import { persistReducer } from 'redux-persist';
 import settingsReducer from './slices/settings';
 import authJwtReducer from './slices/authJwt';
 import userReducer from './slices/user';
+import adminSettingReducer from './slices/adminSetting';
 // ----------------------------------------------------------------------
 
 const rootPersistConfig = {
@@ -24,7 +25,8 @@ const authPersistConfig = {
 const rootReducer = combineReducers({
   settings: settingsReducer,
   authJwt: persistReducer(authPersistConfig, authJwtReducer),
-  user: userReducer
+  user: userReducer,
+  adminSetting: adminSettingReducer
 });
 
 export { rootPersistConfig, rootReducer };

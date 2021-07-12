@@ -1,6 +1,6 @@
 /* eslint-disable no-continue */
 /* eslint-disable array-callback-return */
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
@@ -12,9 +12,10 @@ const initialState = {
   isLoading: false,
   error: false,
   myProfile: null,
-  posts: [],
+  officeList: [],
   users: [],
   userList: [],
+  managerList: [],
   followers: [],
   friends: [],
   gallery: [],
@@ -43,12 +44,6 @@ const slice = createSlice({
     getProfileSuccess(state, action) {
       state.isLoading = false;
       state.myProfile = action.payload;
-    },
-
-    // GET POSTS
-    getPostsSuccess(state, action) {
-      state.isLoading = false;
-      state.posts = action.payload;
     },
 
     // GET USERS
@@ -146,20 +141,6 @@ export function getProfile() {
     try {
       const response = await axios.get('/api/user/profile');
       dispatch(slice.actions.getProfileSuccess(response.data.user));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
-// ----------------------------------------------------------------------
-
-export function getPosts() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/api/user/posts');
-      dispatch(slice.actions.getPostsSuccess(response.data.posts));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -293,5 +274,33 @@ export function getUsers() {
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
+  };
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Update
+// ----------------------------------------------------------------------
+
+export function updateProfile({
+  email,
+  firstname,
+  lastname,
+  photoURL,
+  roles,
+  officeId,
+  teamId
+}) {
+  const data = {
+    firstname,
+    lastname,
+    email,
+    photoURL,
+    roles,
+    officeId,
+    teamId
+  };
+  return async () => {
+    const response = await axios.post('/api/user/updateProfile', data);
+    console.log(response);
   };
 }

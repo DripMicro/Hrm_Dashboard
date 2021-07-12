@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-
-import { Box, Typography } from '@material-ui/core';
+import {
+  Box,
+  Typography,
+  ToggleButtonGroup,
+  ToggleButton
+} from '@material-ui/core';
 
 DayStatusButtonGroup.propTypes = {
   officeGroups: PropTypes.array.isRequired,
   statusProps: PropTypes.func,
-  officePropos: PropTypes.array,
+  officeInitProps: PropTypes.array,
   isMulti: PropTypes.bool,
   sx: PropTypes.object
 };
@@ -18,14 +20,15 @@ DayStatusButtonGroup.propTypes = {
 export default function DayStatusButtonGroup({
   officeGroups,
   statusProps,
-  officePropos,
+  officeInitProps,
   isMulti,
   sx
 }) {
   const [type, setType] = React.useState(0);
-  const [types, setTypes] = React.useState(officePropos);
+  const [types, setTypes] = React.useState([]);
 
   const handleType = (event, newType) => {
+    console.log(newType);
     setType(newType);
   };
 
@@ -34,6 +37,9 @@ export default function DayStatusButtonGroup({
     setTypes(newTypes);
   };
 
+  useEffect(() => {
+    setTypes(officeInitProps);
+  }, [officeInitProps]);
   return (
     <>
       {isMulti ? (
@@ -57,7 +63,8 @@ export default function DayStatusButtonGroup({
                 '&.Mui-selected': {
                   border: '1px solid #00AB55',
                   borderLeft: '1px solid #00AB55 !important',
-                  color: '#00AB55'
+                  color: '#00AB55',
+                  backgroundColor: 'white'
                 }
               }}
             >

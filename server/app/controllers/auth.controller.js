@@ -7,16 +7,17 @@ const config = require('../config/auth.config');
 const { sequelize } = db;
 
 const User = db.user;
-// const Role = db.role;
-const { ROLES } = db;
+const Office = db.office;
+const Team = db.team;
+const Company = db.company;
 
-// const { Op } = db.Sequelize;
+const { ROLES, OFFICES, TEAMS } = db;
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const JWT_SECRET = config.secret;
-const JWT_EXPIRES_IN = '5 days';
+const JWT_EXPIRES_IN = 86400;
 
 const ADMIN = 2;
 const MEMBER = 4;
@@ -31,51 +32,56 @@ exports.signup = (req, res) => {
     .then((userData) => {
       let emailCount = 0;
       let role = ADMIN;
-      User.findAll().then((users) => {
+      User.findAll().then(async (users) => {
+        const reqEmail = req.body.email.split('@')[1].split('.')[0];
+        const company = req.body.email.split('@')[1];
         users.map((user) => {
-          const reqEmail = req.body.email.split('@')[1].split('.')[0];
           const existEmail = user.email.split('@')[1].split('.')[0];
           if (reqEmail === existEmail) {
             emailCount += 1;
           }
         });
 
-        if (emailCount > 1) role = MEMBER;
-
-        const accessToken = jwt.sign({ userId: userData.id }, JWT_SECRET, {
-          expiresIn: JWT_EXPIRES_IN
-        });
-
-        const user = {
-          id: userData.id,
-          firstname: userData.firstname,
-          lastname: userData.lastname,
-          email: userData.email,
-          roles: ROLES[role - 1].toUpperCase(),
-          offices: ['1']
-        };
-
-        const sql = `
-          UPDATE users
-          SET roleId = ${role}
-          WHERE id = ${userData.id};
-        `;
-        sequelize.query(sql, {
-          type: sequelize.QueryTypes.UPDATE
-        });
-
-        // set user office
-        userData.setOffices([1]).then(() => {
-          const sql = `
-            UPDATE user_offices
-            SET isManager = 0
-            WHERE userId = ${userData.id} and officeId = 1;
-          `;
-          sequelize.query(sql, {
-            type: sequelize.QueryTypes.UPDATE
+        if (emailCount > 1) {
+          role = MEMBER;
+          Company.findOne({
+            where: {
+              name: company
+            }
+          }).then(async (company) => {
+            const { accessToken, user } = await generateUser(
+              userData,
+              role,
+              company.id,
+              false
+            );
+            await User.update(
+              {
+                companyId: company.id
+              },
+              { where: { email: userData.email } }
+            );
+            res.status(200).send({ accessToken, user });
           });
-        });
-        res.send({ accessToken, user });
+        } else {
+          Company.create({
+            name: company
+          }).then(async (company) => {
+            const { accessToken, user } = await generateUser(
+              userData,
+              role,
+              company.id,
+              true
+            );
+            await User.update(
+              {
+                companyId: company.id
+              },
+              { where: { email: userData.email } }
+            );
+            res.status(200).send({ accessToken, user });
+          });
+        }
       });
     })
     .catch((err) => {
@@ -91,7 +97,7 @@ exports.signin = (req, res) => {
   })
     .then((userData) => {
       if (!userData) {
-        return res.status(400).send({ message: 'auth/user-not-found' });
+        return res.status(200).send({ message: 'auth/user-not-found' });
       }
 
       const passwordIsValid = bcrypt.compareSync(
@@ -100,35 +106,130 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(400).send({
+        return res.status(200).send({
           accessToken: null,
           message: 'auth/wrong-password'
         });
       }
 
-      const token = jwt.sign({ id: userData.id }, config.secret, {
-        expiresIn: 300 // 24 hours 86400
-      });
+      const token = jwt.sign(
+        { userId: userData.id, companyId: userData.companyId },
+        JWT_SECRET,
+        {
+          expiresIn: JWT_EXPIRES_IN // 24 hours 86400
+        }
+      );
 
       const officeIds = [];
+      const teamIds = [];
       userData.getOffices().then((offices) => {
         for (let i = 0; i < offices.length; i += 1) {
           officeIds.push(`${offices[i].id}`);
         }
-        const user = {
-          id: userData.id,
-          firstname: userData.firstname,
-          lastname: userData.lastname,
-          email: userData.email,
-          roles: ROLES[userData.roleId - 1].toUpperCase(),
-          offices: officeIds
-        };
-        const accessToken = token;
-        console.log(user);
-        res.status(200).send({ accessToken, user });
+        userData.getTeams().then((teams) => {
+          for (let i = 0; i < teams.length; i += 1) {
+            teamIds.push(`${teams[i].id}`);
+          }
+          const user = {
+            id: userData.id,
+            firstname: userData.firstname,
+            lastname: userData.lastname,
+            email: userData.email,
+            roles: ROLES[userData.roleId - 1].toUpperCase(),
+            offices: officeIds,
+            teams: teamIds,
+            companyId: userData.comapnyId
+          };
+
+          const accessToken = token;
+          res.status(200).send({ accessToken, user });
+        });
       });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 };
+
+async function generateUser(userData, role, cId, isNew) {
+  if (isNew) {
+    await initial(cId);
+  }
+  const accessToken = jwt.sign(
+    { userId: userData.id, companyId: cId },
+    JWT_SECRET,
+    {
+      expiresIn: JWT_EXPIRES_IN
+    }
+  );
+
+  const entries = await Office.findAll({
+    limit: 1,
+    order: [['createdAt', 'DESC']],
+    where: {
+      companyId: cId
+    }
+  });
+
+  let officeId = '';
+  entries.map((office) => {
+    officeId = office.id;
+  });
+
+  const user = {
+    id: userData.id,
+    firstname: userData.firstname,
+    lastname: userData.lastname,
+    email: userData.email,
+    roles: ROLES[role - 1].toUpperCase(),
+    offices: [officeId],
+    teams: [],
+    companyId: cId
+  };
+
+  const sql = `
+    UPDATE users
+    SET roleId = ${role}
+    WHERE id = ${userData.id};
+  `;
+  sequelize.query(sql, {
+    type: sequelize.QueryTypes.UPDATE
+  });
+
+  // set user office
+  userData.setOffices([officeId]).then(() => {
+    const sql = `
+      UPDATE user_offices
+      SET isManager = 0
+      WHERE userId = ${userData.id} and officeId = ${officeId};
+    `;
+    sequelize.query(sql, {
+      type: sequelize.QueryTypes.UPDATE
+    });
+  });
+  const res = {};
+  res.accessToken = accessToken;
+  res.user = user;
+  return res;
+}
+
+async function initial(cId) {
+  // user office initialize ...
+  OFFICES.forEach((office) => {
+    Office.create({
+      emoji: office.emoji,
+      name: office.name,
+      capacity: office.capacity,
+      companyId: cId
+    });
+  });
+
+  TEAMS.forEach((team) => {
+    Team.create({
+      color: team.color,
+      name: team.name,
+      capacity: team.capacity,
+      companyId: cId
+    });
+  });
+}

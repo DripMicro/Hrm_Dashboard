@@ -1,26 +1,45 @@
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { withStyles, useTheme } from '@material-ui/core/styles';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-
-import { Typography } from '@material-ui/core';
+import { Typography, ToggleButtonGroup, ToggleButton } from '@material-ui/core';
 
 TeamCategoryGroup.propTypes = {
   daygroups: PropTypes.array,
+  teamInitProps: PropTypes.array,
+  teamStatusProps: PropTypes.func,
   sx: PropTypes.object
 };
 
-export default function TeamCategoryGroup({ daygroups, sx }) {
+const StyledToggleButtonGroup = withStyles((theme) => ({
+  grouped: {
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1)
+  }
+}))(ToggleButtonGroup);
+
+export default function TeamCategoryGroup({
+  daygroups,
+  teamInitProps,
+  teamStatusProps,
+  sx
+}) {
+  const theme = useTheme();
+
   const [categories, setCategories] = React.useState([]);
 
+  useEffect(() => {
+    setCategories(teamInitProps);
+  }, [teamInitProps]);
+
   const handleCategories = (event, newCategories) => {
+    teamStatusProps(newCategories);
     setCategories(newCategories);
   };
 
   return (
-    <ToggleButtonGroup
+    <StyledToggleButtonGroup
       value={categories}
       onChange={handleCategories}
       aria-label="team category"
@@ -30,29 +49,25 @@ export default function TeamCategoryGroup({ daygroups, sx }) {
         <ToggleButton
           key={item.id}
           value={item.id}
-          style={{ height: '42px' }}
           sx={{
-            px: 3,
-            mr: 1,
-            mb: 1,
-            heigth: '42px !important',
-            borderRadius: '20px !important',
-            borderLeft: '1px solid #D5D9DF !important',
+            borderColor: item.color,
+            borderRadius: `${theme.spacing(3)} !important`,
+            color: item.color,
+            borderLeft: `1px solid ${item.color} !important`,
             '&.Mui-selected': {
-              border: '1px solid #00AB55',
-              borderLeft: '1px solid #00AB55 !important',
               color: 'white',
-              fontWeight: 700,
-              backgroundColor: '#00AB55'
+              backgroundColor: item.color
             },
             '&.Mui-selected:hover': {
-              backgroundColor: 'rgb(87 175 105)'
+              backgroundColor: item.color
             }
           }}
         >
-          <Typography variant="body2">{item.label}</Typography>
+          <Typography variant="body2" sx={{ fontWeight: 700 }}>
+            {item.label}
+          </Typography>
         </ToggleButton>
       ))}
-    </ToggleButtonGroup>
+    </StyledToggleButtonGroup>
   );
 }

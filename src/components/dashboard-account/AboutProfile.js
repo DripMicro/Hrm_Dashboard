@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
@@ -8,7 +7,7 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import DatePicker from '@material-ui/lab/DatePicker';
 
-import { Card, CardContent, Grid, Box } from '@material-ui/core';
+import { Card, CardContent, Grid, Box, Autocomplete } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 
 const TextFieldStyle = withStyles(() => ({

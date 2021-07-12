@@ -1,6 +1,8 @@
-module.exports = (sequelize, Sequelize) => {
-  const Role = sequelize.define('offices', {
-    emoji: {
+"use strict";
+
+module.exports = function (sequelize, Sequelize) {
+  var Team = sequelize.define('teams', {
+    color: {
       type: Sequelize.STRING
     },
     name: {
@@ -23,6 +25,5 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     }
   });
-
-  return Role;
+  return Team;
 };

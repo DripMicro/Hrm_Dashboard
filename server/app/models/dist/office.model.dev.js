@@ -1,5 +1,7 @@
-module.exports = (sequelize, Sequelize) => {
-  const Role = sequelize.define('offices', {
+"use strict";
+
+module.exports = function (sequelize, Sequelize) {
+  var Role = sequelize.define('offices', {
     emoji: {
       type: Sequelize.STRING
     },
@@ -23,6 +25,5 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     }
   });
-
   return Role;
 };

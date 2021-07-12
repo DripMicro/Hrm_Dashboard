@@ -1,16 +1,9 @@
-module.exports = (sequelize, Sequelize) => {
-  const Role = sequelize.define('offices', {
-    emoji: {
-      type: Sequelize.STRING
-    },
+"use strict";
+
+module.exports = function (sequelize, Sequelize) {
+  var Company = sequelize.define('company', {
     name: {
       type: Sequelize.STRING
-    },
-    capacity: {
-      type: Sequelize.INTEGER.UNSIGNED
-    },
-    companyId: {
-      type: Sequelize.INTEGER
     },
     createdAt: {
       type: 'TIMESTAMP',
@@ -23,6 +16,5 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     }
   });
-
-  return Role;
+  return Company;
 };

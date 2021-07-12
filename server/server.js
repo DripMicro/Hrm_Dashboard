@@ -20,12 +20,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // database
 const db = require('./app/models');
 
-const { sequelize } = db;
+// const { sequelize } = db;
 
 const Role = db.role;
 const User = db.user;
-const Office = db.office;
-const { ROLES, OFFICES } = db;
+
+const { ROLES } = db;
 
 // eslint-disable-next-line no-unused-vars
 function initial() {
@@ -34,16 +34,6 @@ function initial() {
     Role.create({
       id: index + 1,
       name: role
-    });
-  });
-
-  // user office initialize ...
-  OFFICES.forEach((office, index) => {
-    Office.create({
-      id: index + 1,
-      emoji: office.emoji,
-      name: office.name,
-      capacity: office.capacity
     });
   });
 
@@ -77,6 +67,8 @@ app.get('/', (req, res) => {
 // routes
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/office.routes')(app);
+require('./app/routes/team.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

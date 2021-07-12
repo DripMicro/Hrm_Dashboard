@@ -31,7 +31,7 @@ export default function EmojiButton({ icon, changeIconProps, index }) {
   };
 
   const uploadIconFromContent = (icon) => {
-    console.log('This is icon:', icon);
+    handleClose();
     changeIconProps(icon, index);
   };
 
