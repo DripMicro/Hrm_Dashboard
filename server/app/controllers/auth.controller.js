@@ -46,7 +46,7 @@ exports.signup = (req, res) => {
           role = MEMBER;
           Company.findOne({
             where: {
-              name: company
+              domain: company
             }
           }).then(async (company) => {
             const { accessToken, user } = await generateUser(
@@ -65,7 +65,7 @@ exports.signup = (req, res) => {
           });
         } else {
           Company.create({
-            name: company
+            domain: company
           }).then(async (company) => {
             const { accessToken, user } = await generateUser(
               userData,
@@ -97,7 +97,7 @@ exports.signin = (req, res) => {
   })
     .then((userData) => {
       if (!userData) {
-        return res.status(200).send({ message: 'auth/user-not-found' });
+        return res.status(400).send({ message: 'auth/user-not-found' });
       }
 
       const passwordIsValid = bcrypt.compareSync(
@@ -106,7 +106,7 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(200).send({
+        return res.status(400).send({
           accessToken: null,
           message: 'auth/wrong-password'
         });

@@ -1,6 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-  const Company = sequelize.define('company', {
+  const Company = sequelize.define('companies', {
     name: {
+      type: Sequelize.STRING
+    },
+    domain: {
       type: Sequelize.STRING
     },
     createdAt: {

@@ -1,15 +1,19 @@
-"use strict";
-
-module.exports = function (sequelize, Sequelize) {
-  var Team = sequelize.define('teams', {
-    color: {
+module.exports = (sequelize, Sequelize) => {
+  const Organization = sequelize.define('organizations', {
+    firstname: {
       type: Sequelize.STRING
     },
-    name: {
+    lastname: {
       type: Sequelize.STRING
     },
-    capacity: {
-      type: Sequelize.INTEGER.UNSIGNED
+    email: {
+      type: Sequelize.STRING
+    },
+    password: {
+      type: Sequelize.STRING
+    },
+    roleId: {
+      type: Sequelize.INTEGER
     },
     companyId: {
       type: Sequelize.INTEGER
@@ -25,5 +29,6 @@ module.exports = function (sequelize, Sequelize) {
       allowNull: false
     }
   });
-  return Team;
+
+  return Organization;
 };

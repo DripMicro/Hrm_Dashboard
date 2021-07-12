@@ -16,7 +16,7 @@ const { sequelize } = db;
 exports.getOfficeList = (req, res) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(200).send([]);
+    return res.status(400).send([]);
   }
 
   const accessToken = authorization.split(' ')[1];
