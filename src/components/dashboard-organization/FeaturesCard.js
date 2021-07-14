@@ -1,5 +1,7 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import PropTypes from 'prop-types';
+
+import React, { useState, useEffect } from 'react';
 
 import {
   useTheme,
@@ -27,8 +29,38 @@ const ScheduleDivider = styled('div')(() => ({
   transform: 'rotate(15deg)'
 }));
 
-export default function FeaturesCard() {
+FeaturesCard.propTypes = {
+  dataProps: PropTypes.object,
+  setFeatureProps: PropTypes.func
+};
+
+export default function FeaturesCard({ dataProps, setFeatureProps }) {
   const theme = useTheme();
+
+  const [isHalfDays, setIsHalfDays] = useState(0);
+  const [isCities, setIsCities] = useState(0);
+
+  useEffect(() => {
+    const fData = dataProps;
+    setIsHalfDays(fData.isHalfDays);
+    setIsCities(fData.isCities);
+  }, [dataProps]);
+
+  useEffect(() => {
+    const tempFeature = {};
+    tempFeature.isHalfDays = isHalfDays;
+    tempFeature.isCities = isCities;
+    setFeatureProps(tempFeature);
+  }, [isHalfDays, isCities]);
+
+  const handleChangeIsHalfDays = () => {
+    setIsHalfDays(isHalfDays === 1 ? 0 : 1);
+  };
+
+  const handleChangeIsCities = () => {
+    setIsCities(isCities === 1 ? 0 : 1);
+  };
+
   return (
     <Card>
       <CardHeader subheader="FEATURES" />
@@ -38,7 +70,8 @@ export default function FeaturesCard() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h5">Half days</Typography>
               <Checkbox
-                defaultChecked
+                checked={isHalfDays === 1}
+                onChange={handleChangeIsHalfDays}
                 color="primary"
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
@@ -70,11 +103,13 @@ export default function FeaturesCard() {
                     role="img"
                     aria-label="Panda"
                     sx={{
-                      fontSize: '15px',
+                      fontSize: 15,
                       [theme.breakpoints.up('md')]: { fontSize: '20px' }
                     }}
                   >
-                    🤒🏠
+                    <span role="img" aria-label="Panda">
+                      🤒🏠
+                    </span>
                   </Box>
                   <ScheduleDivider />
                 </Button>
@@ -93,7 +128,8 @@ export default function FeaturesCard() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h5">Cities (working remotely)</Typography>
               <Checkbox
-                defaultChecked
+                checked={isCities === 1}
+                onChange={handleChangeIsCities}
                 color="primary"
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
@@ -111,14 +147,15 @@ export default function FeaturesCard() {
                   sx={{
                     width: 100,
                     fontWeight: 900,
-                    fontSize: 14,
                     backgroundColor: 'white',
                     px: 2,
                     py: 1,
                     borderRadius: theme.spacing(1)
                   }}
                 >
-                  📍 London
+                  <span role="img" aria-label="Panda" style={{ fontSize: 14 }}>
+                    📍 London
+                  </span>
                 </Box>
               </Box>
               <Typography

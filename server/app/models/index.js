@@ -21,9 +21,13 @@ db.sequelize = sequelize;
 
 db.user = require('./user.model.js')(sequelize, Sequelize);
 db.role = require('./role.model.js')(sequelize, Sequelize);
-db.office = require('./office.model.js')(sequelize, Sequelize);
 db.team = require('./team.model.js')(sequelize, Sequelize);
+db.office = require('./office.model.js')(sequelize, Sequelize);
 db.company = require('./company.model.js')(sequelize, Sequelize);
+db.basiclist = require('./basiclist.model.js')(sequelize, Sequelize);
+db.customlist = require('./customlist.model.js')(sequelize, Sequelize);
+db.workingdays = require('./workingdays.model.js')(sequelize, Sequelize);
+db.organizations = require('./organizations.model.js')(sequelize, Sequelize);
 
 // offices relative
 db.office.belongsToMany(db.user, {
@@ -63,5 +67,51 @@ db.TEAMS = [
   { color: '#EB144C', name: 'Team3', capacity: 7 },
   { color: '#0693E3', name: 'Team4', capacity: 2 }
 ];
+
+db.BASICLIST = [
+  {
+    emoji: '🏡',
+    title: 'From home',
+    description: 'Remote (works with Cities feature)',
+    isActive: 1
+  },
+  {
+    emoji: '🚶‍♂️',
+    title: 'On the go',
+    description: 'On the go / Out of the office',
+    isActive: 1
+  },
+  {
+    emoji: '🏝',
+    title: 'Not working',
+    description: 'Holiday / Not working',
+    isActive: 1
+  },
+  {
+    emoji: '🤒',
+    title: 'Sick',
+    description: 'Sick days (merged with "Not working")',
+    isActive: 0
+  }
+];
+
+db.CUSTOMLIST = [
+  {
+    emoji: '🙂',
+    title: 'Custom 1',
+    isActive: 1
+  }
+];
+
+db.WORKINGDAYS = '1,2,3,4,6';
+
+db.ORGANIZATIONS = {
+  isEmail: 1,
+  isGoogleSignIn: 0,
+  startingDay: 0,
+  monthRange: 2,
+  isCities: 0,
+  isHalfDays: 1
+};
 
 module.exports = db;

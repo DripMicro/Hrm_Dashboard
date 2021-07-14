@@ -32,7 +32,7 @@ export default function App() {
               <NotistackProvider>
                 <Router history={history}>
                   <JwtProvider>
-                    <Settings />
+                    {/* <Settings /> */}
                     <ScrollToTop />
                     {renderRoutes(routes)}
                   </JwtProvider>

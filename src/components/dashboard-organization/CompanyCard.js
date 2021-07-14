@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import PropTypes from 'prop-types';
+
+import React, { useState, useEffect } from 'react';
 
 import {
   Card,
@@ -12,19 +15,45 @@ import {
   Checkbox
 } from '@material-ui/core';
 
-export default function CompanyCard() {
-  const [state, setState] = useState({
-    gilad: true,
-    jason: false,
-    antoine: false,
-    okata: false
-  });
+CompanyCard.propTypes = {
+  dataProps: PropTypes.object,
+  setCompanyProps: PropTypes.func
+};
 
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+export default function CompanyCard({ dataProps, setCompanyProps }) {
+  const [name, setName] = useState('');
+  const [domain, setDomain] = useState('');
+  const [isEmail, setIsEmail] = useState(0);
+  const [isGoogleSignIn, setIsGoogleSignIn] = useState(0);
+
+  useEffect(() => {
+    const cData = dataProps;
+    setName(cData.name);
+    setDomain(cData.domain);
+    setIsEmail(cData.isEmail);
+    setIsGoogleSignIn(cData.isGoogleSignIn);
+  }, [dataProps]);
+
+  useEffect(() => {
+    const tempCompany = {};
+    tempCompany.name = name;
+    tempCompany.domain = domain;
+    tempCompany.isEmail = isEmail;
+    tempCompany.isGoogleSignIn = isGoogleSignIn;
+    setCompanyProps(tempCompany);
+  }, [domain, isEmail, isGoogleSignIn, name]);
+
+  const handleChangeIsEmail = () => {
+    setIsEmail(isEmail === 1 ? 0 : 1);
   };
 
-  const { gilad, jason, antoine, okata } = state;
+  const handleChangeIsGoogleSignIn = () => {
+    setIsGoogleSignIn(isGoogleSignIn === 1 ? 0 : 1);
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
 
   return (
     <Card>
@@ -39,6 +68,8 @@ export default function CompanyCard() {
               id="outlined-basic"
               label="Company Name"
               variant="outlined"
+              onChange={handleNameChange}
+              value={name || ''}
               sx={{ width: '100%' }}
             />
           </Grid>
@@ -53,7 +84,7 @@ export default function CompanyCard() {
           <Grid item xs={12}>
             <TextField
               id="outlined-basic"
-              label="@bengoufa.com"
+              label={domain}
               disabled
               variant="outlined"
               sx={{ width: '100%' }}
@@ -72,9 +103,9 @@ export default function CompanyCard() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={gilad}
-                    onChange={handleChange}
-                    name="gilad"
+                    checked={isEmail === 1}
+                    onChange={handleChangeIsEmail}
+                    name="email+password"
                   />
                 }
                 label="Email + Password"
@@ -82,33 +113,21 @@ export default function CompanyCard() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={jason}
-                    onChange={handleChange}
-                    name="jason"
+                    checked={isGoogleSignIn === 1}
+                    onChange={handleChangeIsGoogleSignIn}
+                    name="googleSignIn"
                   />
                 }
                 label="Google Sign In (G Suite)"
               />
               <FormControlLabel
                 disabled
-                control={
-                  <Checkbox
-                    checked={antoine}
-                    onChange={handleChange}
-                    name="antoine"
-                  />
-                }
+                control={<Checkbox name="azure" />}
                 label="Microsoft Azure AD*"
               />
               <FormControlLabel
                 disabled
-                control={
-                  <Checkbox
-                    checked={okata}
-                    onChange={handleChange}
-                    name="okata"
-                  />
-                }
+                control={<Checkbox name="okata" />}
                 label="Okta*"
               />
             </FormGroup>

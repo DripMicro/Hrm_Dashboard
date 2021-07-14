@@ -11,7 +11,7 @@ import { PATH_DASHBOARD } from '../routes/paths';
 export default function OrganizationPage() {
   return (
     <Page title="Thimble | Organization">
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <HeaderDashboard
           heading="Organization"
           links={[

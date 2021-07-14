@@ -1,18 +1,21 @@
 module.exports = (sequelize, Sequelize) => {
   const Organization = sequelize.define('organizations', {
-    firstname: {
-      type: Sequelize.STRING
+    isEmail: {
+      type: Sequelize.INTEGER
     },
-    lastname: {
-      type: Sequelize.STRING
+    isGoogleSignIn: {
+      type: Sequelize.INTEGER
     },
-    email: {
-      type: Sequelize.STRING
+    startingDay: {
+      type: Sequelize.INTEGER
     },
-    password: {
-      type: Sequelize.STRING
+    monthRange: {
+      type: Sequelize.INTEGER
     },
-    roleId: {
+    isCities: {
+      type: Sequelize.INTEGER
+    },
+    isHalfDays: {
       type: Sequelize.INTEGER
     },
     companyId: {

@@ -9,9 +9,21 @@ const { sequelize } = db;
 const User = db.user;
 const Office = db.office;
 const Team = db.team;
+const BasicList = db.basiclist;
+const Customlist = db.customlist;
+const WorkingDays = db.workingdays;
+const Organizations = db.organizations;
 const Company = db.company;
 
-const { ROLES, OFFICES, TEAMS } = db;
+const {
+  ROLES,
+  OFFICES,
+  TEAMS,
+  BASICLIST,
+  CUSTOMLIST,
+  WORKINGDAYS,
+  ORGANIZATIONS
+} = db;
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -231,5 +243,39 @@ async function initial(cId) {
       capacity: team.capacity,
       companyId: cId
     });
+  });
+
+  BASICLIST.forEach((basic) => {
+    BasicList.create({
+      emoji: basic.emoji,
+      title: basic.title,
+      description: basic.description,
+      isActive: basic.isActive,
+      companyId: cId
+    });
+  });
+
+  CUSTOMLIST.forEach((custom) => {
+    Customlist.create({
+      emoji: custom.emoji,
+      title: custom.title,
+      isActive: custom.isActive,
+      companyId: cId
+    });
+  });
+
+  WorkingDays.create({
+    isWorking: WORKINGDAYS,
+    companyId: cId
+  });
+
+  Organizations.create({
+    isEmail: ORGANIZATIONS.isEmail,
+    isGoogleSignIn: ORGANIZATIONS.isGoogleSignIn,
+    startingDay: ORGANIZATIONS.startingDay,
+    monthRange: ORGANIZATIONS.monthRange,
+    isCities: ORGANIZATIONS.isCities,
+    isHalfDays: ORGANIZATIONS.isHalfDays,
+    companyId: cId
   });
 }

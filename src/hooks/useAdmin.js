@@ -7,7 +7,10 @@ import {
   // team
   addTeam,
   deleteTeam,
-  updateTeamList
+  updateTeamList,
+  // Organization
+  updateOrganizations,
+  addStatus
 } from '../redux/slices/adminSetting';
 import { updateProfile } from '../redux/slices/user';
 
@@ -40,6 +43,10 @@ export default function useUserManage() {
       ),
 
     // -------------- Update list ---------------------
+    updateOrganizations: ({ updatedOrg }) =>
+      dispatch(updateOrganizations({ updatedOrg })),
+
+    // -------------- Update list ---------------------
     updateOfficeList: ({ updatedOfficeList }) =>
       dispatch(updateOfficeList({ updatedOfficeList })),
 
@@ -53,6 +60,7 @@ export default function useUserManage() {
     // -------------- Adding the data ---------------------
 
     addOffice: () => dispatch(addOffice()),
+    addStatus: () => dispatch(addStatus()), // in Organization
     addTeam: () => dispatch(addTeam())
   };
 }

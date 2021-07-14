@@ -1,4 +1,7 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import PropTypes from 'prop-types';
+
+import React, { useState, useEffect } from 'react';
 
 import {
   Card,
@@ -8,62 +11,50 @@ import {
   Box,
   TextField,
   Grid,
-  Autocomplete
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel
 } from '@material-ui/core';
 
 import DayGroup from '../dashboard-component/TeamCategoryGroup';
 
-const days = [
-  {
-    id: 0,
-    label: 'M',
-    selected: true
-  },
-  {
-    id: 1,
-    label: 'T',
-    selected: true
-  },
-  {
-    id: 2,
-    label: 'W',
-    selected: false
-  },
-  {
-    id: 3,
-    label: 'T',
-    selected: true
-  },
-  {
-    id: 4,
-    label: 'F',
-    selected: true
-  },
-  {
-    id: 5,
-    label: 'S',
-    selected: false
-  },
-  {
-    id: 6,
-    label: 'S',
-    selected: false
-  }
-];
+CalendarCard.propTypes = {
+  dataProps: PropTypes.object,
+  setCalendarProps: PropTypes.func
+};
 
-export default function CalendarCard() {
-  // const [state, setState] = React.useState({
-  //   gilad: true,
-  //   jason: false,
-  //   antoine: false,
-  //   okata: false
-  // });
+export default function CalendarCard({ dataProps, setCalendarProps }) {
+  const [workDays, setWorkDays] = useState([]);
+  const [startingDay, setStartingDay] = useState(0);
+  const [monthRange, setMonthRange] = useState(1);
 
-  // const handleChange = (event) => {
-  //   setState({ ...state, [event.target.name]: event.target.checked });
-  // };
+  useEffect(() => {
+    const cData = dataProps;
+    setWorkDays(cData.workDays);
+    setStartingDay(cData.startingDay);
+    setMonthRange(cData.monthRange);
+  }, [dataProps]);
 
-  // const { gilad, jason, antoine, okata } = state;
+  useEffect(() => {
+    const tempCalendar = {};
+    tempCalendar.startingDay = startingDay;
+    tempCalendar.monthRange = Number(monthRange);
+    tempCalendar.workDays = workDays;
+    setCalendarProps(tempCalendar);
+  }, [monthRange, startingDay, workDays]);
+
+  const handleSelectedDays = (selectedItems) => {
+    setWorkDays(selectedItems);
+  };
+
+  const handleChangeStartingDay = (e) => {
+    setStartingDay(e.target.value);
+  };
+
+  const handleChangeMonthRange = (e) => {
+    setMonthRange(e.target.value);
+  };
 
   return (
     <Card>
@@ -81,19 +72,24 @@ export default function CalendarCard() {
                 </Typography>
               </Grid>
               <Grid item lg={8} md={12} sm={12} xs={12}>
-                <Autocomplete
-                  id="combo-box-demo"
-                  options={WeekDays}
-                  getOptionLabel={(option) => option.weekday}
-                  defaultValue={WeekDays[0]}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Week of day"
-                      variant="outlined"
-                    />
-                  )}
-                />
+                <FormControl variant="outlined" sx={{ width: '100%' }}>
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    Week of day
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={startingDay || 0}
+                    onChange={handleChangeStartingDay}
+                    label="Week of day"
+                  >
+                    {WeekDays.map((day, index) => (
+                      <MenuItem key={index} value={index}>
+                        {day}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
           </Grid>
@@ -107,7 +103,12 @@ export default function CalendarCard() {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <DayGroup daygroups={days} />
+            <DayGroup
+              daygroups={days}
+              teamInitProps={workDays}
+              teamStatusProps={handleSelectedDays}
+              sx={{ minWidth: 40 }}
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1"> Range </Typography>
@@ -127,6 +128,8 @@ export default function CalendarCard() {
                   shrink: true
                 }}
                 variant="outlined"
+                value={monthRange || ''}
+                onChange={handleChangeMonthRange}
               />
               <Typography variant="body1" sx={{ py: 2, ml: 2 }}>
                 month(s)
@@ -140,11 +143,49 @@ export default function CalendarCard() {
 }
 
 const WeekDays = [
-  { weekday: 'Monday' },
-  { weekday: 'Tuesday' },
-  { weekday: 'Wednesday' },
-  { weekday: 'Thursday' },
-  { weekday: 'Friday' },
-  { weekday: 'Saturday' },
-  { weekday: 'Sunday' }
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+
+const days = [
+  {
+    id: 1,
+    label: 'M',
+    color: '#00AB55'
+  },
+  {
+    id: 2,
+    label: 'T',
+    color: '#00AB55'
+  },
+  {
+    id: 3,
+    label: 'W',
+    color: '#00AB55'
+  },
+  {
+    id: 4,
+    label: 'T',
+    color: '#00AB55'
+  },
+  {
+    id: 5,
+    label: 'F',
+    color: '#00AB55'
+  },
+  {
+    id: 6,
+    label: 'S',
+    color: '#00AB55'
+  },
+  {
+    id: 7,
+    label: 'S',
+    color: '#00AB55'
+  }
 ];

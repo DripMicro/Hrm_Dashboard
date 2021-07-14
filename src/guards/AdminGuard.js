@@ -20,7 +20,6 @@ export default function AdminProtect({ children }) {
     return <LoadingScreen />;
   }
 
-  console.log(user.roles, isAuthenticated);
   if (
     !isAuthenticated &&
     (user.roles !== 'SUPER ADMIN' || user.roles !== 'ADMIN')

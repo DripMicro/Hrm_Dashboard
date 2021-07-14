@@ -15,7 +15,9 @@ const initialState = {
   officeList: [],
   managerList: [],
   // team
-  teamList: []
+  teamList: [],
+  // organizations
+  organizations: []
 };
 
 const slice = createSlice({
@@ -49,6 +51,12 @@ const slice = createSlice({
     getTeamListSuccess(state, action) {
       state.isLoading = false;
       state.teamList = action.payload;
+    },
+
+    // GET MANAGE ORGANIZATIONS
+    getOrganizationsSuccess(state, action) {
+      state.isLoading = false;
+      state.organizations = action.payload;
     },
 
     // DELETE OFFICE
@@ -140,6 +148,20 @@ export function getManagerList() {
 }
 
 // ----------------------------------------------------------------------
+
+export function getOrganizations() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      console.log('here is redux, it is working well');
+      const response = await axios.get('/api/organization/organizations');
+      dispatch(slice.actions.getOrganizationsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+// ----------------------------------------------------------------------
 // Update
 // ----------------------------------------------------------------------
 
@@ -155,6 +177,14 @@ export function updateTeamList({ updatedTeamList }) {
   const data = updatedTeamList;
   return async () => {
     await axios.post('/api/team/updateTeamList', data);
+  };
+}
+
+export function updateOrganizations({ updatedOrg }) {
+  console.log('Here is redux:', updatedOrg);
+  const data = updatedOrg;
+  return async () => {
+    await axios.post('/api/organization/updateOrganizations', data);
   };
 }
 
@@ -197,6 +227,14 @@ export function addOffice() {
 export function addTeam() {
   return async () => {
     const response = await axios.post('/api/team/addTeam');
+    const { id } = response.data;
+    return id;
+  };
+}
+
+export function addStatus() {
+  return async () => {
+    const response = await axios.post('/api/organization/addCustomStatus');
     const { id } = response.data;
     return id;
   };

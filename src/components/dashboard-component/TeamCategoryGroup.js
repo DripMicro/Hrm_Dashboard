@@ -60,7 +60,8 @@ export default function TeamCategoryGroup({
             },
             '&.Mui-selected:hover': {
               backgroundColor: item.color
-            }
+            },
+            ...sx
           }}
         >
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
