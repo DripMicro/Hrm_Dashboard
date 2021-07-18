@@ -70,6 +70,7 @@ require('./app/routes/user.routes')(app);
 require('./app/routes/office.routes')(app);
 require('./app/routes/team.routes')(app);
 require('./app/routes/organization.routes')(app);
+require('./app/routes/calendar.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

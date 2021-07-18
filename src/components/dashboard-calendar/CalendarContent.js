@@ -1,176 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // material
 import { useTheme } from '@material-ui/core/styles';
 
 import { Container } from '@material-ui/core';
 // ----------------------------------------------------------------------
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getCalendar } from '../../redux/slices/general';
 
 import CalendarCard from './CalendarCard';
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
 
-const DaySchedules = [
-  {
-    id: 0,
-    icon: '💼🚶‍♂️',
-    halfday: true
-  },
-  {
-    id: 1,
-    icon: '🚶‍♂️🏝',
-    halfday: true
-  },
-  {
-    id: 2,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 3,
-    icon: '🤒🏡',
-    halfday: true
-  },
-  {
-    id: 4,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 5,
-    icon: '💼🚶‍♂️',
-    halfday: true
-  },
-  {
-    id: 6,
-    icon: '🚶‍♂️🏝',
-    halfday: true
-  },
-  {
-    id: 7,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 8,
-    icon: '🤒🏡',
-    halfday: true
-  },
-  {
-    id: 9,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 10,
-    icon: '💼🚶‍♂️',
-    halfday: true
-  },
-  {
-    id: 11,
-    icon: '🚶‍♂️🏝',
-    halfday: true
-  },
-  {
-    id: 12,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 13,
-    icon: '🤒🏡',
-    halfday: true
-  },
-  {
-    id: 14,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 15,
-    icon: '💼🚶‍♂️',
-    halfday: true
-  },
-  {
-    id: 16,
-    icon: '🚶‍♂️🏝',
-    halfday: true
-  },
-  {
-    id: 17,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 18,
-    icon: '🤒🏡',
-    halfday: true
-  },
-  {
-    id: 19,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 20,
-    icon: '🤒🏡',
-    halfday: true
-  },
-  {
-    id: 21,
-    icon: '🤒',
-    halfday: false
-  },
-  {
-    id: 22,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 23,
-    icon: '🏡',
-    halfday: false
-  },
-  {
-    id: 24,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 25,
-    icon: '🏡',
-    halfday: false
-  },
-  {
-    id: 26,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 27,
-    icon: '🚶‍♂️🏝',
-    halfday: true
-  },
-  {
-    id: 28,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 29,
-    icon: '🚶‍♂️',
-    halfday: false
-  },
-  {
-    id: 30,
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false
-  },
-  {
-    id: 31,
-    icon: '🏡',
-    halfday: false
-  }
-];
+export default function CalendarContent() {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const { calendar } = useSelector((state) => state.general);
+
+  const [offices, setOffices] = useState(initialStatus);
+  const [calendarProps, setCalendarProps] = useState([]);
+
+  useEffect(() => {
+    dispatch(getCalendar());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setCalendarProps(calendar);
+  }, [calendar]);
+
+  const setStatusProps = (selectedIds) => {
+    setOffices(selectedIds);
+  };
+  return (
+    <Container maxWidth="xl">
+      <Container
+        maxWidth="md"
+        sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
+      >
+        <DayStatusButtonGroup
+          officePropos={offices}
+          statusProps={setStatusProps}
+          officeGroups={OfficeStatus}
+          isMulti
+        />
+        <TeamCategoryGroup daygroups={TeamCategories} />
+        <CalendarCard daystatus={calendarProps} />
+      </Container>
+    </Container>
+  );
+}
 
 const OfficeStatus = [
   {
@@ -219,30 +97,3 @@ const TeamCategories = [
 ];
 
 const initialStatus = [0, 2];
-
-export default function CalendarContent() {
-  const theme = useTheme();
-  const [offices, setOffices] = useState(initialStatus);
-
-  const setStatusProps = (selectedIds) => {
-    setOffices(selectedIds);
-    console.log('G:', selectedIds);
-  };
-  return (
-    <Container maxWidth="xl">
-      <Container
-        maxWidth="md"
-        sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
-      >
-        <DayStatusButtonGroup
-          officePropos={offices}
-          statusProps={setStatusProps}
-          officeGroups={OfficeStatus}
-          isMulti
-        />
-        <TeamCategoryGroup daygroups={TeamCategories} />
-        <CalendarCard daystatus={DaySchedules} />
-      </Container>
-    </Container>
-  );
-}

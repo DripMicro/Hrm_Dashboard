@@ -59,21 +59,25 @@ const Weeks = [
   {
     value: 0,
     label: 'Mon 14',
+    icon: '🏡',
     isWork: 1
   },
   {
     value: 1,
     label: 'Tue 15',
+    icon: '🚶‍♂️',
     isWork: 1
   },
   {
     value: 2,
     label: 'Wed 16',
+    icon: '💼',
     isWork: 1
   },
   {
     value: 3,
     label: 'Thu 17',
+    icon: '🏝',
     isWork: 1
   },
   {
@@ -123,9 +127,17 @@ export default function LandingTryCafe() {
           >
             {Weeks.map((day) =>
               day.isWork === 1 ? (
-                <SchedulePopover title={day.label} key={day.value} />
+                <SchedulePopover
+                  title={day.label}
+                  emoji={day.icon}
+                  key={day.value}
+                />
               ) : (
-                <ScheduleNotWork title={day.label} key={day.value} />
+                <ScheduleNotWork
+                  title={day.label}
+                  emoji={day.icon}
+                  key={day.value}
+                />
               )
             )}
           </Box>

@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 const Sequelize = require('sequelize');
 const config = require('../config/db.config.js');
 
@@ -24,6 +25,7 @@ db.role = require('./role.model.js')(sequelize, Sequelize);
 db.team = require('./team.model.js')(sequelize, Sequelize);
 db.office = require('./office.model.js')(sequelize, Sequelize);
 db.company = require('./company.model.js')(sequelize, Sequelize);
+db.calendar = require('./calendar.model.js')(sequelize, Sequelize);
 db.basiclist = require('./basiclist.model.js')(sequelize, Sequelize);
 db.customlist = require('./customlist.model.js')(sequelize, Sequelize);
 db.workingdays = require('./workingdays.model.js')(sequelize, Sequelize);
@@ -113,5 +115,23 @@ db.ORGANIZATIONS = {
   isCities: 0,
   isHalfDays: 1
 };
+
+const obj = {
+  icon: '?',
+  halfday: false,
+  work: false
+};
+
+const yData = [];
+const MonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+for (let i = 0; i < 12; i += 1) {
+  const mData = [];
+  for (let j = 0; j < MonthDays[i]; j += 1) {
+    mData.push(obj);
+  }
+  yData.push(mData);
+}
+
+db.SCHEDULES = yData;
 
 module.exports = db;

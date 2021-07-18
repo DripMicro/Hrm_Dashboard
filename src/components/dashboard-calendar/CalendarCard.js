@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
 
 import {
@@ -77,12 +79,12 @@ function getCalendar(days, status) {
     for (const day of weekdays) {
       const dayObj = {};
       // eslint-disable-next-line no-restricted-syntax
-      for (const state of status) {
+      for (let i = 0; i < status.length; i += 1) {
         dayObj.day = day;
-        if (day === state.id + 1) {
+        if (day === i + 1) {
           dayObj.day = day;
-          dayObj.icon = state.icon;
-          dayObj.halfday = state.halfday;
+          dayObj.icon = status[i].icon;
+          dayObj.halfday = status[i].halfday;
           dayObj.selected = false;
           break;
         }
@@ -123,12 +125,18 @@ export default function CalendarCard({ daystatus }) {
 
   useEffect(() => {
     const days = getDaybyWeek(init().getFullYear(), init().getMonth());
-    setCalendar(getCalendar(days, daystatus));
+    const monthData = daystatus;
+    if (monthData.length > 0) {
+      setCalendar(getCalendar(days, monthData[month]));
+    }
   }, [daystatus]);
 
   useEffect(() => {
     const days = getDaybyWeek(year, month);
-    setCalendar(getCalendar(days, daystatus));
+    const monthData = daystatus;
+    if (monthData.length > 0) {
+      setCalendar(getCalendar(days, monthData[month]));
+    }
   }, [daystatus, month, year]);
 
   const handleBackMonth = () => {
@@ -151,9 +159,7 @@ export default function CalendarCard({ daystatus }) {
 
   const handleSelected = (selected, selectedDay) => {
     const agenda = calendar;
-    // eslint-disable-next-line array-callback-return
     calendar.map((weeks, wIndex) => {
-      // eslint-disable-next-line array-callback-return
       weeks.map((item, dIndex) => {
         agenda[wIndex][dIndex].selected = false;
         if (item.day === selectedDay)

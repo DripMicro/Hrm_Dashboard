@@ -98,13 +98,14 @@ export default function SchedulePopover(props) {
           ref={anchorRef}
           onClick={() => setOpen(true)}
           sx={{
-            border: '4px solid #EE726A',
+            border: '4px solid #FF8577',
             borderRadius: '32px',
             color: '#FF8577',
             width: '80px',
             height: '80px',
             ...(open && { bgcolor: 'action.selected' }),
             [theme.breakpoints.down('md')]: {
+              border: '2px solid #FF8577',
               width: '56px',
               height: '56px',
               borderRadius: '16px',
@@ -133,11 +134,13 @@ export default function SchedulePopover(props) {
             position: 'absolute',
             bottom: 0,
             right: 0,
-            width: '28px',
-            height: '28px',
+            width: 28,
+            height: 28,
             [theme.breakpoints.down('md')]: {
-              bottom: '-10px',
-              right: '-10px'
+              width: 20,
+              height: 20,
+              bottom: '-5px',
+              right: '-5px'
             }
           }}
         />

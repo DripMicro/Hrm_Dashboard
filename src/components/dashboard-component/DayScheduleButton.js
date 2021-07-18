@@ -42,7 +42,6 @@ export default function DayScheduleButton({
   const theme = useTheme();
 
   const handleClick = () => {
-    console.log('Hello');
     Selection(true, day);
   };
 
@@ -83,7 +82,7 @@ export default function DayScheduleButton({
           }
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             position: 'absolute',
             top: 0,
@@ -119,7 +118,7 @@ export default function DayScheduleButton({
             transform: 'rotate(50deg)',
             transformOrigin: 'left center'
           }}
-        />
+        /> */}
         <Box
           role="img"
           aria-label="Panda"

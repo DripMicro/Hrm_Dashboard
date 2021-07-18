@@ -69,10 +69,10 @@ const ManropeRegular = "'ManropeRegular', sans-serif";
 
 export default function SchedulePopover(props) {
   // eslint-disable-next-line react/prop-types
-  const { title } = props;
+  const { title, emoji } = props;
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [icon, setIcon] = useState('🏝');
+  const [icon, setIcon] = useState(emoji);
   const [selected, setSelected] = useState(0);
   const theme = useTheme();
 
@@ -104,6 +104,7 @@ export default function SchedulePopover(props) {
             height: '80px',
             ...(open && { bgcolor: 'action.selected' }),
             [theme.breakpoints.down('md')]: {
+              border: '2px solid #93C69B',
               width: '56px',
               height: '56px',
               borderRadius: '16px',
@@ -132,11 +133,13 @@ export default function SchedulePopover(props) {
             position: 'absolute',
             bottom: 0,
             right: 0,
-            width: '28px',
-            height: '28px',
+            width: 28,
+            height: 28,
             [theme.breakpoints.down('md')]: {
-              bottom: '-10px',
-              right: '-10px'
+              width: 20,
+              height: 20,
+              bottom: '-5px',
+              right: '-5px'
             }
           }}
         />
@@ -147,8 +150,9 @@ export default function SchedulePopover(props) {
         anchorEl={anchorRef.current}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 140
+          horizontal: 160
         }}
+        sx={{ width: 220 }}
       >
         <Box sx={{ py: 1 }}>
           {LANGS.map((option) => (

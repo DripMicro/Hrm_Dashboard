@@ -120,7 +120,7 @@ export default function WeekList({ daystatus }) {
                     )}
                   </Button>
                 </ListItemIcon>
-                <ListItemText primary={item.weekday} />
+                <ListItemText primary={item.weekTitle} />
               </ListItem>
               <Divider />
             </Box>

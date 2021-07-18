@@ -16,7 +16,6 @@ import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import LoadingScreen from './components/LoadingScreen';
 import NotistackProvider from './components/NotistackProvider';
-import Settings from './components/settings';
 // ----------------------------------------------------------------------
 import JwtProvider from './components/authentication/JwtProvider';
 

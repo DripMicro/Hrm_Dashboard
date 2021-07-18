@@ -85,9 +85,8 @@ export default function UserList() {
 
   useEffect(() => {
     dispatch(getUserList());
-    console.log('This is userList:', userList);
-    console.log('dispatch is changed!');
   }, [dispatch]);
+  console.log('This is UserList:', userList);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -181,7 +180,7 @@ export default function UserList() {
                   return (
                     <TableRow
                       hover
-                      key={id}
+                      key={id + 1}
                       tabIndex={-1}
                       role="checkbox"
                       selected={isItemSelected}

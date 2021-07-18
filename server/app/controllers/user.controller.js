@@ -53,7 +53,7 @@ exports.getUserList = (req, res) => {
               for (let i = 0; i < res.officeIds.length; i += 1) {
                 if (isDuplicated) {
                   isDuplicated = false;
-                  continue;
+                  break;
                 }
                 for (let j = 0; j < user.offices.length; j += 1) {
                   if (res.officeIds[i] === user.offices[j]) {
@@ -151,7 +151,6 @@ exports.getProfile = (req, res) => {
           offices: officeIds,
           teams: teamIds
         };
-        console.log(user);
         res.status(200).send({ user });
       });
     });

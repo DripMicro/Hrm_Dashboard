@@ -9,11 +9,12 @@ const { sequelize } = db;
 const User = db.user;
 const Office = db.office;
 const Team = db.team;
+const Company = db.company;
+const Calendar = db.calendar;
 const BasicList = db.basiclist;
 const Customlist = db.customlist;
 const WorkingDays = db.workingdays;
 const Organizations = db.organizations;
-const Company = db.company;
 
 const {
   ROLES,
@@ -22,7 +23,8 @@ const {
   BASICLIST,
   CUSTOMLIST,
   WORKINGDAYS,
-  ORGANIZATIONS
+  ORGANIZATIONS,
+  SCHEDULES
 } = db;
 
 const jwt = require('jsonwebtoken');
@@ -165,8 +167,15 @@ exports.signin = (req, res) => {
 
 async function generateUser(userData, role, cId, isNew) {
   if (isNew) {
-    await initial(cId);
+    await initial(cId, userData.id);
   }
+
+  Calendar.create({
+    schedule: JSON.stringify(SCHEDULES),
+    userId: userData.id,
+    companyId: cId
+  });
+
   const accessToken = jwt.sign(
     { userId: userData.id, companyId: cId },
     JWT_SECRET,
