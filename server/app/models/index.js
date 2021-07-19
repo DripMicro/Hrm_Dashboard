@@ -118,8 +118,10 @@ db.ORGANIZATIONS = {
 
 const obj = {
   icon: '?',
-  halfday: false,
-  work: false
+  morning: { id: 0, type: 'undefined' },
+  afternoon: { id: 0, type: 'undefined' },
+  isHalf: false,
+  isWork: false
 };
 
 const yData = [];

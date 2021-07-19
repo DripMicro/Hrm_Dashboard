@@ -10,8 +10,8 @@ import { Box, Drawer, Hidden, Typography } from '@material-ui/core';
 // components
 import Scrollbar from '../Scrollbar';
 //
-import SelfSettingButton from './SelftSettingButton';
-import UserScheduleStatus from './UserScheduleStatus';
+import SelfSettingButton from '../dashboard-component/SelftSettingButton';
+import UserScheduleStatus from '../dashboard-component/UserScheduleStatus';
 
 // ----------------------------------------------------------------------
 const Schedule = [

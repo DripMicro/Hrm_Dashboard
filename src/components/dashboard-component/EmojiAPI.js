@@ -16,15 +16,5 @@ export default function EmojiAPI({ updateIcon }) {
     updateIcon(emojiObject.emoji);
   };
 
-  return (
-    // <div>
-    //   {chosenEmoji ? (
-    //     <span>You chose: {chosenEmoji.emoji}</span>
-    //   ) : (
-    //     <span>No emoji Chosen</span>
-    //   )}
-    //   <Picker onEmojiClick={onEmojiClick} />
-    // </div>
-    <Picker onEmojiClick={onEmojiClick} />
-  );
+  return <Picker onEmojiClick={onEmojiClick} />;
 }

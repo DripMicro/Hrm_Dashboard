@@ -1,2 +1,2 @@
-export { default as RightSideBar } from '../dashboard-component/RightSideBar';
+export { default as RightSideBar } from './RightSideBar';
 export { default as CalendarContent } from './CalendarContent';

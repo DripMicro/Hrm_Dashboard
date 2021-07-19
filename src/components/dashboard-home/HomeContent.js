@@ -6,15 +6,22 @@ import {
   experimentalStyled as styled
 } from '@material-ui/core/styles';
 
-import { Container, Typography } from '@material-ui/core';
+import { Container, Typography, Box } from '@material-ui/core';
 // ----------------------------------------------------------------------
 
 import WeekScheduleCard from './WeekScheduleCard';
 import WeekList from './WeekList';
+import RightSideBar from './RightSideBar';
 
+// hooks
+import useGeneral from '../../hooks/useGeneral';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getCalendar } from '../../redux/slices/general';
+import {
+  getOfficeList,
+  getOrganizations
+} from '../../redux/slices/adminSetting';
 
 const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
@@ -45,16 +52,38 @@ const Months = [
   'Dec'
 ];
 
+const reverseMonths = {
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Set: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11
+};
+
 export default function HomeContent() {
   const theme = useTheme();
+  const { updateSchedule } = useGeneral();
   const dispatch = useDispatch();
-
   const { calendar } = useSelector((state) => state.general);
+  const { officeList, organizations } = useSelector(
+    (state) => state.adminSetting
+  );
+
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [thisWeekTitle, setThisWeekTitle] = useState('');
+  const [schedule, setSchedule] = useState([]);
 
   useEffect(() => {
     dispatch(getCalendar());
+    dispatch(getOrganizations());
+    dispatch(getOfficeList());
   }, [dispatch]);
 
   useEffect(() => {
@@ -72,11 +101,11 @@ export default function HomeContent() {
       const firstday = new Date(curr.setDate(first)).getDate();
       const lastday = new Date(curr.setDate(last)).getDate();
       const thisWeekSchedules = [];
-      const NextWeekSchedules = [];
+      // const NextWeekSchedules = [];
 
       if (firstday < lastday) {
         let weekCount = 0;
-        const title = `${Months[curr.getMonth()]} ${firstday} ~ ${
+        const title = `${Months[curr.getMonth()]} ${firstday + 1} ~ ${
           Months[curr.getMonth()]
         } ${lastday - 1}`;
         setThisWeekTitle(title);
@@ -89,8 +118,8 @@ export default function HomeContent() {
                 Months[curr.getMonth()]
               } ${mIndex}`,
               icon: mDay.icon,
-              halfday: mDay.halfday,
-              work: mDay.work
+              halfday: mDay.isHalf,
+              work: mDay.isWork
             };
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
@@ -99,7 +128,7 @@ export default function HomeContent() {
       } else {
         let weekCount = 0;
         if (today > 25) {
-          const title = `${Months[curr.getMonth()]} ${firstday} ~ ${
+          const title = `${Months[curr.getMonth()]} ${firstday + 1} ~ ${
             Months[curr.getMonth() + 1]
           } ${lastday - 1}`;
           setThisWeekTitle(title);
@@ -112,8 +141,8 @@ export default function HomeContent() {
                   Months[curr.getMonth()]
                 } ${mIndex}`,
                 icon: mDay.icon,
-                halfday: mDay.halfday,
-                work: mDay.work
+                halfday: mDay.isHalf,
+                work: mDay.isWork
               };
               thisWeekSchedules.push(dayObj);
               weekCount += 1;
@@ -128,15 +157,15 @@ export default function HomeContent() {
                   Months[curr.getMonth() + 1]
                 } ${mIndex}`,
                 icon: mDay.icon,
-                halfday: mDay.halfday,
-                work: mDay.work
+                halfday: mDay.isHalf,
+                work: mDay.isWork
               };
               thisWeekSchedules.push(dayObj);
               weekCount += 1;
             }
           });
         } else if (today < 5) {
-          const title = `${Months[curr.getMonth() - 1]} ${firstday} ~ ${
+          const title = `${Months[curr.getMonth() - 1]} ${firstday + 1} ~ ${
             Months[curr.getMonth()]
           } ${lastday - 1}`;
           setThisWeekTitle(title);
@@ -149,8 +178,8 @@ export default function HomeContent() {
                   Months[curr.getMonth() - 1]
                 } ${mIndex}`,
                 icon: mDay.icon,
-                halfday: mDay.halfday,
-                work: mDay.work
+                halfday: mDay.isHalf,
+                work: mDay.isWork
               };
               thisWeekSchedules.push(dayObj);
               weekCount += 1;
@@ -165,8 +194,8 @@ export default function HomeContent() {
                   Months[curr.getMonth()]
                 } ${mIndex}`,
                 icon: mDay.icon,
-                halfday: mDay.halfday,
-                work: mDay.work
+                halfday: mDay.isHalf,
+                work: mDay.isWork
               };
               thisWeekSchedules.push(dayObj);
               weekCount += 1;
@@ -178,66 +207,134 @@ export default function HomeContent() {
     }
   }, [calendar]);
 
+  useEffect(() => {
+    if (organizations.result !== undefined) {
+      const { statuses } = organizations.result;
+
+      const schedules = [];
+      const { basicList, customList } = statuses;
+      officeList.map((office) => {
+        const rowObj = {
+          id: office.id,
+          type: 'office',
+          emoji: office.emoji,
+          title: office.name,
+          capacity: office.capacity
+        };
+        schedules.push(rowObj);
+      });
+
+      basicList.map((basic) => {
+        if (basic.isActive > 0) {
+          const rowObj = {
+            id: basic.id,
+            type: 'basic',
+            emoji: basic.emoji,
+            title: basic.title
+          };
+          schedules.push(rowObj);
+        }
+      });
+
+      customList.map((custom) => {
+        if (custom.isActive > 0) {
+          const rowObj = {
+            id: custom.id,
+            type: 'custom',
+            emoji: custom.emoji,
+            title: custom.title
+          };
+          schedules.push(rowObj);
+        }
+      });
+      setSchedule(schedules);
+    }
+  }, [organizations, officeList]);
+
   // change icon when set icon in schedule card
-  const changeIcon = (icon1, icon2, status, index) => {
-    console.log('this is props icon:', icon1, icon2, status, index);
+  const changeIcon = async (icon1, icon2, detail1, detail2, status, index) => {
     let emoji1 = '';
     let emoji2 = '';
     let resIcon = '';
-    Schedule.map((item) => {
-      console.log(item.value);
-      if (item.value === icon1) emoji1 = item.icon;
-      if (item.value === icon2) emoji2 = item.icon;
+    schedule.map((item, index) => {
+      if (index === icon1) emoji1 = item.emoji;
+      if (index === icon2) emoji2 = item.emoji;
     });
     let dayStatus = status;
     if (icon1 === icon2) dayStatus = false;
     resIcon = dayStatus ? `${emoji1}${emoji2}` : emoji1;
     const ThisWeekSchedule = thisWeekSchedule;
+    let settingDay = 0;
+    let weekTitle = '';
     thisWeekSchedule.map((schedule, sIndex) => {
       if (sIndex === index) {
         ThisWeekSchedule[sIndex].icon = resIcon;
         ThisWeekSchedule[sIndex].halfday = dayStatus;
         ThisWeekSchedule[sIndex].work = true;
+        settingDay = ThisWeekSchedule[sIndex].id;
+        weekTitle = ThisWeekSchedule[sIndex].weekTitle;
       }
     });
+
+    // {"id":0,"type":"undefined","icon":"?","halfday":false,"work":false}
+
+    console.log(thisWeekSchedule);
+    const monthText = weekTitle.split(' ')[1];
+    const month = reverseMonths[monthText];
+
+    const updatedSchedule = {
+      month,
+      day: settingDay,
+      emoji: resIcon,
+      morning: detail1,
+      afternoon: detail2,
+      isHalf: dayStatus,
+      isWork: true
+    };
+
+    await updateSchedule({ updatedSchedule });
+
     setThisWeekSchedule([...ThisWeekSchedule]);
   };
 
   return (
-    <Container maxWidth="xl">
-      <Typography
-        variant="h3"
-        component="h1"
-        paragraph
-        sx={{ textAlign: 'center' }}
-      >
-        Welcome to Thimble
-      </Typography>
-      <Container
-        maxWidth="md"
-        sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
-      >
-        <WeekScheduleCard
-          title="This Week "
-          period={thisWeekTitle}
-          daystatus={thisWeekSchedule}
-          schedule={Schedule}
-          iconProps={changeIcon}
-        />
-        <SpaceStyle />
-        <WeekList daystatus={thisWeekSchedule} />
-        <SpaceStyle />
-        <WeekScheduleCard
-          title="Next Week "
-          period="Jun 28 - July 2"
-          daystatus={NextWeekSchedule}
-          schedule={Schedule}
-          iconProps={changeIcon}
-        />
-        <SpaceStyle />
-        <WeekList daystatus={NextWeekList} />
+    <Box sx={{ display: 'flex' }}>
+      <Container maxWidth="xl">
+        <Typography
+          variant="h3"
+          component="h1"
+          paragraph
+          sx={{ textAlign: 'center' }}
+        >
+          Welcome to Thimble
+        </Typography>
+        <Container
+          maxWidth="md"
+          sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
+        >
+          <WeekScheduleCard
+            title="This Week "
+            period={thisWeekTitle}
+            daystatus={thisWeekSchedule}
+            schedule={schedule}
+            iconProps={changeIcon}
+          />
+          <SpaceStyle />
+          <WeekList daystatus={thisWeekSchedule} />
+          <SpaceStyle />
+          <WeekScheduleCard
+            title="Next Week "
+            period="Jun 28 - July 2"
+            daystatus={NextWeekSchedule}
+            schedule={schedule}
+            iconProps={changeIcon}
+          />
+          <SpaceStyle />
+          <WeekList daystatus={NextWeekList} />
+        </Container>
       </Container>
-    </Container>
+      <RightSideBar />
+    </Box>
   );
 }
 
@@ -314,43 +411,5 @@ const NextWeekList = [
     icon: '?',
     halfday: false,
     work: false
-  }
-];
-
-const Schedule = [
-  {
-    value: 0,
-    label: 'Working remotely',
-    icon: '🏡'
-  },
-  {
-    value: 1,
-    label: 'On the go',
-    icon: '🚶‍♂️'
-  },
-  {
-    value: 2,
-    label: 'Not working',
-    icon: '🏝'
-  },
-  {
-    value: 3,
-    label: 'At the office',
-    icon: '💼'
-  },
-  {
-    value: 4,
-    label: 'Sick',
-    icon: '🤒'
-  },
-  {
-    value: 5,
-    label: 'With family',
-    icon: '👨‍👨‍👦‍👦'
-  },
-  {
-    value: 6,
-    label: 'lol',
-    icon: '😫'
   }
 ];

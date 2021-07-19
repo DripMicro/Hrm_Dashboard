@@ -39,26 +39,55 @@ const ListWrapperStyle = styled('div')(() => ({
 // ----------------------------------------------------------------------
 
 export default function SchedulePopupContent({ Schedule, iconProps }) {
-  const [open, setOpen] = useState(true);
-  const [selectedMorning, setSelectedMorning] = useState(1);
-  const [selectedAfternoon, setSelectedAfternoon] = useState(3);
+  const [selectedMorning, setSelectedMorning] = useState(0);
+  const [selectedAfternoon, setSelectedAfternoon] = useState(0);
   const [selected, setSelected] = useState(false);
+
+  const [morningDetail, setMorningDetail] = useState({});
+  const [afternoonDetail, setAfternoonDetail] = useState({});
 
   const theme = useTheme();
 
-  const handleListItemClickMorning = (event, index) => {
-    console.log('morning:', index, 'half:', selected);
+  const handleListItemClickMorning = (event, index, id, type) => {
+    const detail = {
+      id,
+      type
+    };
+    setMorningDetail(detail);
     setSelectedMorning(index);
   };
 
-  const handleListItemClickAfternoon = (event, index) => {
-    console.log('afternoon:', index);
+  const handleListItemClickAfternoon = (event, index, id, type) => {
+    const detail = {
+      id,
+      type
+    };
+    setAfternoonDetail(detail);
     setSelectedAfternoon(index);
   };
 
   const handleClick = () => {
-    iconProps(selectedMorning, selectedAfternoon, !selected);
-    setOpen(!open);
+    let mDetail = {};
+    let aDetail = {};
+    if (morningDetail.id === undefined) {
+      mDetail = {
+        id: Schedule[0].id,
+        type: Schedule[0].type
+      };
+    }
+    if (afternoonDetail.id === undefined) {
+      aDetail = {
+        id: Schedule[0].id,
+        type: Schedule[0].type
+      };
+    }
+    iconProps(
+      selectedMorning,
+      selectedAfternoon,
+      morningDetail.id === undefined ? mDetail : morningDetail,
+      afternoonDetail.id === undefined ? aDetail : afternoonDetail,
+      !selected
+    );
   };
 
   return (
@@ -101,13 +130,18 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
             <BlockSchedule sx={{ mb: 3, ...(selected && { height: 360 }) }}>
               <ListWrapperStyle>
                 <List component="nav" aria-label="main mailbox folders">
-                  {Schedule.map((item) => (
+                  {Schedule.map((item, index) => (
                     <ListItem
-                      key={item.value}
+                      key={index}
                       button
-                      selected={selectedMorning === item.value}
+                      selected={selectedMorning === index}
                       onClick={(event) =>
-                        handleListItemClickMorning(event, item.value)
+                        handleListItemClickMorning(
+                          event,
+                          index,
+                          item.id,
+                          item.type
+                        )
                       }
                       sx={{ borderRadius: '10px' }}
                     >
@@ -126,11 +160,11 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
                             aria-label="Panda"
                             style={{ fontSize: '25px' }}
                           >
-                            {item.icon}
+                            {item.emoji}
                           </span>
                         </Box>
                       </ListItemIcon>
-                      <ListItemText primary={item.label} />
+                      <ListItemText primary={item.title} />
                     </ListItem>
                   ))}
                 </List>
@@ -157,13 +191,18 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
             <BlockSchedule sx={{ mb: 3 }}>
               <ListWrapperStyle>
                 <List component="nav" aria-label="main mailbox folders">
-                  {Schedule.map((item) => (
+                  {Schedule.map((item, index) => (
                     <ListItem
-                      key={item.value}
+                      key={index}
                       button
-                      selected={selectedAfternoon === item.value}
+                      selected={selectedAfternoon === index}
                       onClick={(event) =>
-                        handleListItemClickAfternoon(event, item.value)
+                        handleListItemClickAfternoon(
+                          event,
+                          index,
+                          item.id,
+                          item.type
+                        )
                       }
                       sx={{ borderRadius: '10px' }}
                     >
@@ -182,11 +221,11 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
                             aria-label="Panda"
                             style={{ fontSize: '25px' }}
                           >
-                            {item.icon}
+                            {item.emoji}
                           </span>
                         </Box>
                       </ListItemIcon>
-                      <ListItemText primary={item.label} />
+                      <ListItemText primary={item.title} />
                     </ListItem>
                   ))}
                 </List>

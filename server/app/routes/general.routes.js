@@ -1,4 +1,4 @@
-const controller = require('../controllers/calendar.controller');
+const controller = require('../controllers/general.controller');
 
 module.exports = (app) => {
   app.use((req, res, next) => {
@@ -11,12 +11,12 @@ module.exports = (app) => {
 
   // --------------------- Office Getting List section --------------------------------------------------------------
 
-  app.get('/api/calendar/calendars', controller.getCalendar);
+  app.get('/api/general/calendars', controller.getCalendar);
   // app.get('/api/office/office-managers', controller.getManagerList);
 
   // --------------------- Office CRUD section --------------------------------------------------------------
   // app.post('/api/office/addOffice', controller.addOffice);
   // app.post('/api/office/deleteOffice', controller.deleteOffice);
-  // app.post('/api/office/updateOfficeList', controller.updateOfficeList);
+  app.post('/api/general/updateSchedule', controller.updateSchedule);
   // -----------------------------------------------------------------------------------
 };

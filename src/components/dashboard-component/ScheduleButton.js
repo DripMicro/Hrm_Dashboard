@@ -57,9 +57,10 @@ export default function ScheduleButton({
     setAnchorEl(null);
   };
 
-  const changeIcon = (icon1, icon2, status) => {
+  const changeIcon = (icon1, icon2, detail1, detail2, status) => {
+    handleClose();
     setHalf(status);
-    iconProps(icon1, icon2, status, index);
+    iconProps(icon1, icon2, detail1, detail2, status, index);
   };
 
   const open = Boolean(anchorEl);
@@ -83,6 +84,7 @@ export default function ScheduleButton({
             maxWidth: '66px',
             maxHeight: '67px',
             position: 'relative',
+            ...(!work && { backgroundColor: '#FEB6AC', color: 'black' }),
             [theme.breakpoints.down('md')]: {
               minWidth: '0px',
               width: '50px'

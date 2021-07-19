@@ -69,7 +69,7 @@ export function getCalendar() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/calendar/calendars');
+      const response = await axios.get('/api/general/calendars');
       dispatch(slice.actions.getCalendarSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -81,24 +81,11 @@ export function getCalendar() {
 // Update
 // ----------------------------------------------------------------------
 
-export function updateOfficeList({ updatedOfficeList }) {
-  const data = updatedOfficeList;
+export function updateSchedule({ updatedSchedule }) {
+  const data = updatedSchedule;
   return async () => {
-    await axios.post('/api/office/updateOfficeList', data);
-  };
-}
-
-export function updateTeamList({ updatedTeamList }) {
-  const data = updatedTeamList;
-  return async () => {
-    await axios.post('/api/team/updateTeamList', data);
-  };
-}
-
-export function updateOrganizations({ updatedOrg }) {
-  const data = updatedOrg;
-  return async () => {
-    await axios.post('/api/organization/updateOrganizations', data);
+    console.log('here is redux updatedSchedule', data);
+    await axios.post('/api/general/updateSchedule', data);
   };
 }
 

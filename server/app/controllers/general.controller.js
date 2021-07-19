@@ -21,7 +21,6 @@ exports.getCalendar = (req, res) => {
   Calendar.findOne({
     where: { userId }
   }).then((calendar) => {
-    console.log('this is canendar', calendar);
     res.status(200).send(JSON.parse(calendar.schedule));
   });
 };
@@ -51,15 +50,44 @@ exports.getCalendar = (req, res) => {
 //   res.status(200).send({ message: 'Deleted successfully!' });
 // };
 
-// exports.updateTeamList = (req, res) => {
-//   const teamList = req.body;
-//   teamList.map((team) => {
-//     const updateValues = {
-//       color: team.color,
-//       name: team.name,
-//       capacity: Number(team.capacity)
-//     };
-//     Team.update(updateValues, { where: { id: team.id } });
-//   });
-//   res.status(200).send('success');
-// };
+exports.updateSchedule = (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { userId } = jwt.verify(accessToken, JWT_SECRET);
+  Calendar.findOne({
+    where: { userId }
+  }).then((calendar) => {
+    const tmpSchedule = JSON.parse(calendar.schedule);
+    const updatedSchedule = req.body;
+    const schedule = tmpSchedule;
+    tmpSchedule.map((months, mIndex) => {
+      if (mIndex === updatedSchedule.month) {
+        months.map((days, dIndex) => {
+          if (dIndex === updatedSchedule.day) {
+            const d = {
+              icon: updatedSchedule.emoji,
+              morning: updatedSchedule.morning,
+              afternoon: updatedSchedule.afternoon,
+              isHalf: updatedSchedule.isHalf,
+              isWork: updatedSchedule.isWork
+            };
+            schedule[mIndex][dIndex] = d;
+          }
+        });
+      }
+    });
+    const updatedData = JSON.stringify(schedule);
+    Calendar.update(
+      {
+        schedule: updatedData
+      },
+      { where: { userId } }
+    ).then(() => {
+      res.status(200).send('success');
+    });
+  });
+};

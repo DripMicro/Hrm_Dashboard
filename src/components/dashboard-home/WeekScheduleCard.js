@@ -24,9 +24,11 @@ export default function WeekSchedule({
   iconProps
 }) {
   const theme = useTheme();
-  const changeIcon = (icon1, icon2, status, index) => {
-    iconProps(icon1, icon2, status, index);
+  const changeIcon = (icon1, icon2, detail1, detail2, status, index) => {
+    iconProps(icon1, icon2, detail1, detail2, status, index);
   };
+
+  console.log('M:', daystatus);
 
   return (
     <Card>
