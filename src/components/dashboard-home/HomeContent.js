@@ -91,7 +91,6 @@ export default function HomeContent() {
   const [todayTitle, setTodayTitle] = useState('');
   const [dayofweek, setDayOfWeek] = useState(0);
   const [schedule, setSchedule] = useState([]);
-  const [statusTitle, setStatusTitle] = useState('');
   const [allStatuses, setAllStatuses] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
   const [cMonth, setCMonth] = useState(0);
@@ -625,7 +624,6 @@ export default function HomeContent() {
         schedule={schedule}
         iconProps={changeIcon}
         dayIndex={dayofweek}
-        statusTitle={statusTitle}
         scheduleUsers={scheduleUsers}
         notStatusUsers={notStatusUsers}
       />
@@ -638,7 +636,6 @@ export default function HomeContent() {
               schedule={schedule}
               iconProps={changeIcon}
               dayIndex={dayofweek}
-              statusTitle={statusTitle}
               scheduleUsers={scheduleUsers}
               notStatusUsers={notStatusUsers}
               showDetail={handleShowMobileDetail}
@@ -646,7 +643,7 @@ export default function HomeContent() {
             <MobileWeekView
               daystatus={thisWeekSchedule}
               dayIndex={dayofweek}
-              showDetail={handleClickShowMobileDetail}
+              viewDetailByClick={handleClickShowMobileDetail}
             />
           </>
         )}

@@ -21,7 +21,6 @@ MobileViewDetail.propTypes = {
   iconProps: PropTypes.func,
   showDetail: PropTypes.func,
   dayIndex: PropTypes.number,
-  statusTitle: PropTypes.string,
   notStatusUsers: PropTypes.array,
   scheduleUsers: PropTypes.array,
   isOpenSidebar: PropTypes.bool,
@@ -35,7 +34,6 @@ export default function MobileViewDetail({
   iconProps,
   showDetail,
   dayIndex,
-  statusTitle,
   notStatusUsers,
   scheduleUsers,
   isOpenSidebar,
@@ -48,6 +46,7 @@ export default function MobileViewDetail({
   const [isWork, setIsWork] = useState(false);
   const [detail, setDetail] = useState({});
   const [weekTitle, setWeekTitle] = useState('');
+  const [notStatusYet, setNotStatusYet] = useState(false);
   const [sTitle, setTitle] = useState('');
 
   useEffect(() => {
@@ -60,7 +59,6 @@ export default function MobileViewDetail({
     if (daystatus.length > 0 && schedule.length > 0) {
       daystatus.map((day, dIndex) => {
         if (dayIndex === dIndex) {
-          console.log('DayInfo:', day);
           setIcon(day.icon);
           setIsHalf(day.halfday);
           setIsWork(day.work);
@@ -76,14 +74,17 @@ export default function MobileViewDetail({
             }
           };
           setDetail(detailInfo);
+          let notStatus = true;
           schedule.map((sche) => {
             if (
               sche.id === day.detail.morning.id &&
               sche.type === day.detail.morning.type
             ) {
+              notStatus = false;
               setTitle(sche.title);
             }
           });
+          setNotStatusYet(notStatus);
         }
       });
     }
@@ -127,7 +128,8 @@ export default function MobileViewDetail({
             detailInfo={detail}
             weekTitle={weekTitle}
             iconProps={changeIcon}
-            statusTitle={statusTitle === '' ? sTitle : statusTitle}
+            statusTitle={sTitle}
+            notStatus={notStatusYet}
           />
           <Box m={5} />
           <UserScheduleStatus

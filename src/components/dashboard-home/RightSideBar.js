@@ -34,7 +34,6 @@ RightSideBar.propTypes = {
   schedule: PropTypes.array,
   iconProps: PropTypes.func,
   dayIndex: PropTypes.number,
-  statusTitle: PropTypes.string,
   notStatusUsers: PropTypes.array,
   scheduleUsers: PropTypes.array,
   isOpenSidebar: PropTypes.bool,
@@ -47,7 +46,6 @@ export default function RightSideBar({
   schedule,
   iconProps,
   dayIndex,
-  statusTitle,
   notStatusUsers,
   scheduleUsers,
   isOpenSidebar,
@@ -104,10 +102,6 @@ export default function RightSideBar({
       });
     }
   }, [daystatus, schedule, dayIndex]);
-
-  useEffect(() => {
-    console.log('AAAAA:', statusTitle);
-  }, [statusTitle]);
 
   const changeIcon = (icon1, icon2, detail1, detail2, status) => {
     iconProps(icon1, icon2, detail1, detail2, status, dayIndex);

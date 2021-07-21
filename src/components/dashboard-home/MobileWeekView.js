@@ -35,23 +35,20 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 WeekList.propTypes = {
   dayIndex: PropTypes.number,
   daystatus: PropTypes.array,
-  showDetail: PropTypes.func
+  viewDetailByClick: PropTypes.func
 };
 
 // ----------------------------------------------------------------------
 
-export default function WeekList({ dayIndex, showDetail, daystatus }) {
+export default function WeekList({ dayIndex, viewDetailByClick, daystatus }) {
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
-    if (showDetail !== undefined) {
-      showDetail(new Date().getDate());
-      setSelected(dayIndex);
-    }
-  }, []);
+    setSelected(dayIndex);
+  }, [dayIndex]);
 
   const handleListItemClick = (event, id, index) => {
-    showDetail(id);
+    viewDetailByClick(id);
     setSelected(index);
   };
 
