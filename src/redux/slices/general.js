@@ -1,7 +1,7 @@
 /* eslint-disable no-continue */
 /* eslint-disable array-callback-return */
 // import { useSelector } from 'react-redux';
-import { map, filter } from 'lodash';
+import { map } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
@@ -11,12 +11,15 @@ import axios from '../../utils/axios';
 const initialState = {
   isLoading: false,
   error: false,
+  // get all user status by companyId
+  allStatus: [],
+  allUsers: [],
   // calendar
   calendar: []
 };
 
 const slice = createSlice({
-  name: 'user',
+  name: 'general',
   initialState,
   reducers: {
     // START LOADING
@@ -30,10 +33,22 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
-    // GET OFFICES
+    // GET CALENDAR
     getCalendarSuccess(state, action) {
       state.isLoading = false;
       state.calendar = action.payload;
+    },
+
+    // GET ALL USER STATUS BY COMPANY ID
+    getAllStatusByIdSuccess(state, action) {
+      state.isLoading = false;
+      state.allStatus = action.payload;
+    },
+
+    // GET ALL USER STATUS BY COMPANY ID
+    getUsersByCompanySuccess(state, action) {
+      state.isLoading = false;
+      state.allUsers = action.payload;
     },
 
     // ON TOGGLE FOLLOW
@@ -77,6 +92,30 @@ export function getCalendar() {
   };
 }
 
+export function getAllStatusById() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/general/allstatus');
+      dispatch(slice.actions.getAllStatusByIdSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getUsersByCompany() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/general/allusers');
+      dispatch(slice.actions.getUsersByCompanySuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 // ----------------------------------------------------------------------
 // Update
 // ----------------------------------------------------------------------
@@ -93,50 +132,50 @@ export function updateSchedule({ updatedSchedule }) {
 // Delete
 // ----------------------------------------------------------------------
 
-export function deleteOffice({ officeId }) {
-  const data = {
-    officeId
-  };
-  return async (dispatch) => {
-    await axios.post('/api/office/deleteOffice', data);
-    dispatch(slice.actions.getDeletedOfficeList(data));
-  };
-}
+// export function deleteOffice({ officeId }) {
+//   const data = {
+//     officeId
+//   };
+//   return async (dispatch) => {
+//     await axios.post('/api/office/deleteOffice', data);
+//     dispatch(slice.actions.getDeletedOfficeList(data));
+//   };
+// }
 
-export function deleteTeam({ teamId }) {
-  const data = {
-    teamId
-  };
-  return async (dispatch) => {
-    await axios.post('/api/team/deleteTeam', data);
-    dispatch(slice.actions.getDeletedTeamList(data));
-  };
-}
+// export function deleteTeam({ teamId }) {
+//   const data = {
+//     teamId
+//   };
+//   return async (dispatch) => {
+//     await axios.post('/api/team/deleteTeam', data);
+//     dispatch(slice.actions.getDeletedTeamList(data));
+//   };
+// }
 
 // ----------------------------------------------------------------------
 // Add
 // ----------------------------------------------------------------------
 
-export function addOffice() {
-  return async () => {
-    const response = await axios.post('/api/office/addOffice');
-    const { id } = response.data;
-    return id;
-  };
-}
+// export function addOffice() {
+//   return async () => {
+//     const response = await axios.post('/api/office/addOffice');
+//     const { id } = response.data;
+//     return id;
+//   };
+// }
 
-export function addTeam() {
-  return async () => {
-    const response = await axios.post('/api/team/addTeam');
-    const { id } = response.data;
-    return id;
-  };
-}
+// export function addTeam() {
+//   return async () => {
+//     const response = await axios.post('/api/team/addTeam');
+//     const { id } = response.data;
+//     return id;
+//   };
+// }
 
-export function addStatus() {
-  return async () => {
-    const response = await axios.post('/api/organization/addCustomStatus');
-    const { id } = response.data;
-    return id;
-  };
-}
+// export function addStatus() {
+//   return async () => {
+//     const response = await axios.post('/api/organization/addCustomStatus');
+//     const { id } = response.data;
+//     return id;
+//   };
+// }

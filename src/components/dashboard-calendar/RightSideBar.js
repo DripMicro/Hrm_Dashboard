@@ -1,5 +1,7 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // material
 import {
@@ -14,43 +16,6 @@ import SelfSettingButton from '../dashboard-component/SelftSettingButton';
 import UserScheduleStatus from '../dashboard-component/UserScheduleStatus';
 
 // ----------------------------------------------------------------------
-const Schedule = [
-  {
-    value: 0,
-    label: 'Working remotely',
-    icon: '🏡'
-  },
-  {
-    value: 1,
-    label: 'On the go',
-    icon: '🚶‍♂️'
-  },
-  {
-    value: 2,
-    label: 'Not working',
-    icon: '🏝'
-  },
-  {
-    value: 3,
-    label: 'At the office',
-    icon: '💼'
-  },
-  {
-    value: 4,
-    label: 'Sick',
-    icon: '🤒'
-  },
-  {
-    value: 5,
-    label: 'With family',
-    icon: '👨‍👨‍👦‍👦'
-  },
-  {
-    value: 6,
-    label: 'lol',
-    icon: '😫'
-  }
-];
 
 const DRAWER_WIDTH = 480;
 
@@ -64,19 +29,72 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 RightSideBar.propTypes = {
+  todayTitle: PropTypes.string,
+  daystatus: PropTypes.array,
+  schedule: PropTypes.array,
+  iconProps: PropTypes.func,
+  dayIndex: PropTypes.number,
+  statusTitle: PropTypes.string,
+  notStatusUsers: PropTypes.array,
+  scheduleUsers: PropTypes.array,
   isOpenSidebar: PropTypes.bool,
   onCloseSidebar: PropTypes.func
 };
 
-export default function RightSideBar({ isOpenSidebar, onCloseSidebar }) {
+export default function RightSideBar({
+  todayTitle,
+  daystatus,
+  schedule,
+  iconProps,
+  dayIndex,
+  statusTitle,
+  notStatusUsers,
+  scheduleUsers,
+  isOpenSidebar,
+  onCloseSidebar
+}) {
   const { pathname } = useLocation();
   const theme = useTheme();
+
+  const [icon, setIcon] = useState('');
+  const [isHalf, setIsHalf] = useState(false);
+  const [isWork, setIsWork] = useState(false);
+  const [morningId, setMorningId] = useState(0);
+  const [morningType, setMorningType] = useState('');
+  const [afternoonId, setAfternoonId] = useState(0);
+  const [afternoonType, setAfternoonType] = useState('');
+  const [sTitle, setTitle] = useState('');
 
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
     }
   }, [isOpenSidebar, onCloseSidebar, pathname]);
+
+  useEffect(() => {
+    if (daystatus.length > 0 && schedule.length > 0) {
+      daystatus.map((day, dIndex) => {
+        if (dayIndex === dIndex) {
+          setIcon(day.icon);
+          setIsHalf(day.halfday);
+          setIsWork(day.work);
+          setMorningId(day.morningId);
+          setMorningType(day.morningType);
+          setAfternoonId(day.afternoonId);
+          setAfternoonType(day.afternoonType);
+          schedule.map((sche) => {
+            if (sche.id === day.morningId && sche.type === day.morningType) {
+              setTitle(sche.title);
+            }
+          });
+        }
+      });
+    }
+  }, [daystatus, schedule, dayIndex]);
+
+  const changeIcon = (icon1, icon2, detail1, detail2, status) => {
+    iconProps(icon1, icon2, detail1, detail2, status, dayIndex);
+  };
 
   const renderContent = (
     <Scrollbar>
@@ -85,28 +103,31 @@ export default function RightSideBar({ isOpenSidebar, onCloseSidebar }) {
           variant="h4"
           sx={{ color: 'text.primary', textAlign: 'center' }}
         >
-          Monday 21st Jun. 2021
+          {todayTitle}
         </Typography>
-        <SelfSettingButton schedule={Schedule} />
+        <SelfSettingButton
+          schedule={schedule}
+          icon={icon}
+          halfday={isHalf}
+          work={isWork}
+          morningId={morningId}
+          morningType={morningType}
+          afternoonId={afternoonId}
+          afternoonType={afternoonType}
+          iconProps={changeIcon}
+          statusTitle={statusTitle === '' ? sTitle : statusTitle}
+        />
         <Box m={5} />
-        <UserScheduleStatus />
+        <UserScheduleStatus
+          notStatusUsers={notStatusUsers}
+          scheduleUsers={scheduleUsers}
+        />
       </Box>
     </Scrollbar>
   );
 
   return (
     <RootStyle>
-      <Hidden lgUp>
-        <Drawer
-          open={isOpenSidebar}
-          onClose={onCloseSidebar}
-          PaperProps={{
-            sx: { width: DRAWER_WIDTH }
-          }}
-        >
-          {renderContent}
-        </Drawer>
-      </Hidden>
       <Box sx={{ [theme.breakpoints.down(1400)]: { display: 'none' } }}>
         <Drawer
           open

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../models');
 
 const Calendar = db.calendar;
+const User = db.user;
 const config = require('../config/auth.config');
 
 const JWT_SECRET = config.secret;
@@ -25,30 +26,52 @@ exports.getCalendar = (req, res) => {
   });
 };
 
-// exports.addTeam = (req, res) => {
-//   console.log('here is AddTeam');
+exports.getAllUserStatusById = (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
 
-//   Team.create({
-//     color: '#9900EF',
-//     name: 'New Team',
-//     capacity: 5
-//   }).then((teamList) => {
-//     const data = {
-//       id: teamList.id
-//     };
-//     res.status(200).send(data);
-//   });
-// };
+  const accessToken = authorization.split(' ')[1];
+  const { companyId } = jwt.verify(accessToken, JWT_SECRET);
+  Calendar.findAll({
+    where: { companyId }
+  }).then((calendars) => {
+    const resData = [];
+    calendars.map((calendar) => {
+      const resObj = {
+        userId: calendar.userId,
+        schedule: JSON.parse(calendar.schedule)
+      };
+      resData.push(resObj);
+    });
+    res.status(200).send(resData);
+  });
+};
 
-// exports.deleteTeam = (req, res) => {
-//   const { teamId } = req.body;
-//   Team.destroy({
-//     where: {
-//       id: teamId
-//     }
-//   });
-//   res.status(200).send({ message: 'Deleted successfully!' });
-// };
+exports.getUsersByCompany = (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { companyId } = jwt.verify(accessToken, JWT_SECRET);
+  User.findAll({
+    where: { companyId }
+  }).then((users) => {
+    const resData = [];
+    users.map((user) => {
+      const userObj = {
+        id: user.id,
+        avatarURL: 'user.avatarURL',
+        name: `${user.firstname} ${user.lastname}`
+      };
+      resData.push(userObj);
+    });
+    res.status(200).send(resData);
+  });
+};
 
 exports.updateSchedule = (req, res) => {
   const { authorization } = req.headers;

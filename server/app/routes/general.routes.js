@@ -12,7 +12,8 @@ module.exports = (app) => {
   // --------------------- Office Getting List section --------------------------------------------------------------
 
   app.get('/api/general/calendars', controller.getCalendar);
-  // app.get('/api/office/office-managers', controller.getManagerList);
+  app.get('/api/general/allstatus', controller.getAllUserStatusById);
+  app.get('/api/general/allusers', controller.getUsersByCompany);
 
   // --------------------- Office CRUD section --------------------------------------------------------------
   // app.post('/api/office/addOffice', controller.addOffice);

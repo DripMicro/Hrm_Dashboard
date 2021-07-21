@@ -5,6 +5,7 @@ import { Suspense, Fragment, lazy, useEffect, useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import Scrollbar from '../components/Scrollbar';
 //
 import DashboardRoutes from './dashboard.routes';
 import HomeRoutes from './home.routes';
@@ -73,13 +74,15 @@ export function renderRoutes(routes = []) {
               exact={route.exact}
               render={(props) => (
                 <Guard>
-                  <Layout>
-                    {route.routes ? (
-                      renderRoutes(route.routes)
-                    ) : (
-                      <Component {...props} />
-                    )}
-                  </Layout>
+                  <Scrollbar>
+                    <Layout>
+                      {route.routes ? (
+                        renderRoutes(route.routes)
+                      ) : (
+                        <Component {...props} />
+                      )}
+                    </Layout>
+                  </Scrollbar>
                 </Guard>
               )}
             />

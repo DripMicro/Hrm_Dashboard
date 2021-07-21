@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // material
 import {
   useTheme,
@@ -26,7 +26,11 @@ import TypeButton from './TypeButton';
 import SimpleDialogDemo from './SettingDialog';
 
 SchedulePopupContent.propTypes = {
+  mInit: PropTypes.number,
+  aInit: PropTypes.number,
+  halfday: PropTypes.bool,
   Schedule: PropTypes.array,
+  detailInfo: PropTypes.object,
   iconProps: PropTypes.func
 };
 
@@ -38,15 +42,28 @@ const ListWrapperStyle = styled('div')(() => ({
 
 // ----------------------------------------------------------------------
 
-export default function SchedulePopupContent({ Schedule, iconProps }) {
-  const [selectedMorning, setSelectedMorning] = useState(0);
-  const [selectedAfternoon, setSelectedAfternoon] = useState(0);
-  const [selected, setSelected] = useState(false);
+export default function SchedulePopupContent({
+  mInit,
+  aInit,
+  halfday,
+  Schedule,
+  detailInfo,
+  iconProps
+}) {
+  const [selectedMorning, setSelectedMorning] = useState(mInit);
+  const [selectedAfternoon, setSelectedAfternoon] = useState(aInit);
+  const [isHalf, setIsHalf] = useState(!halfday);
 
   const [morningDetail, setMorningDetail] = useState({});
   const [afternoonDetail, setAfternoonDetail] = useState({});
 
   const theme = useTheme();
+
+  useEffect(() => {
+    console.log('SPC:', mInit, aInit);
+    setSelectedMorning(mInit);
+    setSelectedAfternoon(aInit);
+  }, [mInit, aInit]);
 
   const handleListItemClickMorning = (event, index, id, type) => {
     const detail = {
@@ -67,26 +84,13 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
   };
 
   const handleClick = () => {
-    let mDetail = {};
-    let aDetail = {};
-    if (morningDetail.id === undefined) {
-      mDetail = {
-        id: Schedule[0].id,
-        type: Schedule[0].type
-      };
-    }
-    if (afternoonDetail.id === undefined) {
-      aDetail = {
-        id: Schedule[0].id,
-        type: Schedule[0].type
-      };
-    }
+    console.log('PROPS:', selectedMorning, selectedAfternoon);
     iconProps(
       selectedMorning,
       selectedAfternoon,
-      morningDetail.id === undefined ? mDetail : morningDetail,
-      afternoonDetail.id === undefined ? aDetail : afternoonDetail,
-      !selected
+      morningDetail.id === undefined ? detailInfo.morning : morningDetail,
+      afternoonDetail.id === undefined ? detailInfo.afternoon : afternoonDetail,
+      !isHalf
     );
   };
 
@@ -121,13 +125,13 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
                 src="/static/dashboard/home/light_mode_black_24dp.svg"
                 sx={{ mr: 1 }}
               />
-              {!selected ? (
+              {!isHalf ? (
                 <Typography variant="body2">MORNING</Typography>
               ) : (
                 <Typography variant="body2">ALL DAY</Typography>
               )}
             </Box>
-            <BlockSchedule sx={{ mb: 3, ...(selected && { height: 360 }) }}>
+            <BlockSchedule sx={{ mb: 3, ...(isHalf && { height: 360 }) }}>
               <ListWrapperStyle>
                 <List component="nav" aria-label="main mailbox folders">
                   {Schedule.map((item, index) => (
@@ -172,7 +176,7 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
             </BlockSchedule>
           </Box>
 
-          <Box sx={{ ...(selected && { display: 'none' }) }}>
+          <Box sx={{ ...(isHalf && { display: 'none' }) }}>
             <Box
               sx={{
                 display: 'flex',
@@ -236,17 +240,13 @@ export default function SchedulePopupContent({ Schedule, iconProps }) {
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <ToggleButton
               value="check"
-              selected={selected}
+              selected={isHalf}
               onChange={() => {
-                setSelected(!selected);
+                setIsHalf(!isHalf);
               }}
               sx={{ padding: '5px 10px', minWidth: '110px' }}
             >
-              {selected ? (
-                <TypeButton type="all" />
-              ) : (
-                <TypeButton type="half" />
-              )}
+              {isHalf ? <TypeButton type="all" /> : <TypeButton type="half" />}
             </ToggleButton>
             <Button variant="outlined" onClick={handleClick}>
               Set Status

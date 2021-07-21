@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // material
 import { useTheme } from '@material-ui/core/styles';
 
-import { Container } from '@material-ui/core';
+import { Container, Box } from '@material-ui/core';
 // ----------------------------------------------------------------------
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -12,6 +12,8 @@ import CalendarCard from './CalendarCard';
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
 
+import RightSideBar from './RightSideBar';
+
 export default function CalendarContent() {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -20,33 +22,48 @@ export default function CalendarContent() {
   const [offices, setOffices] = useState(initialStatus);
   const [calendarProps, setCalendarProps] = useState([]);
 
+  const [todayTitle, setTodayTitle] = useState('');
+
   useEffect(() => {
     dispatch(getCalendar());
   }, [dispatch]);
 
   useEffect(() => {
     setCalendarProps(calendar);
+    console.log('this is calendar:', calendar);
   }, [calendar]);
 
   const setStatusProps = (selectedIds) => {
     setOffices(selectedIds);
   };
   return (
-    <Container maxWidth="xl">
-      <Container
-        maxWidth="md"
-        sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
-      >
-        <DayStatusButtonGroup
-          officePropos={offices}
-          statusProps={setStatusProps}
-          officeGroups={OfficeStatus}
-          isMulti
-        />
-        <TeamCategoryGroup daygroups={TeamCategories} />
-        <CalendarCard daystatus={calendarProps} />
+    <Box sx={{ display: 'flex' }}>
+      <Container maxWidth="xl">
+        <Container
+          maxWidth="md"
+          sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
+        >
+          <DayStatusButtonGroup
+            officePropos={offices}
+            statusProps={setStatusProps}
+            officeGroups={OfficeStatus}
+            isMulti
+          />
+          <TeamCategoryGroup daygroups={TeamCategories} />
+          <CalendarCard daystatus={calendarProps} />
+        </Container>
       </Container>
-    </Container>
+      {/* <RightSideBar
+        todayTitle={todayTitle}
+        daystatus={thisWeekSchedule}
+        schedule={schedule}
+        iconProps={changeIcon}
+        dayIndex={dayofweek}
+        statusTitle={statusTitle}
+        scheduleUsers={scheduleUsers}
+        notStatusUsers={notStatusUsers}
+      /> */}
+    </Box>
   );
 }
 

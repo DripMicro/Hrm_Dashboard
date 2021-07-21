@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // material
 import {
   useTheme,
@@ -24,7 +25,6 @@ const ListWrapperStyle = styled('div')(() => ({
 
 const ScheduleDivider = styled('div')(() => ({
   position: 'absolute',
-  zIndex: 10,
   width: '2px',
   height: '40px',
   borderRadius: '8px',
@@ -33,17 +33,28 @@ const ScheduleDivider = styled('div')(() => ({
 }));
 
 WeekList.propTypes = {
-  daystatus: PropTypes.array
+  dayIndex: PropTypes.number,
+  daystatus: PropTypes.array,
+  showDetail: PropTypes.func
 };
 
 // ----------------------------------------------------------------------
 
-export default function WeekList({ daystatus }) {
-  const [selected, setSelected] = useState(1);
+export default function WeekList({ dayIndex, showDetail, daystatus }) {
+  const [selected, setSelected] = useState(0);
 
   const theme = useTheme();
 
-  const handleListItemClick = (event, index) => {
+  useEffect(() => {
+    if (showDetail !== undefined) {
+      showDetail(new Date().getDate());
+      console.log('this is DayINDEX:', dayIndex, daystatus);
+      setSelected(dayIndex);
+    }
+  }, []);
+
+  const handleListItemClick = (event, id, index) => {
+    showDetail(id);
     setSelected(index);
   };
 
@@ -51,12 +62,12 @@ export default function WeekList({ daystatus }) {
     <>
       <ListWrapperStyle>
         <List component="nav" aria-label="main mailbox folders">
-          {daystatus.map((item) => (
+          {daystatus.map((item, index) => (
             <Box key={item.id}>
               <ListItem
                 button
-                selected={selected === item.id}
-                onClick={(event) => handleListItemClick(event, item.id)}
+                selected={selected === index}
+                onClick={(event) => handleListItemClick(event, item.id, index)}
                 sx={{
                   borderRadius: '10px',
                   '&.Mui-selected': {

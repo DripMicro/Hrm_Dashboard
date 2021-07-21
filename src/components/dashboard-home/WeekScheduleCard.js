@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useTheme } from '@material-ui/core/styles';
 
@@ -28,7 +28,9 @@ export default function WeekSchedule({
     iconProps(icon1, icon2, detail1, detail2, status, index);
   };
 
-  console.log('M:', daystatus);
+  useEffect(() => {
+    console.log('DS:', daystatus);
+  }, [daystatus]);
 
   return (
     <Card>
@@ -60,8 +62,9 @@ export default function WeekSchedule({
               icon={day.icon}
               halfday={day.halfday}
               work={day.work}
+              detailInfo={day.detail}
               schedule={schedule}
-              index={index}
+              dayIndex={index}
               iconProps={changeIcon}
             />
           ))}

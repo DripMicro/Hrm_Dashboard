@@ -1,7 +1,7 @@
-import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-import { deepOrange } from '@material-ui/core/colors';
+import React, { useState } from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import {
   Accordion,
@@ -12,10 +12,13 @@ import {
   Avatar,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  AvatarGroup
 } from '@material-ui/core';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import Heatmap from './Heatmap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,52 +38,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Users = [
-  {
-    value: 0,
-    label: 'Zelenko Sofia',
-    icon: '/static/dashboard/home/3.jpg',
-    isAvatar: true
-  },
-  {
-    value: 1,
-    label: 'Oleg Pablo',
-    icon: 'OP',
-    isAvatar: false
-  },
-  {
-    value: 2,
-    label: 'Alexander Ryndin',
-    icon: '/static/dashboard/home/2.jpg',
-    isAvatar: true
-  }
-];
+UserScheduleStatus.propTypes = {
+  notStatusUsers: PropTypes.array,
+  scheduleUsers: PropTypes.array
+};
 
-const DayStatus = [
-  {
-    id: 0,
-    title: 'Office',
-    icon: '💼',
-    panel_name: 'panel1'
-  },
-  {
-    id: 1,
-    title: 'Not working',
-    icon: '🏝',
-    panel_name: 'panel2'
-  },
-  {
-    id: 2,
-    title: 'No Status yet',
-    icon: '🤒',
-    panel_name: 'panel3'
-  }
-];
-
-export default function UserScheduleStatus() {
+export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -92,11 +58,117 @@ export default function UserScheduleStatus() {
 
   return (
     <div className={classes.root}>
-      {DayStatus.map((status) => (
+      {scheduleUsers.map((status, index) => (
         <Accordion
-          key={status.id}
-          expanded={expanded === status.panel_name}
-          onChange={handleChange(status.panel_name)}
+          key={index}
+          expanded={expanded === status.schTitle}
+          onChange={handleChange(status.schTitle)}
+          sx={{
+            border: '1px solid #E7ECF5',
+            borderRadius: '12px !important',
+            mb: 5,
+            '&:before': { display: 'none' }
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+          >
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Box sx={{ display: 'flex' }}>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: 60,
+                    height: 60
+                  }}
+                >
+                  {status.type === 'office' ? (
+                    <Heatmap occupancy={status.occupancy} />
+                  ) : (
+                    <Heatmap occupancy={0} />
+                  )}
+                  <Box
+                    role="img"
+                    aria-label="Panda"
+                    sx={{
+                      fontSize: '25px',
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  >
+                    {status.emoji}
+                  </Box>
+                </Box>
+                <Typography variant="subtitle1" sx={{ py: 2, px: 1 }}>
+                  {status.schTitle}{' '}
+                  {status.type === 'office' ? (
+                    <Typography variant="caption">
+                      ({status.users.length}/{status.capacity})
+                    </Typography>
+                  ) : (
+                    <Typography variant="caption">
+                      ({status.users.length})
+                    </Typography>
+                  )}
+                </Typography>
+              </Box>
+
+              {expanded !== status.schTitle && (
+                <AvatarGroup max={3}>
+                  {status.users.map((item, index) => (
+                    <Avatar key={index} alt={item.name} src={item.avatarURL} />
+                  ))}
+                </AvatarGroup>
+              )}
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            {status.users.map((item, index) => (
+              <ListItem
+                key={index}
+                button
+                onClick={handleProfile}
+                sx={{ borderRadius: '10px' }}
+              >
+                <ListItemIcon>
+                  <Box
+                    sx={{
+                      width: '50px',
+                      height: '50px'
+                    }}
+                  >
+                    <Avatar
+                      alt={item.name}
+                      src={item.avatarURL}
+                      sx={{
+                        width: theme.spacing(6),
+                        height: theme.spacing(6),
+                        marginLeft: theme.spacing(-1)
+                      }}
+                    />
+                  </Box>
+                </ListItemIcon>
+                <ListItemText primary={item.name} />
+              </ListItem>
+            ))}
+          </AccordionDetails>
+        </Accordion>
+      ))}
+      {notStatusUsers.length > 0 && (
+        <Accordion
+          expanded={expanded === 'not-status'}
+          onChange={handleChange('not-status')}
           sx={{
             border: '1px solid #E7ECF5',
             borderRadius: '24px !important',
@@ -113,7 +185,7 @@ export default function UserScheduleStatus() {
               sx={{
                 width: '100%',
                 display: 'flex',
-                itemAlign: 'center',
+                alignItems: 'center',
                 justifyContent: 'space-between'
               }}
             >
@@ -130,58 +202,32 @@ export default function UserScheduleStatus() {
                   <span
                     role="img"
                     aria-label="Panda"
-                    style={{ fontSize: '25px' }}
+                    style={{ fontSize: '25px', marginTop: '10px' }}
                   >
-                    {status.icon}
+                    🤔
                   </span>
                 </Box>
-                <Typography className={classes.heading}>
-                  {status.title}({DayStatus.length})
+                <Typography variant="subtitle1" sx={{ py: 2, px: 1 }}>
+                  No Status yet{' '}
+                  <Typography variant="caption">
+                    ({notStatusUsers.length})
+                  </Typography>
                 </Typography>
               </Box>
 
-              {expanded !== status.panel_name && (
-                <Box sx={{ display: 'flex', pt: 1 }}>
-                  {Users.map((item) => (
-                    <Box key={item.value}>
-                      {item.isAvatar ? (
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={item.icon}
-                          sx={{
-                            width: theme.spacing(5),
-                            height: theme.spacing(5),
-                            marginLeft: theme.spacing(-1),
-                            backgroundColor: deepOrange[500],
-                            color: theme.palette.getContrastText(
-                              deepOrange[500]
-                            )
-                          }}
-                        />
-                      ) : (
-                        <Avatar
-                          alt="Remy Sharp"
-                          sx={{
-                            width: theme.spacing(5),
-                            height: theme.spacing(5),
-                            marginLeft: theme.spacing(-1),
-                            backgroundColor: deepOrange[200],
-                            color: theme.palette.getContrastText(
-                              deepOrange[500]
-                            )
-                          }}
-                        />
-                      )}
-                    </Box>
+              {expanded !== 'not-status' && (
+                <AvatarGroup max={3}>
+                  {notStatusUsers.map((item, index) => (
+                    <Avatar key={index} alt={item.name} src={item.avatarURL} />
                   ))}
-                </Box>
+                </AvatarGroup>
               )}
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            {Users.map((item) => (
+            {notStatusUsers.map((item, index) => (
               <ListItem
-                key={item.value}
+                key={index}
                 button
                 onClick={handleProfile}
                 sx={{ borderRadius: '10px' }}
@@ -193,38 +239,27 @@ export default function UserScheduleStatus() {
                       height: '50px'
                     }}
                   >
-                    {item.isAvatar ? (
-                      <Avatar
-                        alt="Remy Sharp"
-                        src={item.icon}
-                        sx={{
-                          width: theme.spacing(6),
-                          height: theme.spacing(6),
-                          marginLeft: theme.spacing(-1)
-                        }}
-                      />
-                    ) : (
-                      <Avatar
-                        alt="Remy Sharp"
-                        sx={{
-                          width: theme.spacing(6),
-                          height: theme.spacing(6),
-                          marginLeft: theme.spacing(-1),
-                          backgroundColor: deepOrange[500],
-                          color: theme.palette.getContrastText(deepOrange[500])
-                        }}
-                      >
-                        {item.icon}
-                      </Avatar>
-                    )}
+                    <Avatar
+                      alt={item.name}
+                      src={item.avatarURL}
+                      sx={{
+                        width: theme.spacing(6),
+                        height: theme.spacing(6),
+                        marginLeft: theme.spacing(-1)
+                      }}
+                    />
                   </Box>
                 </ListItemIcon>
-                <ListItemText primary={item.label} />
+                <ListItemText primary={item.name} />
               </ListItem>
             ))}
           </AccordionDetails>
         </Accordion>
-      ))}
+      )}
     </div>
   );
 }
+
+// avatarURL: "user.avatarURL"
+// id: 3
+// name: "Zlenko Sofia"

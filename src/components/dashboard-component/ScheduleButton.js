@@ -1,6 +1,7 @@
+/* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   withStyles,
   useTheme,
@@ -28,26 +29,53 @@ const ScheduleDivider = styled('div')(() => ({
 }));
 
 ScheduleButton.propTypes = {
-  index: PropTypes.number,
+  dayIndex: PropTypes.number,
   schedule: PropTypes.array,
   weekday: PropTypes.string,
   icon: PropTypes.string,
   halfday: PropTypes.bool,
   work: PropTypes.bool,
+  detailInfo: PropTypes.object,
   iconProps: PropTypes.func
 };
 
 export default function ScheduleButton({
-  index,
+  dayIndex,
   schedule,
   weekday,
   icon,
   halfday,
   work,
+  detailInfo,
   iconProps
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isHalf, setHalf] = useState(false);
+  const [mInit, setMInit] = useState(0);
+  const [aInit, setAInit] = useState(0);
+
+  useEffect(() => {
+    // console.log('MInit, AInit:', mInit, aInit);
+  }, [mInit, aInit]);
+
+  useEffect(() => {
+    if (detailInfo !== undefined) {
+      schedule.map((sche, index) => {
+        if (
+          sche.id === detailInfo.morning.id &&
+          sche.type === detailInfo.morning.type
+        ) {
+          setMInit(index);
+        }
+        if (
+          sche.id === detailInfo.afternoon.id &&
+          sche.type === detailInfo.afternoon.type
+        ) {
+          setAInit(index);
+        }
+      });
+    }
+  }, [detailInfo, schedule]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,7 +88,7 @@ export default function ScheduleButton({
   const changeIcon = (icon1, icon2, detail1, detail2, status) => {
     handleClose();
     setHalf(status);
-    iconProps(icon1, icon2, detail1, detail2, status, index);
+    iconProps(icon1, icon2, detail1, detail2, status, dayIndex);
   };
 
   const open = Boolean(anchorEl);
@@ -147,7 +175,14 @@ export default function ScheduleButton({
         }}
         sx={{ backgroundColor: '#00000040' }}
       >
-        <PopupContent Schedule={schedule} iconProps={changeIcon} />
+        <PopupContent
+          Schedule={schedule}
+          iconProps={changeIcon}
+          halfday={halfday}
+          detailInfo={detailInfo}
+          mInit={mInit}
+          aInit={aInit}
+        />
       </PopoverStyle>
     </div>
   );
