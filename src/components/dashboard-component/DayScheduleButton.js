@@ -10,6 +10,8 @@ import {
 import { Box, Typography } from '@material-ui/core';
 
 DayScheduleButton.propTypes = {
+  year: PropTypes.number,
+  month: PropTypes.number,
   day: PropTypes.number,
   icon: PropTypes.string,
   halfday: PropTypes.bool,
@@ -25,7 +27,7 @@ const ScheduleDivider = styled('div')(({ theme }) => ({
   width: '2px',
   height: '48px',
   borderRadius: '8px',
-  backgroundColor: '#b9b9b9',
+  backgroundColor: '#e0e0e0',
   transform: 'rotate(15deg)',
   [theme.breakpoints.down('sm')]: {
     height: '30px'
@@ -33,6 +35,8 @@ const ScheduleDivider = styled('div')(({ theme }) => ({
 }));
 
 export default function DayScheduleButton({
+  year,
+  month,
   day,
   icon,
   halfday,
@@ -42,7 +46,8 @@ export default function DayScheduleButton({
   const theme = useTheme();
 
   const handleClick = () => {
-    Selection(true, day);
+    console.log(year, month, day);
+    Selection(true, year, month, day);
   };
 
   return (
@@ -82,43 +87,6 @@ export default function DayScheduleButton({
           }
         }}
       >
-        {/* <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#F5F9FC',
-            borderRadius: '50%',
-            border: 'solid 5px #A3D9AB',
-            [theme.breakpoints.down('sm')]: {
-              border: 'solid 2px #A3D9AB'
-            }
-          }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '50%',
-            height: '100%',
-            backgroundColor: '#F5F9FC'
-          }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: '50%',
-            height: '100%',
-            backgroundColor: '#F5F9FC',
-            transform: 'rotate(50deg)',
-            transformOrigin: 'left center'
-          }}
-        /> */}
         <Box
           role="img"
           aria-label="Panda"

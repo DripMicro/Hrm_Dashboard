@@ -8,7 +8,7 @@ import {
   useTheme,
   experimentalStyled as styled
 } from '@material-ui/core/styles';
-import { Box, Drawer, Hidden, Typography } from '@material-ui/core';
+import { Box, Drawer, Typography } from '@material-ui/core';
 // components
 import Scrollbar from '../Scrollbar';
 //
@@ -33,8 +33,7 @@ RightSideBar.propTypes = {
   daystatus: PropTypes.array,
   schedule: PropTypes.array,
   iconProps: PropTypes.func,
-  dayIndex: PropTypes.number,
-  statusTitle: PropTypes.string,
+  cToday: PropTypes.object,
   notStatusUsers: PropTypes.array,
   scheduleUsers: PropTypes.array,
   isOpenSidebar: PropTypes.bool,
@@ -46,8 +45,7 @@ export default function RightSideBar({
   daystatus,
   schedule,
   iconProps,
-  dayIndex,
-  statusTitle,
+  cToday,
   notStatusUsers,
   scheduleUsers,
   isOpenSidebar,
@@ -59,10 +57,9 @@ export default function RightSideBar({
   const [icon, setIcon] = useState('');
   const [isHalf, setIsHalf] = useState(false);
   const [isWork, setIsWork] = useState(false);
-  const [morningId, setMorningId] = useState(0);
-  const [morningType, setMorningType] = useState('');
-  const [afternoonId, setAfternoonId] = useState(0);
-  const [afternoonType, setAfternoonType] = useState('');
+  const [detail, setDetail] = useState({});
+  const [weekTitle, setWeekTitle] = useState('');
+  const [notStatusYet, setNotStatusYet] = useState(false);
   const [sTitle, setTitle] = useState('');
 
   useEffect(() => {
@@ -73,27 +70,44 @@ export default function RightSideBar({
 
   useEffect(() => {
     if (daystatus.length > 0 && schedule.length > 0) {
-      daystatus.map((day, dIndex) => {
-        if (dayIndex === dIndex) {
-          setIcon(day.icon);
-          setIsHalf(day.halfday);
-          setIsWork(day.work);
-          setMorningId(day.morningId);
-          setMorningType(day.morningType);
-          setAfternoonId(day.afternoonId);
-          setAfternoonType(day.afternoonType);
-          schedule.map((sche) => {
-            if (sche.id === day.morningId && sche.type === day.morningType) {
-              setTitle(sche.title);
-            }
-          });
-        }
+      console.log('Here is rightside bar:', daystatus);
+      daystatus.map((months, mIndex) => {
+        months.map((day, dIndex) => {
+          if (mIndex === cToday.month && dIndex === cToday.day) {
+            setIcon(day.icon);
+            setIsHalf(day.halfday);
+            setIsWork(day.work);
+            setWeekTitle(day.weekTitle);
+            const detailInfo = {
+              morning: {
+                id: day.detail.morning.id,
+                type: day.detail.morning.type
+              },
+              afternoon: {
+                id: day.detail.afternoon.id,
+                type: day.detail.afternoon.type
+              }
+            };
+            setDetail(detailInfo);
+            let notStatus = true;
+            schedule.map((sche) => {
+              if (
+                sche.id === day.detail.morning.id &&
+                sche.type === day.detail.morning.type
+              ) {
+                notStatus = false;
+                setTitle(sche.title);
+              }
+            });
+            setNotStatusYet(notStatus);
+          }
+        });
       });
     }
-  }, [daystatus, schedule, dayIndex]);
+  }, [daystatus, schedule, cToday]);
 
   const changeIcon = (icon1, icon2, detail1, detail2, status) => {
-    iconProps(icon1, icon2, detail1, detail2, status, dayIndex);
+    iconProps(icon1, icon2, detail1, detail2, status, cToday.month, cToday.day);
   };
 
   const renderContent = (
@@ -110,12 +124,11 @@ export default function RightSideBar({
           icon={icon}
           halfday={isHalf}
           work={isWork}
-          morningId={morningId}
-          morningType={morningType}
-          afternoonId={afternoonId}
-          afternoonType={afternoonType}
+          detailInfo={detail}
+          weekTitle={weekTitle}
           iconProps={changeIcon}
-          statusTitle={statusTitle === '' ? sTitle : statusTitle}
+          statusTitle={sTitle}
+          notStatus={notStatusYet}
         />
         <Box m={5} />
         <UserScheduleStatus

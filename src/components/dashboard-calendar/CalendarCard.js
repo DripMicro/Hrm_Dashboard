@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
@@ -40,7 +41,7 @@ function init() {
 }
 
 function getDaybyWeek(year, month) {
-  const calendar = [];
+  const monthCalendar = [];
   let day = 0;
   let monthday = MonthDays[month];
   const firstDay = getFirstDay(year, month).getDay();
@@ -50,11 +51,11 @@ function getDaybyWeek(year, month) {
 
   for (let i = 0; i < 42; i += 1) {
     // the position of first day of this month.
-    if (i < startPos) calendar[i] = -1;
-    else if (i > endPos) calendar[i] = -1;
+    if (i < startPos) monthCalendar[i] = -1;
+    else if (i > endPos) monthCalendar[i] = -1;
     else {
       day += 1;
-      calendar[i] = day;
+      monthCalendar[i] = day;
     }
   }
 
@@ -62,7 +63,7 @@ function getDaybyWeek(year, month) {
   for (let i = 0; i < 42; i += 7) {
     const row = [];
     for (let j = 0, k = i; j < 7; j += 1, k += 1) {
-      row.push(calendar[k]); // save by week.
+      row.push(monthCalendar[k]); // save by week.
     }
     res.push(row);
   }
@@ -70,18 +71,18 @@ function getDaybyWeek(year, month) {
   return res;
 }
 
-function getCalendar(days, status) {
-  const calendar = [];
-  // eslint-disable-next-line array-callback-return
+function getCalendar(days, status, month, year) {
+  console.log('STATUS:', status);
+  const monthCalendar = [];
   days.map((weekdays) => {
     const weeks = [];
-    // eslint-disable-next-line no-restricted-syntax
     for (const day of weekdays) {
       const dayObj = {};
-      // eslint-disable-next-line no-restricted-syntax
       for (let i = 0; i < status.length; i += 1) {
         dayObj.day = day;
-        if (day === i + 1) {
+        if (day === i) {
+          dayObj.year = year;
+          dayObj.month = month;
           dayObj.day = day;
           dayObj.icon = status[i].icon;
           dayObj.halfday = status[i].halfday;
@@ -91,9 +92,9 @@ function getCalendar(days, status) {
       }
       weeks.push(dayObj);
     }
-    calendar.push(weeks);
+    monthCalendar.push(weeks);
   });
-  return calendar;
+  return monthCalendar;
 }
 
 function getFirstDay(y, m) {
@@ -104,7 +105,8 @@ function getMonthNamebyNumber(month) {
   return Months[month];
 }
 CalendarCard.propTypes = {
-  daystatus: PropTypes.array
+  daystatus: PropTypes.array,
+  viewDetailByClick: PropTypes.func
 };
 
 // styling conponent
@@ -116,7 +118,7 @@ const GridItem = styled('div')(() => ({
   flex: 1
 }));
 
-export default function CalendarCard({ daystatus }) {
+export default function CalendarCard({ daystatus, viewDetailByClick }) {
   const theme = useTheme();
 
   const [month, setMonth] = useState(init().getMonth());
@@ -124,18 +126,11 @@ export default function CalendarCard({ daystatus }) {
   const [calendar, setCalendar] = useState([]);
 
   useEffect(() => {
-    const days = getDaybyWeek(init().getFullYear(), init().getMonth());
     const monthData = daystatus;
     if (monthData.length > 0) {
-      setCalendar(getCalendar(days, monthData[month]));
-    }
-  }, [daystatus]);
-
-  useEffect(() => {
-    const days = getDaybyWeek(year, month);
-    const monthData = daystatus;
-    if (monthData.length > 0) {
-      setCalendar(getCalendar(days, monthData[month]));
+      const days = getDaybyWeek(year, month);
+      const calendarInfo = getCalendar(days, monthData[month], month, year);
+      setCalendar(calendarInfo);
     }
   }, [daystatus, month, year]);
 
@@ -157,16 +152,17 @@ export default function CalendarCard({ daystatus }) {
     setMonth(m);
   };
 
-  const handleSelected = (selected, selectedDay) => {
+  const handleSelected = (selected, year, month, day) => {
     const agenda = calendar;
     calendar.map((weeks, wIndex) => {
       weeks.map((item, dIndex) => {
         agenda[wIndex][dIndex].selected = false;
-        if (item.day === selectedDay)
-          agenda[wIndex][dIndex].selected = selected;
+        if (item.day === day) agenda[wIndex][dIndex].selected = selected;
       });
     });
+    console.log('MMM:', calendar);
     setCalendar([...agenda]);
+    viewDetailByClick(year, month, day);
   };
 
   return (
@@ -214,6 +210,8 @@ export default function CalendarCard({ daystatus }) {
                 <GridItem key={dIndex}>
                   {day.day > 0 && (
                     <DayScheduleButton
+                      year={day.year}
+                      month={day.month}
                       day={day.day}
                       icon={day.icon}
                       halfday={day.halfday}

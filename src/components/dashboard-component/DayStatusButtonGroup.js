@@ -39,6 +39,7 @@ export default function DayStatusButtonGroup({
 
   useEffect(() => {
     setTypes(officeInitProps);
+    setType(1);
   }, [officeInitProps]);
   return (
     <>
@@ -105,7 +106,8 @@ export default function DayStatusButtonGroup({
                 '&.Mui-selected': {
                   border: '1px solid #00AB55',
                   borderLeft: '1px solid #00AB55 !important',
-                  color: '#00AB55'
+                  color: '#00AB55',
+                  backgroundColor: 'white'
                 }
               }}
             >

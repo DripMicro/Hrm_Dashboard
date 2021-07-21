@@ -517,7 +517,6 @@ export default function HomeContent() {
     updateSchedule({ updatedSchedule }).then(() => {
       dispatch(getAllStatusById());
     });
-    console.log([...ThisWeekSchedule], cToday, 'llll');
     setThisWeekSchedule([...ThisWeekSchedule]);
   };
 
