@@ -31,6 +31,7 @@ SchedulePopupContent.propTypes = {
   halfday: PropTypes.bool,
   Schedule: PropTypes.array,
   detailInfo: PropTypes.object,
+  weekTitle: PropTypes.string,
   iconProps: PropTypes.func
 };
 
@@ -48,6 +49,7 @@ export default function SchedulePopupContent({
   halfday,
   Schedule,
   detailInfo,
+  weekTitle,
   iconProps
 }) {
   const [selectedMorning, setSelectedMorning] = useState(mInit);
@@ -96,7 +98,7 @@ export default function SchedulePopupContent({
 
   return (
     <>
-      <Card sx={{ width: 343, borderRadius: theme.spacing(2.4) }}>
+      <Card sx={{ borderRadius: theme.spacing(2.4) }}>
         <Box
           sx={{
             padding: '24px 24px 0',
@@ -105,8 +107,8 @@ export default function SchedulePopupContent({
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h5" sx={{ pl: 9 }}>
-            Wednesday Jun 2
+          <Typography variant="h5" sx={{ margin: 'auto' }}>
+            {weekTitle}
           </Typography>
           <SimpleDialogDemo />
         </Box>

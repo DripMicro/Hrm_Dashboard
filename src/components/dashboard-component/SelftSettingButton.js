@@ -38,6 +38,7 @@ SelfSettingButton.propTypes = {
   work: PropTypes.bool,
   detailInfo: PropTypes.object,
   statusTitle: PropTypes.string,
+  weekTitle: PropTypes.string,
   notStatus: PropTypes.bool,
   iconProps: PropTypes.func
 };
@@ -49,6 +50,7 @@ export default function SelfSettingButton({
   work,
   detailInfo,
   statusTitle,
+  weekTitle,
   notStatus,
   iconProps
 }) {
@@ -107,7 +109,11 @@ export default function SelfSettingButton({
           width: '100%',
           py: theme.spacing(1.5),
           px: theme.spacing(3),
-          borderRadius: theme.spacing(3)
+          borderRadius: theme.spacing(3),
+          [theme.breakpoints.down('md')]: {
+            py: 1,
+            px: 1
+          }
         }}
       >
         <Box
@@ -124,7 +130,10 @@ export default function SelfSettingButton({
               sx={{
                 width: theme.spacing(6),
                 height: theme.spacing(6),
-                marginRight: theme.spacing(3)
+                marginRight: theme.spacing(3),
+                [theme.breakpoints.down('md')]: {
+                  marginRight: theme.spacing(1)
+                }
               }}
             />
             {notStatus ? (
@@ -192,6 +201,7 @@ export default function SelfSettingButton({
           iconProps={changeIcon}
           halfday={halfday}
           detailInfo={detailInfo}
+          weekTitle={weekTitle}
           mInit={mInit}
           aInit={aInit}
         />

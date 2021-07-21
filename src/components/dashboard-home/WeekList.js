@@ -35,26 +35,34 @@ const ScheduleDivider = styled('div')(() => ({
 WeekList.propTypes = {
   dayIndex: PropTypes.number,
   daystatus: PropTypes.array,
-  showDetail: PropTypes.func
+  initShowDetail: PropTypes.func,
+  viewDetailByClick: PropTypes.func
 };
 
 // ----------------------------------------------------------------------
 
-export default function WeekList({ dayIndex, showDetail, daystatus }) {
-  const [selected, setSelected] = useState(0);
+export default function WeekList({
+  dayIndex,
+  initShowDetail,
+  viewDetailByClick,
+  daystatus
+}) {
+  const [selected, setSelected] = useState(dayIndex);
 
   const theme = useTheme();
 
   useEffect(() => {
-    if (showDetail !== undefined) {
-      showDetail(new Date().getDate());
-      console.log('this is DayINDEX:', dayIndex, daystatus);
-      setSelected(dayIndex);
+    if (initShowDetail !== undefined) {
+      initShowDetail(new Date().getDate());
     }
   }, []);
 
+  useEffect(() => {
+    setSelected(dayIndex);
+  }, [dayIndex]);
+
   const handleListItemClick = (event, id, index) => {
-    showDetail(id);
+    viewDetailByClick(id);
     setSelected(index);
   };
 

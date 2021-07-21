@@ -47,6 +47,7 @@ export default function MobileViewDetail({
   const [isHalf, setIsHalf] = useState(false);
   const [isWork, setIsWork] = useState(false);
   const [detail, setDetail] = useState({});
+  const [weekTitle, setWeekTitle] = useState('');
   const [sTitle, setTitle] = useState('');
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function MobileViewDetail({
           setIcon(day.icon);
           setIsHalf(day.halfday);
           setIsWork(day.work);
+          setWeekTitle(day.weekTitle);
           const detailInfo = {
             morning: {
               id: day.detail.morning.id,
@@ -107,22 +109,23 @@ export default function MobileViewDetail({
       }}
     >
       <Scrollbar>
-        <Box sx={{ px: 2.5, py: 3, mt: 10 }}>
-          <IconButton aria-label="delete" onClick={handleBack}>
-            <ArrowBackIcon fontSize="large" />
-          </IconButton>
+        <Box sx={{ px: 2.5, py: 3, mt: 17 }}>
           <Typography
             variant="h4"
             sx={{ color: 'text.primary', textAlign: 'center' }}
           >
             {todayTitle}
           </Typography>
+          <IconButton aria-label="delete" onClick={handleBack}>
+            <ArrowBackIcon fontSize="large" />
+          </IconButton>
           <SelfSettingButton
             schedule={schedule}
             icon={icon}
             halfday={isHalf}
             work={isWork}
             detailInfo={detail}
+            weekTitle={weekTitle}
             iconProps={changeIcon}
             statusTitle={statusTitle === '' ? sTitle : statusTitle}
           />

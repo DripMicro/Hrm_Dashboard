@@ -63,6 +63,7 @@ export default function WeekSchedule({
               halfday={day.halfday}
               work={day.work}
               detailInfo={day.detail}
+              weekTitle={day.weekTitle}
               schedule={schedule}
               dayIndex={index}
               iconProps={changeIcon}

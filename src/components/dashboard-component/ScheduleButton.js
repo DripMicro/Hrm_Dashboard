@@ -32,6 +32,7 @@ ScheduleButton.propTypes = {
   dayIndex: PropTypes.number,
   schedule: PropTypes.array,
   weekday: PropTypes.string,
+  weekTitle: PropTypes.string,
   icon: PropTypes.string,
   halfday: PropTypes.bool,
   work: PropTypes.bool,
@@ -43,6 +44,7 @@ export default function ScheduleButton({
   dayIndex,
   schedule,
   weekday,
+  weekTitle,
   icon,
   halfday,
   work,
@@ -177,6 +179,7 @@ export default function ScheduleButton({
       >
         <PopupContent
           Schedule={schedule}
+          weekTitle={weekTitle}
           iconProps={changeIcon}
           halfday={halfday}
           detailInfo={detailInfo}

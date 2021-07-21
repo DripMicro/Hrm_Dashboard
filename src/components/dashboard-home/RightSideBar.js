@@ -60,6 +60,7 @@ export default function RightSideBar({
   const [isHalf, setIsHalf] = useState(false);
   const [isWork, setIsWork] = useState(false);
   const [detail, setDetail] = useState({});
+  const [weekTitle, setWeekTitle] = useState('');
   const [notStatusYet, setNotStatusYet] = useState(false);
   const [sTitle, setTitle] = useState('');
 
@@ -71,12 +72,12 @@ export default function RightSideBar({
 
   useEffect(() => {
     if (daystatus.length > 0 && schedule.length > 0) {
-      console.log('This is DayOf Index:', dayIndex);
       daystatus.map((day, dIndex) => {
         if (dayIndex === dIndex) {
           setIcon(day.icon);
           setIsHalf(day.halfday);
           setIsWork(day.work);
+          setWeekTitle(day.weekTitle);
           const detailInfo = {
             morning: {
               id: day.detail.morning.id,
@@ -104,8 +105,6 @@ export default function RightSideBar({
     }
   }, [daystatus, schedule, dayIndex]);
 
-  console.log('BBBBB:', statusTitle);
-
   useEffect(() => {
     console.log('AAAAA:', statusTitle);
   }, [statusTitle]);
@@ -129,6 +128,7 @@ export default function RightSideBar({
           halfday={isHalf}
           work={isWork}
           detailInfo={detail}
+          weekTitle={weekTitle}
           iconProps={changeIcon}
           statusTitle={sTitle}
           notStatus={notStatusYet}

@@ -522,7 +522,25 @@ export default function HomeContent() {
     setThisWeekSchedule([...ThisWeekSchedule]);
   };
 
+  const initShowDetail = (day) => {
+    console.log('Here is initShowDetail:', day);
+    dispatch(getAllStatusById());
+    setCToday(day);
+
+    const curr = new Date();
+    curr.setDate(day);
+    const dayOfweek =
+      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
+    const tmpMonth = Months[curr.getMonth()];
+    const tmpYear = curr.getFullYear();
+    const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
+
+    setDayOfWeek(curr.getDay() - 1);
+    setTodayTitle(tmpTodaytitle);
+  };
+
   const handleClickShowDetail = (day) => {
+    console.log('Here is HandleClickshowdetail:', day);
     dispatch(getAllStatusById());
     setCToday(day);
 
@@ -586,10 +604,11 @@ export default function HomeContent() {
           <WeekList
             daystatus={thisWeekSchedule}
             dayIndex={dayofweek}
-            showDetail={handleClickShowDetail}
+            viewDetailByClick={handleClickShowDetail}
+            initShowDetail={initShowDetail}
           />
           <SpaceStyle />
-          <WeekScheduleCard
+          {/* <WeekScheduleCard
             title="Next Week "
             period="Jun 28 - July 2"
             daystatus={NextWeekSchedule}
@@ -597,7 +616,7 @@ export default function HomeContent() {
             iconProps={changeIcon}
           />
           <SpaceStyle />
-          <WeekList daystatus={NextWeekList} />
+          <WeekList daystatus={NextWeekList} /> */}
         </Container>
       </Container>
       <RightSideBar
@@ -610,26 +629,28 @@ export default function HomeContent() {
         scheduleUsers={scheduleUsers}
         notStatusUsers={notStatusUsers}
       />
-      {showMobileDetail && !upLg && (
-        <>
-          <MobileViewDetail
-            todayTitle={todayTitle}
-            daystatus={thisWeekSchedule}
-            schedule={schedule}
-            iconProps={changeIcon}
-            dayIndex={dayofweek}
-            statusTitle={statusTitle}
-            scheduleUsers={scheduleUsers}
-            notStatusUsers={notStatusUsers}
-            showDetail={handleShowMobileDetail}
-          />
-          <MobileWeekView
-            daystatus={thisWeekSchedule}
-            dayIndex={dayofweek}
-            showDetail={handleClickShowMobileDetail}
-          />
-        </>
-      )}
+      <Box sx={{ backgroundColor: 'red !important' }}>
+        {showMobileDetail && !upLg && (
+          <>
+            <MobileViewDetail
+              todayTitle={todayTitle}
+              daystatus={thisWeekSchedule}
+              schedule={schedule}
+              iconProps={changeIcon}
+              dayIndex={dayofweek}
+              statusTitle={statusTitle}
+              scheduleUsers={scheduleUsers}
+              notStatusUsers={notStatusUsers}
+              showDetail={handleShowMobileDetail}
+            />
+            <MobileWeekView
+              daystatus={thisWeekSchedule}
+              dayIndex={dayofweek}
+              showDetail={handleClickShowMobileDetail}
+            />
+          </>
+        )}
+      </Box>
     </Box>
   );
 }

@@ -64,6 +64,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
           expanded={expanded === status.schTitle}
           onChange={handleChange(status.schTitle)}
           sx={{
+            margin: theme.spacing(1, 0, 0),
             border: '1px solid #E7ECF5',
             borderRadius: '12px !important',
             mb: 5,
@@ -74,13 +75,16 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
+            sx={{
+              '& .css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
+                margin: theme.spacing(1, 0, 0)
+              }
+            }}
           >
             <Box
               sx={{
                 width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
+                display: 'block'
               }}
             >
               <Box sx={{ display: 'flex' }}>
@@ -125,9 +129,21 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
               </Box>
 
               {expanded !== status.schTitle && (
-                <AvatarGroup max={3}>
+                <AvatarGroup
+                  max={3}
+                  sx={{
+                    justifyContent: 'flex-end',
+                    marginLeft: '30px',
+                    marginTop: '5px'
+                  }}
+                >
                   {status.users.map((item, index) => (
-                    <Avatar key={index} alt={item.name} src={item.avatarURL} />
+                    <Avatar
+                      key={index}
+                      alt={item.name}
+                      src={item.avatarURL}
+                      sx={{ width: theme.spacing(6), height: theme.spacing(6) }}
+                    />
                   ))}
                 </AvatarGroup>
               )}
@@ -141,7 +157,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                 onClick={handleProfile}
                 sx={{ borderRadius: '10px' }}
               >
-                <ListItemIcon>
+                <ListItemIcon sx={{ marginRight: '3px' }}>
                   <Box
                     sx={{
                       width: '50px',
@@ -153,8 +169,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                       src={item.avatarURL}
                       sx={{
                         width: theme.spacing(6),
-                        height: theme.spacing(6),
-                        marginLeft: theme.spacing(-1)
+                        height: theme.spacing(6)
                       }}
                     />
                   </Box>
