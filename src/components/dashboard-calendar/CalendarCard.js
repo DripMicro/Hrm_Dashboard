@@ -81,62 +81,63 @@ function getCalendar(days, status, allStatus, schedules, month, year) {
       const dayObj = {};
       for (let i = 0; i < status.length; i += 1) {
         dayObj.day = day;
-        if (day === i) {
+        if (day - 1 === i) {
           // set occupancy by day
-          // const newData = [];
-          // allStatus.map((stat) => {
-          //   const dData = stat.schedule[month][day - 1];
-          //   const rObj = {
-          //     userId: stat.userId,
-          //     data: dData
-          //   };
-          //   newData.push(rObj);
-          // });
+          const newData = [];
+          allStatus.map((stat) => {
+            const dData = stat.schedule[month][day - 1];
+            const rObj = {
+              userId: stat.userId,
+              data: dData
+            };
+            newData.push(rObj);
+          });
 
-          // const schArr = [];
-          // schedules.map((sche) => {
-          //   if (sche.type === 'office') {
-          //     const userArr = [];
-          //     newData.map((user) => {
-          //       if (user.data.isWork) {
-          //         if (user.data.isHalf) {
-          //           if (
-          //             sche.id === user.data.morning.id &&
-          //             sche.type === user.data.morning.type
-          //           ) {
-          //             userArr.push(user.userId);
-          //           } else if (
-          //             sche.id === user.data.afternoon.id &&
-          //             sche.type === user.data.afternoon.type
-          //           ) {
-          //             userArr.push(user.userId);
-          //           }
-          //         } else if (!user.data.isHalf) {
-          //           if (
-          //             sche.id === user.data.morning.id &&
-          //             sche.type === user.data.morning.type
-          //           ) {
-          //             userArr.push(user.userId);
-          //           }
-          //         }
-          //       }
-          //     });
-          //     let schObj = {};
-          //     const occupancy = (userArr.length / sche.capacity) * 100;
-          //     schObj = {
-          //       id: sche.id,
-          //       schTitle: sche.title,
-          //       users: userArr,
-          //       capacity: sche.capacity,
-          //       occupancy: parseInt(occupancy)
-          //     };
-          //     schArr.push(schObj);
-          //   }
-          // });
+          const schArr = [];
+          schedules.map((sche) => {
+            if (sche.type === 'office') {
+              const userArr = [];
+              newData.map((user) => {
+                if (user.data.isWork) {
+                  if (user.data.isHalf) {
+                    if (
+                      sche.id === user.data.morning.id &&
+                      sche.type === user.data.morning.type
+                    ) {
+                      userArr.push(user.userId);
+                    } else if (
+                      sche.id === user.data.afternoon.id &&
+                      sche.type === user.data.afternoon.type
+                    ) {
+                      userArr.push(user.userId);
+                    }
+                  } else if (!user.data.isHalf) {
+                    if (
+                      sche.id === user.data.morning.id &&
+                      sche.type === user.data.morning.type
+                    ) {
+                      userArr.push(user.userId);
+                    }
+                  }
+                }
+              });
+              let schObj = {};
+              const occupancy = (userArr.length / sche.capacity) * 100;
+              schObj = {
+                id: sche.id,
+                schTitle: sche.title,
+                users: userArr,
+                capacity: sche.capacity,
+                occupancy: parseInt(occupancy)
+              };
+              schArr.push(schObj);
+            }
+          });
+
           dayObj.year = year;
           dayObj.month = month;
           dayObj.day = day;
-          // dayObj.officeInfo = schArr;
+          dayObj.officeInfo = schArr;
           dayObj.icon = status[i].icon;
           dayObj.halfday = status[i].halfday;
           dayObj.selected = false;
@@ -161,6 +162,7 @@ CalendarCard.propTypes = {
   allStatuses: PropTypes.array,
   schedule: PropTypes.array,
   daystatus: PropTypes.array,
+  officeFilterId: PropTypes.number,
   viewDetailByClick: PropTypes.func
 };
 
@@ -177,6 +179,7 @@ export default function CalendarCard({
   daystatus,
   allStatuses,
   schedule,
+  officeFilterId,
   viewDetailByClick
 }) {
   const theme = useTheme();
@@ -201,7 +204,7 @@ export default function CalendarCard({
 
       setCalendar(calendarInfo);
     }
-  }, [daystatus, month, year]);
+  }, [daystatus, month, year, allStatuses, schedule]);
 
   const handleBackMonth = () => {
     let m = month - 1;
@@ -222,7 +225,6 @@ export default function CalendarCard({
   };
 
   const handleSelected = (selected, year, month, day) => {
-    console.log(year, month, day);
     const agenda = calendar;
     calendar.map((weeks, wIndex) => {
       weeks.map((item, dIndex) => {
@@ -230,7 +232,6 @@ export default function CalendarCard({
         if (item.day === day) agenda[wIndex][dIndex].selected = selected;
       });
     });
-    console.log('AGEMDA:', agenda);
     setCalendar([...agenda]);
     viewDetailByClick(year, month, day);
   };
@@ -283,7 +284,8 @@ export default function CalendarCard({
                       year={day.year}
                       month={day.month}
                       day={day.day}
-                      // officeInfo={day.officeInfo}
+                      officeFilterId={officeFilterId}
+                      officeInfo={day.officeInfo}
                       icon={day.icon}
                       halfday={day.halfday}
                       Selection={handleSelected}

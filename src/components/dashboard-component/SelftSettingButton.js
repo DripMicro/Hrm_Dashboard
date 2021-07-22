@@ -67,13 +67,11 @@ export default function SelfSettingButton({
           sche.type === detailInfo.morning.type
         ) {
           setMInit(index);
-          console.log('MID:', index);
         }
         if (
           sche.id === detailInfo.afternoon.id &&
           sche.type === detailInfo.afternoon.type
         ) {
-          console.log('AID:', index);
           setAInit(index);
         }
       });

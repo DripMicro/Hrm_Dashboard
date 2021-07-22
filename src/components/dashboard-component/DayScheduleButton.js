@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   useTheme,
@@ -15,6 +15,7 @@ DayScheduleButton.propTypes = {
   year: PropTypes.number,
   month: PropTypes.number,
   day: PropTypes.number,
+  officeFilterId: PropTypes.number,
   officeInfo: PropTypes.array,
   icon: PropTypes.string,
   halfday: PropTypes.bool,
@@ -24,7 +25,7 @@ DayScheduleButton.propTypes = {
 
 const ScheduleDivider = styled('div')(({ theme }) => ({
   position: 'absolute',
-  left: '50%',
+  left: '56%',
   top: '7px',
   zIndex: 10,
   width: '2px',
@@ -41,6 +42,7 @@ export default function DayScheduleButton({
   year,
   month,
   day,
+  officeFilterId,
   officeInfo,
   icon,
   halfday,
@@ -49,16 +51,12 @@ export default function DayScheduleButton({
 }) {
   const theme = useTheme();
 
-  // useEffect(() => {
-  //   console.log(
-  //     'OfficeInfo:',
-  //     'Month:',
-  //     month,
-  //     'Day:',
-  //     day,
-  //     officeInfo[0].occupancy
-  //   );
-  // }, [officeInfo]);
+  const [occupancy, setOccupancy] = useState(0);
+  useEffect(() => {
+    if (officeInfo.length > 0) {
+      setOccupancy(officeInfo[officeFilterId - 1].occupancy);
+    }
+  }, [officeInfo, officeFilterId]);
 
   const handleClick = () => {
     Selection(true, year, month, day);
@@ -82,15 +80,15 @@ export default function DayScheduleButton({
       }}
     >
       <Typography variant="caption">{day}</Typography>
-      {/* <Box
+      <Box
         sx={{
           position: 'relative',
           width: 60,
-          height: 60
+          height: 70
         }}
       >
-        <Heatmap occupancy={officeInfo[0].occupancy} />
-        <Box
+        <Heatmap occupancy={occupancy} isCalendar />
+        {/* <Box
           role="img"
           aria-label="Panda"
           sx={{
@@ -102,10 +100,25 @@ export default function DayScheduleButton({
           }}
         >
           {icon}
+        </Box> */}
+        <Box
+          role="img"
+          aria-label="Panda"
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            top: '50%',
+            left: '56%',
+            transform: 'translate(-50%, -50%)',
+            fontSize: '12px',
+            [theme.breakpoints.up('sm')]: { fontSize: '18px' }
+          }}
+        >
+          {icon}
         </Box>
         {halfday && <ScheduleDivider />}
-      </Box> */}
-      <Box
+      </Box>
+      {/* <Box
         sx={{
           position: 'relative',
           borderRadius: '50%',
@@ -141,7 +154,7 @@ export default function DayScheduleButton({
         </Box>
         {halfday && <ScheduleDivider />}
         <Box m={3} />
-      </Box>
+      </Box> */}
     </Box>
   );
 }

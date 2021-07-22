@@ -29,7 +29,7 @@ export default function WeekSchedule({
   };
 
   useEffect(() => {
-    console.log('DS:', daystatus);
+    // console.log('DS:', daystatus);
   }, [daystatus]);
 
   return (

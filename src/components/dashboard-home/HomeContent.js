@@ -158,13 +158,13 @@ export default function HomeContent() {
         } ${lastday - 1}`;
         setThisWeekTitle(title);
         thisMonth.map((mDay, mIndex) => {
-          if (firstday < mIndex && mIndex < lastday) {
+          if (firstday < mIndex + 1 && mIndex + 1 < lastday) {
             const dayObj = {
               id: mIndex,
-              weekday: `${Weeks[weekCount]} ${mIndex}`,
+              weekday: `${Weeks[weekCount]} ${mIndex + 1}`,
               weekTitle: `${WeekListTitles[weekCount]} ${
                 Months[curr.getMonth()]
-              } ${mIndex}`,
+              } ${mIndex + 1}`,
               icon: mDay.icon,
               detail: {
                 morning: { id: mDay.morning.id, type: mDay.morning.type },
@@ -334,7 +334,7 @@ export default function HomeContent() {
   useEffect(() => {
     const newData = [];
     allStatuses.map((status) => {
-      const dData = status.schedule[cMonth][cToday];
+      const dData = status.schedule[cMonth][cToday - 1];
       const rObj = {
         userId: status.userId,
         data: dData
@@ -513,7 +513,8 @@ export default function HomeContent() {
     setTodayTitle(tmpTodaytitle);
   };
 
-  const handleClickShowDetail = (day) => {
+  const handleClickShowDetail = (id) => {
+    const day = id + 1;
     dispatch(getAllStatusById());
     setCToday(day);
 
@@ -530,7 +531,8 @@ export default function HomeContent() {
     setShowMobileDetail(true);
   };
 
-  const handleClickShowMobileDetail = (day) => {
+  const handleClickShowMobileDetail = (id) => {
+    const day = id + 1;
     dispatch(getAllStatusById());
     setCToday(day);
 

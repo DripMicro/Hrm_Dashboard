@@ -72,7 +72,7 @@ export default function RightSideBar({
     if (daystatus.length > 0 && schedule.length > 0) {
       daystatus.map((months, mIndex) => {
         months.map((day, dIndex) => {
-          if (mIndex === cToday.month && dIndex === cToday.day) {
+          if (mIndex === cToday.month && dIndex === cToday.day - 1) {
             setIcon(day.icon);
             setIsHalf(day.halfday);
             setIsWork(day.work);

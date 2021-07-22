@@ -12,10 +12,11 @@ import BaseOptionChart from './BaseOptionChart';
 // ----------------------------------------------------------------------
 
 Heatmap.propTypes = {
-  occupancy: PropTypes.number
+  occupancy: PropTypes.number,
+  isCalendar: PropTypes.bool
 };
 
-export default function Heatmap({ occupancy }) {
+export default function Heatmap({ occupancy, isCalendar }) {
   const theme = useTheme();
 
   const [chatData, setChatData] = useState([0]);
@@ -42,7 +43,7 @@ export default function Heatmap({ occupancy }) {
           value: {
             offsetY: 6,
             color: theme.palette.common.white,
-            fontSize: theme.typography.subtitle2.fontSize
+            fontSize: 1
           }
         }
       }
@@ -50,12 +51,24 @@ export default function Heatmap({ occupancy }) {
   });
 
   return (
-    <ReactApexChart
-      type="radialBar"
-      series={chatData}
-      options={chartOptions}
-      width={60}
-      height={60}
-    />
+    <>
+      {isCalendar ? (
+        <ReactApexChart
+          type="radialBar"
+          series={chatData}
+          options={chartOptions}
+          width={68}
+          height={68}
+        />
+      ) : (
+        <ReactApexChart
+          type="radialBar"
+          series={chatData}
+          options={chartOptions}
+          width={60}
+          height={60}
+        />
+      )}
+    </>
   );
 }

@@ -28,8 +28,10 @@ export default function DayStatusButtonGroup({
   const [types, setTypes] = React.useState([]);
 
   const handleType = (event, newType) => {
-    console.log(newType);
-    setType(newType);
+    if (newType !== null) {
+      setType(newType);
+      statusProps([newType]);
+    }
   };
 
   const handleTypes = (event, newTypes) => {
@@ -38,9 +40,12 @@ export default function DayStatusButtonGroup({
   };
 
   useEffect(() => {
-    setTypes(officeInitProps);
-    setType(1);
-  }, [officeInitProps]);
+    if (isMulti) {
+      setTypes(officeInitProps);
+    } else {
+      setType(officeInitProps[0]);
+    }
+  }, [officeInitProps, isMulti]);
   return (
     <>
       {isMulti ? (

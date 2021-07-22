@@ -91,7 +91,7 @@ export default function WeekList({ dayIndex, viewDetailByClick, daystatus }) {
             sx={{ borderRadius: '50% !important', width: 50, height: 50 }}
           >
             <Typography variant="h6" sx={{ padding: 1 }}>
-              {item.id}
+              {item.id + 1}
             </Typography>
           </ToggleButton>
         ))}

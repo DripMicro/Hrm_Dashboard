@@ -129,7 +129,6 @@ export default function CalendarContent() {
         yearData.push(monthData);
       });
 
-      // console.log('YEARDATA:', yearData);
       setCalendarProps(yearData);
     }
   }, [calendar]);
@@ -208,7 +207,7 @@ export default function CalendarContent() {
   useEffect(() => {
     const newData = [];
     allStatuses.map((status) => {
-      const dData = status.schedule[cToday.month][cToday.day];
+      const dData = status.schedule[cToday.month][cToday.day - 1];
       const rObj = {
         userId: status.userId,
         data: dData
@@ -326,6 +325,7 @@ export default function CalendarContent() {
   }, [allStatuses, cToday, allMembers]);
 
   const setStatusProps = (selectedIds) => {
+    console.log('SelectedId:', selectedIds);
     setOfficeIds(selectedIds);
   };
 
@@ -370,13 +370,12 @@ export default function CalendarContent() {
     calendarProps.map((months, mIndex) => {
       months.map((schedule, sIndex) => {
         if (mIndex === month && schedule.id === day) {
-          const sI = schedule.id;
-          CalendarSchedule[mIndex][sI].icon = resIcon;
-          CalendarSchedule[mIndex][sI].halfday = dayStatus;
-          CalendarSchedule[mIndex][sI].work = true;
-          CalendarSchedule[mIndex][sI].detail.morning.id = detail1.id;
-          CalendarSchedule[mIndex][sI].detail.morning.type = detail1.type;
-          settingDay = CalendarSchedule[mIndex][sIndex].id;
+          CalendarSchedule[mIndex][sIndex].icon = resIcon;
+          CalendarSchedule[mIndex][sIndex].halfday = dayStatus;
+          CalendarSchedule[mIndex][sIndex].work = true;
+          CalendarSchedule[mIndex][sIndex].detail.morning.id = detail1.id;
+          CalendarSchedule[mIndex][sIndex].detail.morning.type = detail1.type;
+          settingDay = sIndex;
         }
       });
     });
@@ -416,6 +415,7 @@ export default function CalendarContent() {
             teamStatusProps={handleTeamSelected}
           />
           <CalendarCard
+            officeFilterId={officeIds[0]}
             allStatuses={allStatuses}
             schedule={schedule}
             daystatus={calendarProps}

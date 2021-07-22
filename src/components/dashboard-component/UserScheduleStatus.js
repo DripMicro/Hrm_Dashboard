@@ -96,7 +96,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                   }}
                 >
                   {status.type === 'office' ? (
-                    <Heatmap occupancy={status.occupancy} />
+                    <Heatmap occupancy={status.occupancy} isCalendar={false} />
                   ) : (
                     <Heatmap occupancy={0} />
                   )}
