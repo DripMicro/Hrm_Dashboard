@@ -101,7 +101,7 @@ export default function SelfSettingButton({
     <div>
       <Button
         aria-describedby={id}
-        variant="outlined"
+        variant="contained"
         color="primary"
         onClick={handleClick}
         sx={{
@@ -138,7 +138,7 @@ export default function SelfSettingButton({
             />
             {notStatus ? (
               <Box sx={{ textAlign: 'left' }}>
-                <Typography variant="body2" sx={{ py: 1.2 }}>
+                <Typography variant="body2" sx={{ py: 1.7 }}>
                   What's your status for this day?
                 </Typography>
               </Box>

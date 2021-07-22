@@ -70,7 +70,6 @@ export default function RightSideBar({
 
   useEffect(() => {
     if (daystatus.length > 0 && schedule.length > 0) {
-      console.log('Here is rightside bar:', daystatus);
       daystatus.map((months, mIndex) => {
         months.map((day, dIndex) => {
           if (mIndex === cToday.month && dIndex === cToday.day) {

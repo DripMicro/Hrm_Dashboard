@@ -283,7 +283,6 @@ export default function HomeContent() {
           });
         }
       }
-      console.log('TWS:', thisWeekSchedules);
       setThisWeekSchedule(thisWeekSchedules);
     }
   }, [calendar]);
@@ -332,27 +331,8 @@ export default function HomeContent() {
     }
   }, [organizations, officeList]);
 
-  // useEffect(() => {
-  //   console.log('Changed:', thisWeekSchedule);
-  //   thisWeekSchedule.map((day, dIndex) => {
-  //     if (dayofweek === dIndex) {
-  //       console.log('DAYOFWORK:', dayofweek, dIndex);
-  //       schedule.map((sche) => {
-  //         if (
-  //           sche.id === day.detail.morning.id &&
-  //           sche.type === day.detail.morning.type
-  //         ) {
-  //           console.log('SCHE:', sche.title);
-  //           setStatusTitle(sche.title);
-  //         }
-  //       });
-  //     }
-  //   });
-  // }, [thisWeekSchedule]);
-
   useEffect(() => {
     const newData = [];
-    console.log('C_TODAY:', cMonth, cToday);
     allStatuses.map((status) => {
       const dData = status.schedule[cMonth][cToday];
       const rObj = {
@@ -473,7 +453,6 @@ export default function HomeContent() {
 
   // change icon when set icon in schedule card
   const changeIcon = (icon1, icon2, detail1, detail2, status, index) => {
-    console.log('This function is called by click', index);
     let emoji1 = '';
     let emoji2 = '';
     let resIcon = '';
@@ -489,7 +468,6 @@ export default function HomeContent() {
     let weekTitle = '';
     thisWeekSchedule.map((schedule, sIndex) => {
       if (sIndex === index) {
-        console.log('SCHEDULE:', schedule);
         ThisWeekSchedule[sIndex].icon = resIcon;
         ThisWeekSchedule[sIndex].halfday = dayStatus;
         ThisWeekSchedule[sIndex].work = true;
@@ -501,7 +479,6 @@ export default function HomeContent() {
     });
 
     const monthText = weekTitle.split(' ')[1];
-    console.log('This is weekTitle', weekTitle);
     const month = reverseMonths[monthText];
 
     const updatedSchedule = {
@@ -521,7 +498,6 @@ export default function HomeContent() {
   };
 
   const initShowDetail = (day) => {
-    console.log('Here is initShowDetail:', day);
     dispatch(getAllStatusById());
     setCToday(day);
 
@@ -538,7 +514,6 @@ export default function HomeContent() {
   };
 
   const handleClickShowDetail = (day) => {
-    console.log('Here is HandleClickshowdetail:', day);
     dispatch(getAllStatusById());
     setCToday(day);
 
@@ -606,15 +581,6 @@ export default function HomeContent() {
             initShowDetail={initShowDetail}
           />
           <SpaceStyle />
-          {/* <WeekScheduleCard
-            title="Next Week "
-            period="Jun 28 - July 2"
-            daystatus={NextWeekSchedule}
-            schedule={schedule}
-            iconProps={changeIcon}
-          />
-          <SpaceStyle />
-          <WeekList daystatus={NextWeekList} /> */}
         </Container>
       </Container>
       <RightSideBar
@@ -650,79 +616,3 @@ export default function HomeContent() {
     </Box>
   );
 }
-
-const NextWeekSchedule = [
-  {
-    id: 0,
-    weekday: 'Mon 28',
-    icon: '💼🚶‍♂️',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 1,
-    weekday: 'Tue 29',
-    icon: '🚶‍♂️🏝',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 2,
-    weekday: 'Wed 30',
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false,
-    work: true
-  },
-  {
-    id: 3,
-    weekday: 'Thu 1',
-    icon: '🤒🏡',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 4,
-    weekday: 'Fri 2',
-    icon: '?',
-    halfday: false,
-    work: false
-  }
-];
-
-const NextWeekList = [
-  {
-    id: 0,
-    weekday: 'Monday Jun 28',
-    icon: '👨‍👨‍👦‍👦',
-    halfday: false,
-    work: true
-  },
-  {
-    id: 1,
-    weekday: 'Tuesday Jun 29',
-    icon: '🚶‍♂️🏝',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 2,
-    weekday: 'Wednesday Jun 30',
-    icon: '🤒🏡',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 3,
-    weekday: 'Thuesday July 1',
-    icon: '💼🚶‍♂️',
-    halfday: true,
-    work: true
-  },
-  {
-    id: 4,
-    weekday: 'Friday July 2',
-    icon: '?',
-    halfday: false,
-    work: false
-  }
-];

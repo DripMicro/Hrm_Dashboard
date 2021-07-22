@@ -7,7 +7,7 @@ import { CalendarContent } from '../components/dashboard-calendar';
 
 export default function CalendarPage() {
   return (
-    <Page title="Thimble | Calendar" sx={{ display: 'flex' }}>
+    <Page title="Thimble | Calendar">
       <CalendarContent />
     </Page>
   );

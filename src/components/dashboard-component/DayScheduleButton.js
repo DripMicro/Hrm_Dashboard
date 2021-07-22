@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   useTheme,
@@ -9,10 +9,13 @@ import {
 
 import { Box, Typography } from '@material-ui/core';
 
+import Heatmap from './Heatmap';
+
 DayScheduleButton.propTypes = {
   year: PropTypes.number,
   month: PropTypes.number,
   day: PropTypes.number,
+  officeInfo: PropTypes.array,
   icon: PropTypes.string,
   halfday: PropTypes.bool,
   isSelected: PropTypes.bool,
@@ -38,6 +41,7 @@ export default function DayScheduleButton({
   year,
   month,
   day,
+  officeInfo,
   icon,
   halfday,
   isSelected,
@@ -45,8 +49,18 @@ export default function DayScheduleButton({
 }) {
   const theme = useTheme();
 
+  // useEffect(() => {
+  //   console.log(
+  //     'OfficeInfo:',
+  //     'Month:',
+  //     month,
+  //     'Day:',
+  //     day,
+  //     officeInfo[0].occupancy
+  //   );
+  // }, [officeInfo]);
+
   const handleClick = () => {
-    console.log(year, month, day);
     Selection(true, year, month, day);
   };
 
@@ -68,6 +82,29 @@ export default function DayScheduleButton({
       }}
     >
       <Typography variant="caption">{day}</Typography>
+      {/* <Box
+        sx={{
+          position: 'relative',
+          width: 60,
+          height: 60
+        }}
+      >
+        <Heatmap occupancy={officeInfo[0].occupancy} />
+        <Box
+          role="img"
+          aria-label="Panda"
+          sx={{
+            fontSize: '25px',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+          }}
+        >
+          {icon}
+        </Box>
+        {halfday && <ScheduleDivider />}
+      </Box> */}
       <Box
         sx={{
           position: 'relative',

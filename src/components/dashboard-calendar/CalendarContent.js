@@ -108,14 +108,14 @@ export default function CalendarContent() {
 
         const monthData = [];
 
-        thisMonth.map((mDay, mIndex) => {
-          curr.setDate(mIndex + 1);
+        thisMonth.map((mDay, dIndex) => {
+          curr.setDate(dIndex + 1);
           const dayListIndex = curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1;
           const dayObj = {
-            id: mIndex + 1,
+            id: dIndex + 1,
             weekTitle: `${WeekListTitles[dayListIndex]} ${
               Months[curr.getMonth()]
-            } ${mIndex + 1}`,
+            } ${dIndex + 1}`,
             icon: mDay.icon,
             detail: {
               morning: { id: mDay.morning.id, type: mDay.morning.type },
@@ -128,7 +128,8 @@ export default function CalendarContent() {
         });
         yearData.push(monthData);
       });
-      console.log('YEARDATA:', yearData);
+
+      // console.log('YEARDATA:', yearData);
       setCalendarProps(yearData);
     }
   }, [calendar]);
@@ -349,13 +350,11 @@ export default function CalendarContent() {
     const tmpYear = curr.getFullYear();
     const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
 
-    // setDayOfWeek(curr.getDay() - 1);
     setTodayTitle(tmpTodaytitle);
   };
 
   // change icon when set icon in schedule card
   const changeIcon = (icon1, icon2, detail1, detail2, status, month, day) => {
-    console.log('This function is called by click', month, day);
     let emoji1 = '';
     let emoji2 = '';
     let resIcon = '';
@@ -366,15 +365,11 @@ export default function CalendarContent() {
     let dayStatus = status;
     if (icon1 === icon2) dayStatus = false;
     resIcon = dayStatus ? `${emoji1}${emoji2}` : emoji1;
-    console.log('This is resIcon', resIcon);
     const CalendarSchedule = calendarProps;
     let settingDay = 0;
-    // let weekTitle = '';
-    console.log('MMM:', calendarProps);
     calendarProps.map((months, mIndex) => {
       months.map((schedule, sIndex) => {
         if (mIndex === month && schedule.id === day) {
-          console.log('SCHEDULE:', schedule, day);
           const sI = schedule.id;
           CalendarSchedule[mIndex][sI].icon = resIcon;
           CalendarSchedule[mIndex][sI].halfday = dayStatus;
@@ -382,7 +377,6 @@ export default function CalendarContent() {
           CalendarSchedule[mIndex][sI].detail.morning.id = detail1.id;
           CalendarSchedule[mIndex][sI].detail.morning.type = detail1.type;
           settingDay = CalendarSchedule[mIndex][sIndex].id;
-          // weekTitle = CalendarSchedule[sIndex].weekTitle;
         }
       });
     });
@@ -422,6 +416,8 @@ export default function CalendarContent() {
             teamStatusProps={handleTeamSelected}
           />
           <CalendarCard
+            allStatuses={allStatuses}
+            schedule={schedule}
             daystatus={calendarProps}
             viewDetailByClick={handleClickShowDetail}
           />
@@ -465,20 +461,3 @@ const Months = [
   'Nov',
   'Dec'
 ];
-
-const reverseMonths = {
-  Jan: 0,
-  Feb: 1,
-  Mar: 2,
-  Apr: 3,
-  May: 4,
-  Jun: 5,
-  Jul: 6,
-  Aug: 7,
-  Set: 8,
-  Oct: 9,
-  Nov: 10,
-  Dec: 11
-};
-
-const Weeks = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
