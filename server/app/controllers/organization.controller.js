@@ -163,7 +163,6 @@ exports.updateOrganizations = async (req, res) => {
     );
   });
 
-  console.log('THis is CustomList:', customList);
   customList.map(async (item) => {
     await CustomList.update(
       {
@@ -176,49 +175,3 @@ exports.updateOrganizations = async (req, res) => {
   });
   res.status(200).send('success');
 };
-
-// {
-//   company: {
-//     name: 'ITDevelopOPS',
-//     domain: '@startup.com',
-//     isEmail: 0,
-//     isGoogleSignIn: 1
-//   },
-//   calendar: { startingDay: 1, monthRange: 4, workDays: [ 1, 2, 4 ] },
-//   features: { isHalfDays: 1, isCities: 0 },
-//   statuses: {
-//     basicList: [ [Object], [Object], [Object], [Object] ],
-//     customList: [ [Object] ]
-//   }
-// }
-// basicList: [
-//   {
-//     id: 1,
-//     emoji: '🏡',
-//     title: 'No From home',
-//     description: 'Remote (works with Cities feature)',
-//     isActive: 1
-//   },
-//   {
-//     id: 2,
-//     emoji: '🚶‍♂️',
-//     title: 'On the go',
-//     description: 'On the go / Out of the office',
-//     isActive: 1
-//   },
-//   {
-//     id: 3,
-//     emoji: '🏝' ,
-//     title: 'Not working',
-//     description: 'Holiday / Not working',
-//     isActive: 0
-//   },
-//   {
-//     id: 4,
-//     emoji: '🤒',
-//     title: 'Sick',
-//     description: 'Sick days (merged with "Not working")',
-//     isActive: 1
-//   }
-// ],
-// customList: [ { id: 4, emoji: '🙂', title: 'Custom 1', isActive: 1 } ]

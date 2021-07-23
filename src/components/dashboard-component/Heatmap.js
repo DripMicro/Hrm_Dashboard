@@ -6,6 +6,7 @@ import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 // material
 import { useTheme } from '@material-ui/core/styles';
+import { useMediaQuery } from '@material-ui/core';
 // utils
 import BaseOptionChart from './BaseOptionChart';
 
@@ -20,12 +21,19 @@ export default function Heatmap({ occupancy, isCalendar }) {
   const theme = useTheme();
 
   const [chatData, setChatData] = useState([0]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const upSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (occupancy !== undefined) {
       setChatData([occupancy]);
     }
   }, [occupancy]);
+
+  useEffect(() => {
+    setIsMobile(upSm);
+  }, [upSm]);
 
   const chartOptions = merge(BaseOptionChart(), {
     colors: {
@@ -53,13 +61,25 @@ export default function Heatmap({ occupancy, isCalendar }) {
   return (
     <>
       {isCalendar ? (
-        <ReactApexChart
-          type="radialBar"
-          series={chatData}
-          options={chartOptions}
-          width={68}
-          height={68}
-        />
+        <>
+          {isMobile ? (
+            <ReactApexChart
+              type="radialBar"
+              series={chatData}
+              options={chartOptions}
+              width={50}
+              height={50}
+            />
+          ) : (
+            <ReactApexChart
+              type="radialBar"
+              series={chatData}
+              options={chartOptions}
+              width={68}
+              height={68}
+            />
+          )}
+        </>
       ) : (
         <ReactApexChart
           type="radialBar"

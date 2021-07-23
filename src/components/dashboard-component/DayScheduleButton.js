@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
 
 import React, { useEffect, useState } from 'react';
@@ -54,7 +55,11 @@ export default function DayScheduleButton({
   const [occupancy, setOccupancy] = useState(0);
   useEffect(() => {
     if (officeInfo.length > 0) {
-      setOccupancy(officeInfo[officeFilterId - 1].occupancy);
+      officeInfo.map((office) => {
+        if (office.id === officeFilterId) {
+          setOccupancy(office.occupancy);
+        }
+      });
     }
   }, [officeInfo, officeFilterId]);
 
@@ -84,23 +89,14 @@ export default function DayScheduleButton({
         sx={{
           position: 'relative',
           width: 60,
-          height: 70
+          height: 70,
+          [theme.breakpoints.down('sm')]: {
+            width: 45,
+            height: 50
+          }
         }}
       >
         <Heatmap occupancy={occupancy} isCalendar />
-        {/* <Box
-          role="img"
-          aria-label="Panda"
-          sx={{
-            fontSize: '25px',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)'
-          }}
-        >
-          {icon}
-        </Box> */}
         <Box
           role="img"
           aria-label="Panda"

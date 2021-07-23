@@ -19,6 +19,10 @@ import {
 
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getOrganizations } from '../../redux/slices/adminSetting';
+
 // routes
 // components
 import BlockSchedule from './BlockSchedule';
@@ -52,17 +56,32 @@ export default function SchedulePopupContent({
   weekTitle,
   iconProps
 }) {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const { organizations } = useSelector((state) => state.adminSetting);
+
   const [selectedMorning, setSelectedMorning] = useState(mInit);
   const [selectedAfternoon, setSelectedAfternoon] = useState(aInit);
   const [isHalf, setIsHalf] = useState(!halfday);
+  const [isHalfOrg, setIsHalfOrg] = useState(false);
 
   const [morningDetail, setMorningDetail] = useState({});
   const [afternoonDetail, setAfternoonDetail] = useState({});
 
-  const theme = useTheme();
+  useEffect(() => {
+    dispatch(getOrganizations());
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log('SPC:', mInit, aInit);
+    const { result } = organizations;
+    if (result.features.isHalfDays === 0) {
+      setIsHalf(true);
+      setIsHalfOrg(true);
+    }
+  }, [organizations]);
+
+  useEffect(() => {
     setSelectedMorning(mInit);
     setSelectedAfternoon(aInit);
   }, [mInit, aInit]);
@@ -86,7 +105,6 @@ export default function SchedulePopupContent({
   };
 
   const handleClick = () => {
-    console.log('PROPS:', selectedMorning, selectedAfternoon);
     iconProps(
       selectedMorning,
       selectedAfternoon,
@@ -98,7 +116,12 @@ export default function SchedulePopupContent({
 
   return (
     <>
-      <Card sx={{ borderRadius: theme.spacing(2.4) }}>
+      <Card
+        sx={{
+          borderRadius: theme.spacing(2.4),
+          [theme.breakpoints.up('sm')]: { minWidth: 350 }
+        }}
+      >
         <Box
           sx={{
             padding: '24px 24px 0',
@@ -241,6 +264,7 @@ export default function SchedulePopupContent({
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <ToggleButton
+              disabled={isHalfOrg}
               value="check"
               selected={isHalf}
               onChange={() => {

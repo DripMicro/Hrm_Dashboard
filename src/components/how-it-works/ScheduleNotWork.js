@@ -151,8 +151,9 @@ export default function SchedulePopover(props) {
         anchorEl={anchorRef.current}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 140
+          horizontal: 160
         }}
+        sx={{ width: 220 }}
       >
         <Box sx={{ py: 1 }}>
           {LANGS.map((option) => (

@@ -19,7 +19,7 @@ exports.getTeamList = (req, res) => {
   const accessToken = authorization.split(' ')[1];
   const { companyId } = jwt.verify(accessToken, JWT_SECRET);
   Team.findAll({
-    where: { companyId }
+    where: { companyId, isActive: 1 }
   }).then((teams) => {
     const teamList = [];
     teams.map((team) => {
@@ -36,12 +36,19 @@ exports.getTeamList = (req, res) => {
 };
 
 exports.addTeam = (req, res) => {
-  console.log('here is AddTeam');
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { companyId } = jwt.verify(accessToken, JWT_SECRET);
 
   Team.create({
     color: '#9900EF',
     name: 'New Team',
-    capacity: 5
+    capacity: 5,
+    companyId
   }).then((teamList) => {
     const data = {
       id: teamList.id
@@ -52,11 +59,14 @@ exports.addTeam = (req, res) => {
 
 exports.deleteTeam = (req, res) => {
   const { teamId } = req.body;
-  Team.destroy({
-    where: {
-      id: teamId
+  Team.update(
+    { isActive: 0 },
+    {
+      where: {
+        id: teamId
+      }
     }
-  });
+  );
   res.status(200).send({ message: 'Deleted successfully!' });
 };
 

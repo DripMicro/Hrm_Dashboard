@@ -35,46 +35,6 @@ const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
 }));
 
-const Weeks = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-const WeekListTitles = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday'
-];
-const Months = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Set',
-  'Oct',
-  'Nov',
-  'Dec'
-];
-
-const reverseMonths = {
-  Jan: 0,
-  Feb: 1,
-  Mar: 2,
-  Apr: 3,
-  May: 4,
-  Jun: 5,
-  Jul: 6,
-  Aug: 7,
-  Set: 8,
-  Oct: 9,
-  Nov: 10,
-  Dec: 11
-};
-
 export default function HomeContent() {
   const theme = useTheme();
   const { updateSchedule } = useGeneral();
@@ -618,3 +578,43 @@ export default function HomeContent() {
     </Box>
   );
 }
+
+const Weeks = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const WeekListTitles = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+const Months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Set',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
+const reverseMonths = {
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Set: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11
+};

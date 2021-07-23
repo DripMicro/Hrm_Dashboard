@@ -136,7 +136,10 @@ export default function SelfSettingButton({
             />
             {notStatus ? (
               <Box sx={{ textAlign: 'left' }}>
-                <Typography variant="body2" sx={{ py: 1.7 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ py: 1.7, [theme.breakpoints.down('sm')]: { py: 0.5 } }}
+                >
                   What's your status for this day?
                 </Typography>
               </Box>

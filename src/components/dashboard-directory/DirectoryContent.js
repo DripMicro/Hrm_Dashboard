@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable array-callback-return */
+import React, { useState, useEffect } from 'react';
 // material
 import {
   useTheme,
@@ -6,59 +7,16 @@ import {
 } from '@material-ui/core/styles';
 
 import { Container } from '@material-ui/core';
+
+// hooks
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getOfficeList, getTeamList } from '../../redux/slices/adminSetting';
 // ----------------------------------------------------------------------
 
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
 import UserLists from './UserList';
-
-const OfficeStatus = [
-  {
-    id: 0,
-    label: 'swiss-office',
-    icon: '💼'
-  },
-  {
-    id: 1,
-    label: 'At Home',
-    icon: '🏡'
-  },
-  {
-    id: 2,
-    label: 'With Family',
-    icon: '👨‍👨‍👦‍👦'
-  },
-  {
-    id: 3,
-    label: 'On the go',
-    icon: '🚶‍♂️'
-  },
-  {
-    id: 4,
-    label: 'Not working',
-    icon: '🏝'
-  }
-];
-
-const TeamCategories = [
-  {
-    id: 0,
-    label: 'Web Team',
-    selected: false
-  },
-  {
-    id: 1,
-    label: 'Design Team',
-    selected: false
-  },
-  {
-    id: 2,
-    label: 'Backend Team',
-    selected: false
-  }
-];
-
-const initialStatus = [1, 2];
 
 const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
@@ -66,11 +24,54 @@ const SpaceStyle = styled('div')(({ theme }) => ({
 
 export default function DirectoryContent() {
   const theme = useTheme();
-  const [offices, setOffices] = useState(initialStatus);
+
+  const dispatch = useDispatch();
+  const { officeList, teamList } = useSelector((state) => state.adminSetting);
+
+  const [teams, setTeams] = useState([]);
+  const [teamIds, setTeamIds] = useState([]);
+
+  const [offices, setOffices] = useState([]);
+  const [officeIds, setOfficeIds] = useState([]);
+
+  useEffect(() => {
+    dispatch(getOfficeList());
+    dispatch(getTeamList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const OfficeStatus = [];
+    officeList.map((office) => {
+      const data = {
+        id: office.id,
+        label: office.name,
+        icon: office.emoji
+      };
+
+      OfficeStatus.push(data);
+    });
+
+    const TeamStatus = [];
+    teamList.map((team) => {
+      const data = {
+        id: team.id,
+        label: team.name,
+        color: team.color
+      };
+
+      TeamStatus.push(data);
+    });
+
+    setOffices([...OfficeStatus]);
+    setTeams([...TeamStatus]);
+  }, [officeList, teamList]);
 
   const setStatusProps = (selectedIds) => {
-    setOffices(selectedIds);
-    console.log('G:', selectedIds);
+    setOfficeIds(selectedIds);
+  };
+
+  const handleTeamSelected = (teamStatus) => {
+    setTeamIds(teamStatus);
   };
 
   return (
@@ -80,12 +81,16 @@ export default function DirectoryContent() {
         sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
       >
         <DayStatusButtonGroup
-          officePropos={offices}
+          officeInitProps={officeIds}
           statusProps={setStatusProps}
-          officeGroups={OfficeStatus}
+          officeGroups={offices}
           isMulti
         />
-        <TeamCategoryGroup daygroups={TeamCategories} />
+        <TeamCategoryGroup
+          teamInitProps={teamIds}
+          daygroups={teams}
+          teamStatusProps={handleTeamSelected}
+        />
         <SpaceStyle />
         <UserLists />
       </Container>

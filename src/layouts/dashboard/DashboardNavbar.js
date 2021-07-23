@@ -54,7 +54,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           </IconButton>
         </Hidden>
 
-        <Searchbar />
+        {/* <Searchbar /> */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Box
@@ -66,8 +66,8 @@ export default function DashboardNavbar({ onOpenSidebar }) {
             }
           }}
         >
-          <LanguagePopover />
-          <NotificationsPopover />
+          {/* <LanguagePopover /> */}
+          {/* <NotificationsPopover /> */}
           <AccountPopover />
         </Box>
       </ToolbarStyle>

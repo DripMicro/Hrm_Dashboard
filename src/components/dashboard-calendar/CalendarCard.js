@@ -16,6 +16,10 @@ import { CardContent, IconButton, Box } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
+import { getOrganizations } from '../../redux/slices/adminSetting';
+
 import DayScheduleButton from '../dashboard-component/DayScheduleButton';
 
 const Weeks = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -184,9 +188,41 @@ export default function CalendarCard({
 }) {
   const theme = useTheme();
 
+  const dispatch = useDispatch();
+
+  const { organizations } = useSelector((state) => state.adminSetting);
+
   const [month, setMonth] = useState(init().getMonth());
   const [year, setYear] = useState(init().getFullYear());
   const [calendar, setCalendar] = useState([]);
+
+  const [count, setCount] = useState(0);
+  const [isDisableNext, setIsDisableNext] = useState(false);
+  const [isDisableBack, setIsDisableBack] = useState(false);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
+
+  useEffect(() => {
+    dispatch(getOrganizations());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const { result } = organizations;
+    console.log('Here is Pop', result);
+    let mRange = 0;
+    if (result !== undefined) {
+      mRange = result.calendar.monthRange;
+      const isOdd = mRange % 2;
+      setMin(1);
+      if (isOdd) {
+        setMax(mRange);
+        setCount((mRange - 1) / 2 + 1);
+      } else {
+        setMax(mRange + 1);
+        setCount(mRange / 2 + 1);
+      }
+    }
+  }, [organizations]);
 
   useEffect(() => {
     const monthData = daystatus;
@@ -206,22 +242,43 @@ export default function CalendarCard({
     }
   }, [daystatus, month, year, allStatuses, schedule]);
 
+  useEffect(() => {
+    if (count < max) {
+      setIsDisableNext(false);
+    }
+    if (count > min) {
+      setIsDisableBack(false);
+    }
+  }, [count]);
+
   const handleBackMonth = () => {
-    let m = month - 1;
-    let y = year;
-    y = m < 0 ? year - 1 : year;
-    m = m < 0 ? 11 : m;
-    setYear(y);
-    setMonth(m);
+    const newCount = count - 1;
+    if (newCount < min) {
+      setIsDisableBack(true);
+    } else {
+      let m = month - 1;
+      let y = year;
+      y = m < 0 ? year - 1 : year;
+      m = m < 0 ? 11 : m;
+      setYear(y);
+      setMonth(m);
+      setCount(newCount);
+    }
   };
 
   const handleNextMonth = () => {
-    let m = month + 1;
-    let y = year;
-    y = m > 11 ? year + 1 : year;
-    m = m > 11 ? 0 : m;
-    setYear(y);
-    setMonth(m);
+    const newCount = count + 1;
+    if (newCount > max) {
+      setIsDisableNext(true);
+    } else {
+      let m = month + 1;
+      let y = year;
+      y = m > 11 ? year + 1 : year;
+      m = m > 11 ? 0 : m;
+      setYear(y);
+      setMonth(m);
+      setCount(newCount);
+    }
   };
 
   const handleSelected = (selected, year, month, day) => {
@@ -250,7 +307,11 @@ export default function CalendarCard({
             justifyContent: 'space-between'
           }}
         >
-          <IconButton aria-label="delete" onClick={handleBackMonth}>
+          <IconButton
+            disabled={isDisableBack}
+            aria-label="delete"
+            onClick={handleBackMonth}
+          >
             <ArrowBackIosIcon fontSize="medium" />
           </IconButton>
           <Typography
@@ -259,7 +320,11 @@ export default function CalendarCard({
           >
             {getMonthNamebyNumber(month)} {year}
           </Typography>
-          <IconButton aria-label="delete" onClick={handleNextMonth}>
+          <IconButton
+            disabled={isDisableNext}
+            aria-label="delete"
+            onClick={handleNextMonth}
+          >
             <ArrowForwardIosIcon fontSize="medium" />
           </IconButton>
         </Box>

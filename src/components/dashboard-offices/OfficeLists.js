@@ -20,8 +20,8 @@ import {
   Autocomplete
 } from '@material-ui/core';
 
-import DeleteIcon from '@material-ui/icons/Delete';
 import EmojiButton from '../dashboard-component/EmojiButton';
+import DeleteButton from '../dashboard-component/ConfirmDialog';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -183,8 +183,8 @@ export default function OfficeLists() {
     setIsChanged(false);
   };
 
-  const handleDeleteOffice = async (officeId) => {
-    await deleteOffice({ officeId });
+  const handleDeleteOffice = (officeId) => {
+    deleteOffice({ officeId });
   };
 
   return (
@@ -271,20 +271,11 @@ export default function OfficeLists() {
                       />
                     </TableCellStyles>
                     <TableCellStyles align="right">
-                      <Button
-                        onClick={() => {
-                          handleDeleteOffice(row.id);
-                        }}
-                        color="error"
-                        sx={{
-                          borderRadius: '50%',
-                          minWidth: '0px',
-                          width: 50,
-                          height: 50
-                        }}
-                      >
-                        <DeleteIcon />
-                      </Button>
+                      <DeleteButton
+                        deleteTitle={row.name}
+                        deleteProps={handleDeleteOffice}
+                        deleteId={row.id}
+                      />
                     </TableCellStyles>
                   </TableRow>,
                   <TableRow key={`sub_${index}`}>

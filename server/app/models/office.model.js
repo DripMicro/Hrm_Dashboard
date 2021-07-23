@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
     capacity: {
       type: Sequelize.INTEGER.UNSIGNED
     },
+    isActive: {
+      type: Sequelize.INTEGER,
+      defaultValue: 1
+    },
     companyId: {
       type: Sequelize.INTEGER
     },

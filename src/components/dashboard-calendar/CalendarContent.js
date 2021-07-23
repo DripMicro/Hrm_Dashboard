@@ -325,7 +325,6 @@ export default function CalendarContent() {
   }, [allStatuses, cToday, allMembers]);
 
   const setStatusProps = (selectedIds) => {
-    console.log('SelectedId:', selectedIds);
     setOfficeIds(selectedIds);
   };
 

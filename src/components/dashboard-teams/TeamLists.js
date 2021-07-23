@@ -14,7 +14,7 @@ import { LoadingButton } from '@material-ui/lab';
 
 import { Button, Card, CardContent, TextField, Box } from '@material-ui/core';
 
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteButton from '../dashboard-component/ConfirmDialog';
 
 import ColorButton from '../dashboard-component/ColorButton';
 
@@ -88,8 +88,8 @@ export default function TeamLists() {
     setTeams([...rows]);
   };
 
-  const handleDeleteTeam = async (teamId) => {
-    await deleteTeam({ teamId });
+  const handleDeleteTeam = (teamId) => {
+    deleteTeam({ teamId });
   };
 
   const changeColor = (color, index) => {
@@ -191,7 +191,12 @@ export default function TeamLists() {
                       />
                     </TableCellStyles>
                     <TableCellStyles align="right">
-                      <Button
+                      <DeleteButton
+                        deleteTitle={row.name}
+                        deleteProps={handleDeleteTeam}
+                        deleteId={row.id}
+                      />
+                      {/* <Button
                         onClick={() => handleDeleteTeam(row.id)}
                         color="error"
                         sx={{
@@ -202,7 +207,7 @@ export default function TeamLists() {
                         }}
                       >
                         <DeleteIcon />
-                      </Button>
+                      </Button> */}
                     </TableCellStyles>
                   </TableRow>
                 ))}

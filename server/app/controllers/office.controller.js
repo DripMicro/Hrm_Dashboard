@@ -23,7 +23,7 @@ exports.getOfficeList = (req, res) => {
   const { companyId } = jwt.verify(accessToken, JWT_SECRET);
 
   Office.findAll({
-    where: { companyId }
+    where: { companyId, isActive: 1 }
   }).then((offices) => {
     const officeList = [];
     offices.map((office) => {
@@ -82,19 +82,30 @@ exports.updateOfficeList = (req, res) => {
 
 exports.deleteOffice = (req, res) => {
   const { officeId } = req.body;
-  Office.destroy({
-    where: {
-      id: officeId
+  Office.update(
+    { isActive: 0 },
+    {
+      where: {
+        id: officeId
+      }
     }
-  });
+  );
   res.status(200).send({ message: 'Deleted successfully!' });
 };
 
 exports.addOffice = (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { companyId } = jwt.verify(accessToken, JWT_SECRET);
   Office.create({
     emoji: '🙂',
     name: 'New Office',
-    capacity: 5
+    capacity: 5,
+    companyId
   }).then((officeList) => {
     const data = {
       id: officeList.id

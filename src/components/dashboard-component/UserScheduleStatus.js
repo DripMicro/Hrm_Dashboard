@@ -75,6 +75,74 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
+          >
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Box sx={{ display: 'flex' }}>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: 60,
+                    height: 60
+                  }}
+                >
+                  {status.type === 'office' ? (
+                    <Heatmap occupancy={status.occupancy} isCalendar={false} />
+                  ) : (
+                    <Heatmap occupancy={0} />
+                  )}
+                  <Box
+                    role="img"
+                    aria-label="Panda"
+                    sx={{
+                      fontSize: '25px',
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  >
+                    {status.emoji}
+                  </Box>
+                </Box>
+                <Typography variant="subtitle1" sx={{ py: 2, px: 1 }}>
+                  {status.schTitle}{' '}
+                  {status.type === 'office' ? (
+                    <Typography variant="caption">
+                      ({status.users.length}/{status.capacity})
+                    </Typography>
+                  ) : (
+                    <Typography variant="caption">
+                      ({status.users.length})
+                    </Typography>
+                  )}
+                </Typography>
+              </Box>
+
+              {expanded !== status.schTitle && (
+                <AvatarGroup max={3}>
+                  {status.users.map((item, index) => (
+                    <Avatar
+                      key={index}
+                      alt={item.name}
+                      src={item.avatarURL}
+                      sx={{ width: theme.spacing(5), height: theme.spacing(5) }}
+                    />
+                  ))}
+                </AvatarGroup>
+              )}
+            </Box>
+          </AccordionSummary>
+          {/* <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
             sx={{
               '& .css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
                 margin: theme.spacing(1, 0, 0)
@@ -131,24 +199,24 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
               {expanded !== status.schTitle && (
                 <AvatarGroup
                   max={3}
-                  sx={{
-                    justifyContent: 'flex-end',
-                    marginLeft: '30px',
-                    marginTop: '5px'
-                  }}
+                  // sx={{
+                  //   justifyContent: 'flex-end',
+                  //   marginLeft: '30px',
+                  //   marginTop: '5px'
+                  // }}
                 >
                   {status.users.map((item, index) => (
                     <Avatar
                       key={index}
                       alt={item.name}
                       src={item.avatarURL}
-                      sx={{ width: theme.spacing(6), height: theme.spacing(6) }}
+                      sx={{ width: theme.spacing(5), height: theme.spacing(5) }}
                     />
                   ))}
                 </AvatarGroup>
               )}
             </Box>
-          </AccordionSummary>
+          </AccordionSummary> */}
           <AccordionDetails>
             {status.users.map((item, index) => (
               <ListItem

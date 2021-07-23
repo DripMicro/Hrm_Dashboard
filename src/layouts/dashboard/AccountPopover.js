@@ -18,6 +18,8 @@ import {
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
 import useAuth from '../../hooks/useAuth';
+
+import { PATH_DASHBOARD } from '../../routes/paths';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -29,7 +31,7 @@ const MENU_OPTIONS = [
   {
     label: 'Profile',
     icon: personFill,
-    linkTo: '#'
+    linkTo: PATH_DASHBOARD.general.user
   },
   {
     label: 'Settings',
