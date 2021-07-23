@@ -48,8 +48,13 @@ export default function AnalyticsContent() {
   const [allStatuses, setAllStatuses] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
 
-  const [month, setMonth] = useState(init().getMonth());
-  const [year, setYear] = useState(init().getFullYear());
+  const [month, setMonth] = useState(0);
+  const [year, setYear] = useState(0);
+
+  useEffect(() => {
+    setMonth(init().getMonth());
+    setYear(init().getFullYear());
+  }, []);
 
   useEffect(() => {
     dispatch(getCalendar());

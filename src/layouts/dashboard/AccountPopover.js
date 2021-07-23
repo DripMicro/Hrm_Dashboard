@@ -77,10 +77,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar
-          alt="My Avatar"
-          src="/static/mock-images/avatars/avatar_default.jpg"
-        />
+        <Avatar alt={user.firstname} src={user.photoURL} />
       </MIconButton>
 
       <MenuPopover

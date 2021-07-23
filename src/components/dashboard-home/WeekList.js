@@ -33,6 +33,8 @@ const ScheduleDivider = styled('div')(() => ({
 }));
 
 WeekList.propTypes = {
+  firstDay: PropTypes.number,
+  lastDay: PropTypes.number,
   dayIndex: PropTypes.number,
   daystatus: PropTypes.array,
   initShowDetail: PropTypes.func,
@@ -42,6 +44,8 @@ WeekList.propTypes = {
 // ----------------------------------------------------------------------
 
 export default function WeekList({
+  firstDay,
+  lastDay,
   dayIndex,
   initShowDetail,
   viewDetailByClick,
@@ -52,10 +56,14 @@ export default function WeekList({
   const theme = useTheme();
 
   useEffect(() => {
-    if (initShowDetail !== undefined) {
-      initShowDetail(new Date().getDate());
+    if (initShowDetail !== undefined && firstDay > 0 && lastDay > 0) {
+      let today = new Date().getDate();
+      if (today > lastDay) {
+        today = firstDay;
+      }
+      initShowDetail(today);
     }
-  }, []);
+  }, [firstDay, lastDay]);
 
   useEffect(() => {
     setSelected(dayIndex);

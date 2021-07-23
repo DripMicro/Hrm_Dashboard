@@ -11,6 +11,7 @@ import {
 import { Button, Popover, Typography, Box } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 
+import useAuth from '../../hooks/useAuth';
 import PopupContent from './SchedulePopupContent';
 
 const PopoverStyle = withStyles(() => ({
@@ -58,6 +59,7 @@ export default function SelfSettingButton({
   const [isHalf, setHalf] = useState(false);
   const [mInit, setMInit] = useState(0);
   const [aInit, setAInit] = useState(0);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (detailInfo.morning !== undefined) {
@@ -95,6 +97,7 @@ export default function SelfSettingButton({
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const theme = useTheme();
+
   return (
     <div>
       <Button
@@ -123,8 +126,8 @@ export default function SelfSettingButton({
         >
           <Box sx={{ display: 'flex' }}>
             <Avatar
-              alt="Remy Sharp"
-              src="/static/dashboard/home/3.jpg"
+              alt={user.firstname}
+              src={user.photoURL}
               sx={{
                 width: theme.spacing(6),
                 height: theme.spacing(6),

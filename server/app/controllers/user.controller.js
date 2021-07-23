@@ -3,6 +3,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable array-callback-return */
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 const config = require('../config/auth.config');
 
@@ -12,6 +13,17 @@ const db = require('../models');
 
 const User = db.user;
 const { ROLES } = db;
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, '../public/static/uploads');
+  },
+  filename(req, file, cb) {
+    console.log(file);
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+const upload = multer({ storage }).single('file');
 
 exports.getUserList = (req, res) => {
   const { authorization } = req.headers;
@@ -82,7 +94,7 @@ async function getUserLists(datas) {
     }
     users.push({
       id: datas[i].id,
-      avatarUrl: `/static/mock-images/avatars/avatar_${i}.jpg`,
+      avatarUrl: datas[i].photoURL,
       name: `${datas[i].firstname} ${datas[i].lastname}`,
       email: datas[i].email,
       role: ROLES[datas[i].roleId - 1],
@@ -98,6 +110,7 @@ exports.updateProfile = (req, res) => {
     {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
+      photoURL: req.body.photoURL,
       roles: 1
     },
     { where: { email: req.body.email } }
@@ -116,6 +129,18 @@ exports.updateProfile = (req, res) => {
     .catch((error) => {
       console.log('error', error);
     });
+};
+
+exports.uploadAvatar = (req, res) => {
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json(err);
+    }
+    if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(200).send(req.file);
+  });
 };
 
 exports.getProfile = (req, res) => {
@@ -147,6 +172,7 @@ exports.getProfile = (req, res) => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
+          photoURL: userData.photoURL,
           roles: ROLES[userData.roleId - 1].toUpperCase(),
           offices: officeIds,
           teams: teamIds

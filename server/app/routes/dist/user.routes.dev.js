@@ -1,0 +1,15 @@
+"use strict";
+
+var controller = require('../controllers/user.controller');
+
+module.exports = function (app) {
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Headers', 'x-access-token, Origin, Content-Type, Accept');
+    next();
+  });
+  app.get('/api/user/manage-users', controller.getUserList);
+  app.get('/api/user/profile', controller.getProfile); // -----------------------------------------------------------------------------------
+
+  app.post('/api/user/updateProfile', controller.updateProfile);
+  app.post('/api/user/uploadAvatar', controller.uploadAvatar);
+};

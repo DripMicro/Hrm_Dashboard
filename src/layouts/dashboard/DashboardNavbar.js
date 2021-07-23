@@ -5,10 +5,10 @@ import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, AppBar, Hidden, Toolbar, IconButton } from '@material-ui/core';
 //
-import Searchbar from './Searchbar';
+// import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
+// import LanguagePopover from './LanguagePopover';
+// import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------
 

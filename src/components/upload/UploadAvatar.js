@@ -1,4 +1,3 @@
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { useDropzone } from 'react-dropzone';
@@ -14,6 +13,7 @@ import {
 } from '@material-ui/core';
 // utils
 import { fData } from '../../utils/formatNumber';
+import axios from '../../utils/axios';
 // hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 //
@@ -23,7 +23,8 @@ import { cloudinaryConfig } from '../../config';
 
 const CLOUDINARY_KEY = cloudinaryConfig.cloudinaryKey;
 const CLOUDINARY_PRESET = cloudinaryConfig.cloudinaryPreset;
-const CLOUDINARY_URL = cloudinaryConfig.cloudinaryUrl;
+// const CLOUDINARY_URL = cloudinaryConfig.cloudinaryUrl;
+const CLOUDINARY_URL = '/api/user/uploadAvatar';
 
 const PHOTO_SIZE = 3145728; // bytes
 const FILE_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
@@ -129,14 +130,16 @@ export default function UploadAvatar({
           formData.append('folder', 'upload_minimal/avatar');
           formData.append('upload_preset', CLOUDINARY_PRESET);
           formData.append('api_key', CLOUDINARY_KEY);
+
           return await axios
             .post(CLOUDINARY_URL, formData, {
               headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then((response) => {
               const { data } = response;
+              const avatarURL = `/static/uploads/${data.filename}`;
               if (isMountedRef.current) {
-                setFile(data.secure_url);
+                setFile(avatarURL);
                 setIsLoading(false);
                 setIsError(null);
               }

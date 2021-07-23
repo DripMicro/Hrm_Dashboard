@@ -64,7 +64,7 @@ exports.getUsersByCompany = (req, res) => {
     users.map((user) => {
       const userObj = {
         id: user.id,
-        avatarURL: 'user.avatarURL',
+        avatarURL: user.photoURL,
         name: `${user.firstname} ${user.lastname}`
       };
       resData.push(userObj);

@@ -15,4 +15,5 @@ module.exports = (app) => {
   // -----------------------------------------------------------------------------------
 
   app.post('/api/user/updateProfile', controller.updateProfile);
+  app.post('/api/user/uploadAvatar', controller.uploadAvatar);
 };

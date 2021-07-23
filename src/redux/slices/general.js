@@ -123,59 +123,6 @@ export function getUsersByCompany() {
 export function updateSchedule({ updatedSchedule }) {
   const data = updatedSchedule;
   return async () => {
-    console.log('here is redux updatedSchedule', data);
     await axios.post('/api/general/updateSchedule', data);
   };
 }
-
-// ----------------------------------------------------------------------
-// Delete
-// ----------------------------------------------------------------------
-
-// export function deleteOffice({ officeId }) {
-//   const data = {
-//     officeId
-//   };
-//   return async (dispatch) => {
-//     await axios.post('/api/office/deleteOffice', data);
-//     dispatch(slice.actions.getDeletedOfficeList(data));
-//   };
-// }
-
-// export function deleteTeam({ teamId }) {
-//   const data = {
-//     teamId
-//   };
-//   return async (dispatch) => {
-//     await axios.post('/api/team/deleteTeam', data);
-//     dispatch(slice.actions.getDeletedTeamList(data));
-//   };
-// }
-
-// ----------------------------------------------------------------------
-// Add
-// ----------------------------------------------------------------------
-
-// export function addOffice() {
-//   return async () => {
-//     const response = await axios.post('/api/office/addOffice');
-//     const { id } = response.data;
-//     return id;
-//   };
-// }
-
-// export function addTeam() {
-//   return async () => {
-//     const response = await axios.post('/api/team/addTeam');
-//     const { id } = response.data;
-//     return id;
-//   };
-// }
-
-// export function addStatus() {
-//   return async () => {
-//     const response = await axios.post('/api/organization/addCustomStatus');
-//     const { id } = response.data;
-//     return id;
-//   };
-// }

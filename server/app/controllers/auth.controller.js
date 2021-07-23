@@ -41,6 +41,7 @@ exports.signup = (req, res) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
+    // photoURL: '/static/uploads/temp.jpg',
     password: bcrypt.hashSync(req.body.password, 8)
   })
     .then((userData) => {

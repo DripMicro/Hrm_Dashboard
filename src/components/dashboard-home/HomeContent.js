@@ -54,7 +54,9 @@ export default function HomeContent() {
   const [allStatuses, setAllStatuses] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
   const [cMonth, setCMonth] = useState(0);
-  const [cToday, setCToday] = useState(0);
+  const [cToday, setCToday] = useState(1);
+  const [firstDay, setFirstDay] = useState(0);
+  const [lastDay, setLastDay] = useState(0);
 
   // right side bar user setting
   const [scheduleUsers, setScheduleUsers] = useState([]);
@@ -105,6 +107,8 @@ export default function HomeContent() {
 
       const first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
       const last = first + 6; // last day is the first day + 6
+      setFirstDay(first + 1);
+      setLastDay(last - 1);
 
       const firstday = new Date(curr.setDate(first)).getDate();
       const lastday = new Date(curr.setDate(last)).getDate();
@@ -293,6 +297,20 @@ export default function HomeContent() {
 
   useEffect(() => {
     const newData = [];
+
+    const curr = new Date();
+    const today = cToday;
+    curr.setDate(cToday);
+
+    const dayOfweek =
+      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
+    const tmpMonth = Months[curr.getMonth()];
+    const tmpYear = curr.getFullYear();
+    const tmpTodaytitle = `${dayOfweek} ${today} ${tmpMonth}. ${tmpYear}`;
+
+    setDayOfWeek(curr.getDay() - 1);
+    setTodayTitle(tmpTodaytitle);
+
     allStatuses.map((status) => {
       const dData = status.schedule[cMonth][cToday - 1];
       const rObj = {
@@ -306,6 +324,7 @@ export default function HomeContent() {
     let notStatus = [];
     schedule.map((sche) => {
       const userArr = [];
+      // if (newData.data !== undefined) {}
       newData.map((user) => {
         if (user.data.isWork) {
           if (user.data.isHalf) {
@@ -537,6 +556,8 @@ export default function HomeContent() {
           />
           <SpaceStyle />
           <WeekList
+            firstDay={firstDay}
+            lastDay={lastDay}
             daystatus={thisWeekSchedule}
             dayIndex={dayofweek}
             viewDetailByClick={handleClickShowDetail}

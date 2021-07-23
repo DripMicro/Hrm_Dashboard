@@ -158,7 +158,7 @@ export default function AccountGeneral() {
                 }}
               >
                 <UploadAvatar
-                  disabled={user.email === 'demo@minimals.cc'} // You can remove this
+                  disabled={user.email === 'admin@thimble.com'} // You can remove this
                   value={values.photoURL}
                   onChange={(value) => setFieldValue('photoURL', value)}
                 />
@@ -172,7 +172,7 @@ export default function AccountGeneral() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      disabled={user.email === 'demo@minimals.cc'} // You can remove this
+                      disabled={user.email === 'admin@thimble.com'} // You can remove this
                       fullWidth
                       label="First Name"
                       {...getFieldProps('firstname')}
@@ -183,7 +183,7 @@ export default function AccountGeneral() {
 
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      disabled={user.email === 'demo@minimals.cc'} // You can remove this
+                      disabled={user.email === 'admin@thimble.com'} // You can remove this
                       fullWidth
                       label="Last Name"
                       {...getFieldProps('lastname')}
