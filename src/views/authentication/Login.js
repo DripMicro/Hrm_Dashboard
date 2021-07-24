@@ -130,7 +130,7 @@ export default function Login() {
 
           <Alert severity="info" sx={{ mb: 5 }}>
             Use email : <strong>superadmin@thimble.com</strong> / password :
-            <strong>&nbsp;asdf</strong>
+            <strong>&nbsp;superadmin</strong>
           </Alert>
 
           <LoginForm />
