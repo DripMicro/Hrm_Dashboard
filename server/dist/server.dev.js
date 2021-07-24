@@ -50,12 +50,14 @@ function initial() {
 //   initial();
 // });
 // force: true will drop the table if it already exists
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log('Drop and Resync Database with { force: true }');
-//   initial();
-// });
-// simple route
 
+
+db.sequelize.sync({
+  force: true
+}).then(function () {
+  console.log('Drop and Resync Database with { force: true }');
+  initial();
+}); // simple route
 
 app.get('/', function (req, res) {
   res.json({

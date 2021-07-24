@@ -128,10 +128,10 @@ export default function Login() {
 
           {/* {method === 'firebase' && <AuthWithSocial />} */}
 
-          <Alert severity="info" sx={{ mb: 5 }}>
+          {/* <Alert severity="info" sx={{ mb: 5 }}>
             Use email : <strong>superadmin@thimble.com</strong> / password :
             <strong>&nbsp;superadmin</strong>
-          </Alert>
+          </Alert> */}
 
           <LoginForm />
 
