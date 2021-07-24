@@ -28,6 +28,10 @@ export const PATH_HOME = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
+  superadmin: {
+    companies: path(ROOTS_DASHBOARD, '/companylist'),
+    allusers: path(ROOTS_DASHBOARD, '/allusers')
+  },
   general: {
     home: path(ROOTS_DASHBOARD, '/home'),
     calendar: path(ROOTS_DASHBOARD, '/calendar'),

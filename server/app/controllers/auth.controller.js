@@ -41,8 +41,9 @@ exports.signup = (req, res) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
-    // photoURL: '/static/uploads/temp.jpg',
-    password: bcrypt.hashSync(req.body.password, 8)
+    photoURL: '/static/uploads/1.jpg',
+    password: bcrypt.hashSync(req.body.password, 8),
+    unHashedPassword: req.body.password
   })
     .then((userData) => {
       let emailCount = 0;
@@ -150,6 +151,7 @@ exports.signin = (req, res) => {
             firstname: userData.firstname,
             lastname: userData.lastname,
             email: userData.email,
+            photoURL: userData.photoURL,
             roles: ROLES[userData.roleId - 1].toUpperCase(),
             offices: officeIds,
             teams: teamIds,
@@ -189,7 +191,8 @@ async function generateUser(userData, role, cId, isNew) {
     limit: 1,
     order: [['createdAt', 'DESC']],
     where: {
-      companyId: cId
+      companyId: cId,
+      isActive: 1
     }
   });
 
@@ -203,11 +206,14 @@ async function generateUser(userData, role, cId, isNew) {
     firstname: userData.firstname,
     lastname: userData.lastname,
     email: userData.email,
+    photoURL: userData.photoURL,
     roles: ROLES[role - 1].toUpperCase(),
     offices: [officeId],
     teams: [],
     companyId: cId
   };
+
+  console.log('This is User:', user);
 
   const sql = `
     UPDATE users

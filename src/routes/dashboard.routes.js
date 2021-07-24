@@ -7,6 +7,7 @@ import { PATH_DASHBOARD } from './paths';
 // guards
 import AuthGuard from '../guards/AuthGuard';
 import AdminGuard from '../guards/AdminGuard';
+import SuperAdminGuard from '../guards/SuperAdminGuard';
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = {
@@ -14,6 +15,20 @@ const DashboardRoutes = {
   guard: AuthGuard,
   layout: DashboardLayout,
   routes: [
+    // SUPER ADMIN
+    // ----------------------------------------------------------------------
+    {
+      exact: true,
+      path: PATH_DASHBOARD.superadmin.companies,
+      guard: SuperAdminGuard,
+      component: lazy(() => import('../views/DashboardCompaniesPage'))
+    },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.superadmin.allusers,
+      guard: SuperAdminGuard,
+      component: lazy(() => import('../views/DashboardAllUserListPage'))
+    },
     // GENERAL
     // ----------------------------------------------------------------------
     {

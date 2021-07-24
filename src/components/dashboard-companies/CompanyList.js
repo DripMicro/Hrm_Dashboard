@@ -1,8 +1,8 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 // material
-import { useTheme } from '@material-ui/core/styles';
+// import { useTheme } from '@material-ui/core/styles';
 import {
   Card,
   Table,
@@ -18,24 +18,28 @@ import {
 } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserList, deleteUser } from '../../redux/slices/user';
-import useAuth from '../../hooks/useAuth';
+import { getUserList } from '../../redux/slices/user';
+import { getCompanyList } from '../../redux/slices/superAdmin';
+// import useAuth from '../../hooks/useAuth';
 // components
-import Label from '../Label';
+// import Label from '../Label';
 import Scrollbar from '../Scrollbar';
 import SearchNotFound from '../SearchNotFound';
 
-import UserListHead from './UserListHead';
-import UserListToolbar from './UserListToolbar';
-import UserMoreMenu from './UserMoreMenu';
+import UserListHead from './CompanyListHead';
+import UserListToolbar from './CompanyListToolbar';
+// import UserMoreMenu from './CompanyMoreMenu';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isLinked', label: 'Slack Linked', alignRight: false },
-  { id: '' }
+  { id: 'companyName', label: 'Company Name', alignRight: false },
+  { id: 'companyDomain', label: 'Domain', alignRight: false },
+  { id: 'members', label: 'Members', alignRight: false },
+  { id: 'offices', label: 'Offices', alignRight: false },
+  { id: 'teams', label: 'Teams', alignRight: false },
+  { id: 'adminName', label: 'Admin Name', alignRight: false },
+  { id: 'adminEmail', label: 'Email', alignRight: false },
+  { id: 'adminPass', label: 'Password', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -67,31 +71,33 @@ function applySortFilter(arrays, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.domain.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 export default function UserList() {
-  const theme = useTheme();
+  // const theme = useTheme();
   const dispatch = useDispatch();
   const { userList } = useSelector((state) => state.user);
-  const { user } = useAuth();
+  const { companies } = useSelector((state) => state.superAdmin);
+  // const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('domain');
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     dispatch(getUserList());
+    dispatch(getCompanyList());
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    console.log(companies);
+  }, [companies]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -101,7 +107,7 @@ export default function UserList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = userList.map((n) => n.name);
+      const newSelecteds = companies.map((n) => n.domain);
       setSelected(newSelecteds);
       return;
     }
@@ -139,15 +145,15 @@ export default function UserList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteUser = (userId) => {
-    dispatch(deleteUser(userId));
-  };
+  // const handleDeleteUser = (userId) => {
+  //   dispatch(deleteUser(userId));
+  // };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - companies.length) : 0;
 
   const filteredUsers = applySortFilter(
-    userList,
+    companies,
     getComparator(order, orderBy),
     filterName
   );
@@ -169,7 +175,7 @@ export default function UserList() {
               order={order}
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
-              rowCount={userList.length}
+              rowCount={companies.length}
               numSelected={selected.length}
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
@@ -178,9 +184,20 @@ export default function UserList() {
               {filteredUsers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { id, name, role, email, avatarUrl, isLinked } = row;
+                  const {
+                    id,
+                    name,
+                    domain,
+                    members,
+                    offices,
+                    teams,
+                    adminAvatar,
+                    adminName,
+                    adminEmail,
+                    adminPass
+                  } = row;
 
-                  const isItemSelected = selected.indexOf(name) !== -1;
+                  const isItemSelected = selected.indexOf(domain) !== -1;
 
                   return (
                     <TableRow
@@ -194,40 +211,25 @@ export default function UserList() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
+                          onChange={(event) => handleClick(event, domain)}
                         />
                       </TableCell>
+                      <TableCell align="left">{name}</TableCell>
+                      <TableCell align="left">{domain}</TableCell>
+                      <TableCell align="left">{members}</TableCell>
+                      <TableCell align="left">{offices}</TableCell>
+                      <TableCell align="left">{teams}</TableCell>
+
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={name} src={avatarUrl} />
+                          <Avatar alt={adminName} src={adminAvatar} />
                           <Typography variant="subtitle2" noWrap>
-                            {name}
+                            {adminName}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align="left">{email}</TableCell>
-                      <TableCell align="left">
-                        <Label
-                          variant={
-                            theme.palette.mode === 'light' ? 'ghost' : 'filled'
-                          }
-                          color={(role !== 'admin' && 'warning') || 'success'}
-                        >
-                          {sentenceCase(role)}
-                        </Label>
-                      </TableCell>
-                      <TableCell align="left">
-                        {isLinked ? 'Yes' : 'Not Linked'}
-                      </TableCell>
-
-                      <TableCell align="right">
-                        {user.roles === 'ADMIN' && (
-                          <UserMoreMenu
-                            onDelete={() => handleDeleteUser(id)}
-                            userName={name}
-                          />
-                        )}
-                      </TableCell>
+                      <TableCell align="left">{adminEmail}</TableCell>
+                      <TableCell align="left">{adminPass}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -251,7 +253,7 @@ export default function UserList() {
       </Scrollbar>
 
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 15, 25]}
         component="div"
         count={userList.length}
         rowsPerPage={rowsPerPage}

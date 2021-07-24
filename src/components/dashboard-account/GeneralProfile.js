@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
@@ -29,6 +30,14 @@ import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
 // ----------------------------------------------------------------------
 const initialOffices = [];
 const initialTeams = [];
+
+// async function doesFileExist(urlToFile) {
+//   const xhr = new XMLHttpRequest();
+//   xhr.open('HEAD', urlToFile, false);
+//   xhr.send();
+
+//   return xhr.status !== 404;
+// }
 
 export default function AccountGeneral() {
   const isMountedRef = useIsMountedRef();

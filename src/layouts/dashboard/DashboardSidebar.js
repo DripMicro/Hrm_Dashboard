@@ -114,12 +114,26 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     }
   }, [pathname]);
 
-  let NewMenuLinks = [];
-  if (user.roles === 'SUPER ADMIN' || user.roles === 'ADMIN') {
-    NewMenuLinks = MenuLinks;
+  const NewMenuLinks = [];
+  console.log('This is user Role', user.roles);
+  if (user.roles === 'SUPER ADMIN') {
+    MenuLinks.map((links) => {
+      if (links.subheader === 'super admin') {
+        NewMenuLinks.push(links);
+      }
+    });
+  } else if (user.roles === 'ADMIN') {
+    MenuLinks.map((links) => {
+      if (links.subheader !== 'super admin') {
+        NewMenuLinks.push(links);
+      }
+    });
   } else {
     MenuLinks.map((links) => {
-      if (links.subheader !== 'admin settings') {
+      if (
+        links.subheader !== 'admin settings' &&
+        links.subheader !== 'super admin'
+      ) {
         NewMenuLinks.push(links);
       }
     });

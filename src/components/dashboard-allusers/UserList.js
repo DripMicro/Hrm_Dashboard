@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserList, deleteUser } from '../../redux/slices/user';
+import { getUserList } from '../../redux/slices/superAdmin';
 import useAuth from '../../hooks/useAuth';
 // components
 import Label from '../Label';
@@ -33,9 +33,11 @@ import UserMoreMenu from './UserMoreMenu';
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
+  { id: 'password', label: 'Password', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isLinked', label: 'Slack Linked', alignRight: false },
-  { id: '' }
+  { id: 'offices', label: 'Offices', alignRight: false },
+  { id: 'teams', label: 'Teams', alignRight: false },
+  { id: 'company', label: 'Company', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -76,14 +78,14 @@ function applySortFilter(arrays, comparator, query) {
 export default function UserList() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  const { userList } = useSelector((state) => state.superAdmin);
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     dispatch(getUserList());
@@ -139,9 +141,9 @@ export default function UserList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteUser = (userId) => {
-    dispatch(deleteUser(userId));
-  };
+  // const handleDeleteUser = (userId) => {
+  //   dispatch(deleteUser(userId));
+  // };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
@@ -178,7 +180,17 @@ export default function UserList() {
               {filteredUsers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { id, name, role, email, avatarUrl, isLinked } = row;
+                  const {
+                    id,
+                    name,
+                    roles,
+                    email,
+                    password,
+                    offices,
+                    photoURL,
+                    teams,
+                    companyName
+                  } = row;
 
                   const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -199,35 +211,44 @@ export default function UserList() {
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={name} src={avatarUrl} />
+                          <Avatar alt={name} src={photoURL} />
                           <Typography variant="subtitle2" noWrap>
                             {name}
                           </Typography>
                         </Stack>
                       </TableCell>
                       <TableCell align="left">{email}</TableCell>
+                      <TableCell align="left">{password}</TableCell>
                       <TableCell align="left">
                         <Label
-                          variant={
-                            theme.palette.mode === 'light' ? 'ghost' : 'filled'
-                          }
-                          color={(role !== 'admin' && 'warning') || 'success'}
+                          variant="filled"
+                          color={(roles !== 'admin' && 'warning') || 'success'}
                         >
-                          {sentenceCase(role)}
+                          {roles}
                         </Label>
                       </TableCell>
                       <TableCell align="left">
-                        {isLinked ? 'Yes' : 'Not Linked'}
+                        {offices.map((office, index) => (
+                          <Label
+                            key={index}
+                            variant="filled"
+                            sx={{ borderRadius: '50%', width: 25, height: 25 }}
+                          >
+                            {office}
+                          </Label>
+                        ))}
                       </TableCell>
-
-                      <TableCell align="right">
-                        {user.roles === 'ADMIN' && (
-                          <UserMoreMenu
-                            onDelete={() => handleDeleteUser(id)}
-                            userName={name}
-                          />
-                        )}
+                      <TableCell align="left">
+                        {teams.map((team, index) => (
+                          <Label
+                            key={index}
+                            sx={{ backgroundColor: team.color, color: 'white' }}
+                          >
+                            {team.name}
+                          </Label>
+                        ))}
                       </TableCell>
+                      <TableCell align="left">{companyName}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -251,7 +272,7 @@ export default function UserList() {
       </Scrollbar>
 
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 15, 25]}
         component="div"
         count={userList.length}
         rowsPerPage={rowsPerPage}

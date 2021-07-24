@@ -9,11 +9,11 @@ import LoadingScreen from '../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
-AdminProtect.propTypes = {
+SuperAdminProtect.propTypes = {
   children: PropTypes.node
 };
 
-export default function AdminProtect({ children }) {
+export default function SuperAdminProtect({ children }) {
   const { isLoading, isAuthenticated, user } = useAuth();
 
   if (isLoading) {
@@ -23,7 +23,8 @@ export default function AdminProtect({ children }) {
   if (
     !isAuthenticated ||
     user.roles === 'MEMBER' ||
-    user.roles === 'TEAM LEADER'
+    user.roles === 'TEAM LEADER' ||
+    user.roles === 'ADMIN'
   ) {
     return <Redirect to={PATH_DASHBOARD.general.home} />;
   }

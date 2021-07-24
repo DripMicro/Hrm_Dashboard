@@ -7,6 +7,7 @@ import authJwtReducer from './slices/authJwt';
 import userReducer from './slices/user';
 import adminSettingReducer from './slices/adminSetting';
 import generalReducer from './slices/general';
+import superAdminReducer from './slices/superAdmin';
 // ----------------------------------------------------------------------
 
 const rootPersistConfig = {
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
   authJwt: persistReducer(authPersistConfig, authJwtReducer),
   user: userReducer,
   adminSetting: adminSettingReducer,
-  general: generalReducer
+  general: generalReducer,
+  superAdmin: superAdminReducer
 });
 
 export { rootPersistConfig, rootReducer };

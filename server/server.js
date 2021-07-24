@@ -42,9 +42,11 @@ function initial() {
     id: 1,
     firstname: 'Mo',
     lastname: 'Riss',
-    email: 'thimble@root.com',
+    email: 'superadmin@thimble.com',
     roleId: 1,
-    password: bcrypt.hashSync('asdf', 8)
+    companyId: 1111,
+    password: bcrypt.hashSync('superadmin', 8),
+    unHashedPassword: 'superadmin'
   });
 }
 
@@ -71,6 +73,7 @@ require('./app/routes/office.routes')(app);
 require('./app/routes/team.routes')(app);
 require('./app/routes/organization.routes')(app);
 require('./app/routes/general.routes')(app);
+require('./app/routes/superadmin.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

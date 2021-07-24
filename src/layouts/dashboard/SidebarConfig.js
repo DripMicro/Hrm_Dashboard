@@ -31,6 +31,23 @@ const ICONS = {
 };
 
 const sidebarConfig = [
+  // SUPERADMIN
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'super admin',
+    items: [
+      {
+        title: 'Company List',
+        href: PATH_DASHBOARD.superadmin.companies,
+        icon: ICONS.offices
+      },
+      {
+        title: 'User List',
+        href: PATH_DASHBOARD.superadmin.allusers,
+        icon: ICONS.teams
+      }
+    ]
+  },
   // GENERAL
   // ----------------------------------------------------------------------
   {
@@ -112,33 +129,6 @@ const sidebarConfig = [
       }
     ]
   }
-
-  // APP
-  // ----------------------------------------------------------------------
-  // {
-  //   subheader: 'app',
-  //   items: [
-  //     {
-  //       title: 'Drop',
-  //       href: PATH_DASHBOARD.app.root,
-  //       icon: ICONS.dashboard,
-  //       items: [
-  //         {
-  //           title: 'page Four',
-  //           href: PATH_DASHBOARD.app.pageFour
-  //         },
-  //         {
-  //           title: 'Page Five',
-  //           href: PATH_DASHBOARD.app.pageFive
-  //         },
-  //         {
-  //           title: 'Page Six',
-  //           href: PATH_DASHBOARD.app.pageSix
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // }
 ];
 
 export default sidebarConfig;

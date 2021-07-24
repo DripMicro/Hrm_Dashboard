@@ -48,6 +48,7 @@ exports.getUserList = (req, res) => {
         firstname: userData.firstname,
         lastname: userData.lastname,
         email: userData.email,
+        photoURL: userData.photoURL,
         roles: ROLES[userData.roleId - 1].toUpperCase(),
         offices: officeIds
       };

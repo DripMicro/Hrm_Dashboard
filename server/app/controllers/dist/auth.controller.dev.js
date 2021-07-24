@@ -43,8 +43,9 @@ exports.signup = function (req, res) {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
-    // photoURL: '/static/uploads/temp.jpg',
-    password: bcrypt.hashSync(req.body.password, 8)
+    photoURL: '/static/uploads/1.jpg',
+    password: bcrypt.hashSync(req.body.password, 8),
+    unHashedPassword: req.body.password
   }).then(function (userData) {
     var emailCount = 0;
     var role = ADMIN;
@@ -206,6 +207,7 @@ exports.signin = function (req, res) {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
+          photoURL: userData.photoURL,
           roles: ROLES[userData.roleId - 1].toUpperCase(),
           offices: officeIds,
           teams: teamIds,
@@ -256,7 +258,8 @@ function generateUser(userData, role, cId, isNew) {
             limit: 1,
             order: [['createdAt', 'DESC']],
             where: {
-              companyId: cId
+              companyId: cId,
+              isActive: 1
             }
           }));
 
@@ -271,11 +274,13 @@ function generateUser(userData, role, cId, isNew) {
             firstname: userData.firstname,
             lastname: userData.lastname,
             email: userData.email,
+            photoURL: userData.photoURL,
             roles: ROLES[role - 1].toUpperCase(),
             offices: [officeId],
             teams: [],
             companyId: cId
           };
+          console.log('This is User:', user);
           sql = "\n    UPDATE users\n    SET roleId = ".concat(role, "\n    WHERE id = ").concat(userData.id, ";\n  ");
           sequelize.query(sql, {
             type: sequelize.QueryTypes.UPDATE
@@ -292,7 +297,7 @@ function generateUser(userData, role, cId, isNew) {
           res.user = user;
           return _context4.abrupt("return", res);
 
-        case 18:
+        case 19:
         case "end":
           return _context4.stop();
       }
