@@ -1,8 +1,8 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 // material
-import { useTheme } from '@material-ui/core/styles';
+// import { useTheme } from '@material-ui/core/styles';
 import {
   Card,
   Table,
@@ -27,7 +27,7 @@ import SearchNotFound from '../SearchNotFound';
 
 import UserListHead from './UserListHead';
 import UserListToolbar from './UserListToolbar';
-import UserMoreMenu from './UserMoreMenu';
+// import UserMoreMenu from './UserMoreMenu';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -76,7 +76,7 @@ function applySortFilter(arrays, comparator, query) {
 }
 
 export default function UserList() {
-  const theme = useTheme();
+  // const theme = useTheme();
   const dispatch = useDispatch();
   const { userList } = useSelector((state) => state.superAdmin);
   const { user } = useAuth();
