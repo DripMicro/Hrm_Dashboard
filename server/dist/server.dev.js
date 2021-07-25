@@ -10,7 +10,7 @@ var bcrypt = require('bcryptjs');
 
 var app = express();
 var corsOptions = {
-  // origin: 'http://localhost:3000'
+  // origin: 'http://localhost'
   origin: 'http://3.68.219.73/'
 };
 app.use(cors(corsOptions)); // parse requests of content-type - application/json
