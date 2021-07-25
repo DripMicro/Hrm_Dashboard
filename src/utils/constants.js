@@ -1,3 +1,3 @@
 export const CONSTANTS = {
-  serverURL: 'http://localhost:8080'
+  serverURL: 'http://3.68.219.73:8080'
 };
