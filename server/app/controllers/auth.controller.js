@@ -245,7 +245,7 @@ async function initial(cId) {
   // user office initialize ...
   OFFICES.forEach((office) => {
     Office.create({
-      emoji: office.emoji,
+      emoji: JSON.stringify(office.emoji),
       name: office.name,
       capacity: office.capacity,
       companyId: cId
@@ -263,7 +263,7 @@ async function initial(cId) {
 
   BASICLIST.forEach((basic) => {
     BasicList.create({
-      emoji: basic.emoji,
+      emoji: JSON.stringify(basic.emoji),
       title: basic.title,
       description: basic.description,
       isActive: basic.isActive,
@@ -273,7 +273,7 @@ async function initial(cId) {
 
   CUSTOMLIST.forEach((custom) => {
     Customlist.create({
-      emoji: custom.emoji,
+      emoji: JSON.stringify(custom.emoji),
       title: custom.title,
       isActive: custom.isActive,
       companyId: cId

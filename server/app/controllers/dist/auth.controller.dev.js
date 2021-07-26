@@ -313,7 +313,7 @@ function initial(cId) {
           // user office initialize ...
           OFFICES.forEach(function (office) {
             Office.create({
-              emoji: office.emoji,
+              emoji: JSON.stringify(office.emoji),
               name: office.name,
               capacity: office.capacity,
               companyId: cId
@@ -329,7 +329,7 @@ function initial(cId) {
           });
           BASICLIST.forEach(function (basic) {
             BasicList.create({
-              emoji: basic.emoji,
+              emoji: JSON.stringify(basic.emoji),
               title: basic.title,
               description: basic.description,
               isActive: basic.isActive,
@@ -338,7 +338,7 @@ function initial(cId) {
           });
           CUSTOMLIST.forEach(function (custom) {
             Customlist.create({
-              emoji: custom.emoji,
+              emoji: JSON.stringify(custom.emoji),
               title: custom.title,
               isActive: custom.isActive,
               companyId: cId
