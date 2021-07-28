@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const app = express();
 
 const corsOptions = {
-  // origin: 'http://localhost'
+  // origin: 'http://localhost:3000'
   origin: 'http://3.68.219.73/'
 };
 
@@ -57,10 +57,10 @@ function initial() {
 
 // force: true will drop the table if it already exists
 
-db.sequelize.sync({ force: true }).then(() => {
-  console.log('Drop and Resync Database with { force: true }');
-  initial();
-});
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log('Drop and Resync Database with { force: true }');
+//   initial();
+// });
 
 // simple route
 app.get('/', (req, res) => {
