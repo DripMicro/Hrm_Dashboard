@@ -57,7 +57,6 @@ exports.updateOfficeList = (req, res) => {
       capacity: reqOffice.capacity
     };
     Office.update(updateValues, { where: { id: reqOffice.id } });
-    console.log(reqOffice.managers);
 
     const sql = `UPDATE user_offices SET isManager = 0`;
     sequelize

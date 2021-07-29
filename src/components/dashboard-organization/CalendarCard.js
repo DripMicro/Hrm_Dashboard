@@ -84,8 +84,8 @@ export default function CalendarCard({ dataProps, setCalendarProps }) {
                     label="Week of day"
                   >
                     {WeekDays.map((day, index) => (
-                      <MenuItem key={index} value={index}>
-                        {day}
+                      <MenuItem key={index} value={day.id}>
+                        {day.title}
                       </MenuItem>
                     ))}
                   </Select>
@@ -143,16 +143,21 @@ export default function CalendarCard({ dataProps, setCalendarProps }) {
 }
 
 const WeekDays = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday'
+  // { id: 0, title: 'Sunday' },
+  { id: 1, title: 'Monday' },
+  { id: 2, title: 'Tuesday' },
+  { id: 3, title: 'Wednesday' },
+  { id: 4, title: 'Thursday' },
+  { id: 5, title: 'Friday' },
+  { id: 6, title: 'Saturday' }
 ];
 
 const days = [
+  {
+    id: 0,
+    label: 'S',
+    color: '#00AB55'
+  },
   {
     id: 1,
     label: 'M',
@@ -180,11 +185,6 @@ const days = [
   },
   {
     id: 6,
-    label: 'S',
-    color: '#00AB55'
-  },
-  {
-    id: 7,
     label: 'S',
     color: '#00AB55'
   }

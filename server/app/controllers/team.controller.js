@@ -5,6 +5,7 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models');
 
+const { sequelize } = db;
 const Team = db.team;
 const config = require('../config/auth.config');
 
@@ -72,6 +73,7 @@ exports.deleteTeam = (req, res) => {
 
 exports.updateTeamList = (req, res) => {
   const teamList = req.body;
+  console.log(teamList);
   teamList.map((team) => {
     const updateValues = {
       color: team.color,
@@ -79,6 +81,34 @@ exports.updateTeamList = (req, res) => {
       capacity: Number(team.capacity)
     };
     Team.update(updateValues, { where: { id: team.id } });
+    const sql = `UPDATE user_teams SET isManager = 0`;
+    sequelize
+      .query(sql, {
+        type: sequelize.QueryTypes.UPDATE
+      })
+      .then(() => {
+        team.managers.map((manager) => {
+          const sql = `
+          UPDATE user_teams
+          SET isManager = 1
+          WHERE userId = ${manager.id} and teamId = ${team.id};
+        `;
+          sequelize.query(sql, {
+            type: sequelize.QueryTypes.UPDATE
+          });
+        });
+      });
   });
   res.status(200).send('success');
+};
+
+exports.getTManagerList = (req, res) => {
+  sequelize
+    .query('SELECT teamId, userId FROM `user_teams` WHERE isManager = 1', {
+      type: sequelize.QueryTypes.SELECT
+    })
+    .then((users) => {
+      console.log(users);
+      res.status(200).send(users);
+    });
 };

@@ -12,7 +12,14 @@ import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import { LoadingButton } from '@material-ui/lab';
 
-import { Button, Card, CardContent, TextField, Box } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Box,
+  Autocomplete
+} from '@material-ui/core';
 
 import DeleteButton from '../dashboard-component/ConfirmDialog';
 
@@ -20,7 +27,8 @@ import ColorButton from '../dashboard-component/ColorButton';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getTeamList } from '../../redux/slices/adminSetting';
+import { getUserList } from '../../redux/slices/user';
+import { getTeamList, getTManagerList } from '../../redux/slices/adminSetting';
 import useAdmin from '../../hooks/useAdmin';
 
 const TableCellStyles = withStyles((theme) => ({
@@ -38,42 +46,117 @@ const TableCellStyles = withStyles((theme) => ({
   }
 }))(TableCell);
 
-function createData(id, color, name, capacity) {
-  return { id, color, name, capacity };
+function createData(id, color, name, capacity, members, managers) {
+  return { id, color, name, capacity, members, managers };
 }
 
 let rows = [
-  createData(0, '#00D084', 'Maxime quidem provident', 12),
-  createData(1, '#0693E3', 'Atque pariatur', 3),
-  createData(2, '#EB144C', 'Quia iste', 5)
+  createData(0, '#00D084', 'Maxime quidem provident', 12, [], []),
+  createData(1, '#0693E3', 'Atque pariatur', 3, [], []),
+  createData(2, '#EB144C', 'Quia iste', 5, [], [])
 ];
+
+let teamManagersData = [];
+let teamManagers = [];
 
 export default function TeamLists() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { addTeam, deleteTeam, updateTeamList } = useAdmin();
-  const { teamList } = useSelector((state) => state.adminSetting);
+  const { userList } = useSelector((state) => state.user);
+  const { teamList, tmanagerList } = useSelector((state) => state.adminSetting);
 
   const [teams, setTeams] = useState([]);
+  const [isManager, setIsManager] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChanged, setIsChanged] = useState(true);
 
   useEffect(() => {
     dispatch(getTeamList());
+    dispatch(getUserList());
+    dispatch(getTManagerList());
   }, [dispatch]);
 
   useEffect(() => {
+    teamManagersData = [];
+    if (teamList.length > 0) {
+      teamList.map((team) => {
+        const eachTeam = [];
+        userList.map((user) => {
+          for (let i = 0; i < user.teamIds.length; i += 1) {
+            if (team.id === Number(user.teamIds[i])) {
+              eachTeam.push(user);
+              break;
+            }
+          }
+        });
+        teamManagersData.push(eachTeam);
+      });
+    }
+
+    teamManagers = [];
+    if (tmanagerList.length > 0) {
+      teamList.map((team, oIndex) => {
+        const eachTeamManager = [];
+        tmanagerList.map((manager) => {
+          if (manager.teamId === team.id) {
+            for (let i = 0; i < teamManagersData[oIndex].length; i += 1) {
+              if (teamManagersData[oIndex][i].id === manager.userId) {
+                eachTeamManager.push(teamManagersData[oIndex][i]);
+                break;
+              }
+            }
+          }
+        });
+        teamManagers.push(eachTeamManager);
+      });
+    }
+
     rows = [];
-    teamList.map((team) => {
-      rows.push(createData(team.id, team.color, team.name, team.capacity));
+    teamList.map((team, tIndex) => {
+      rows.push(
+        createData(
+          team.id,
+          team.color,
+          team.name,
+          team.capacity,
+          teamManagersData[tIndex],
+          teamManagers[tIndex]
+        )
+      );
     });
+    const managerNames = [];
+    rows.map((team) => {
+      const rowData = {};
+      rowData.teamId = team.id;
+      const teamIsManagers = [];
+      team.members.map((member) => {
+        if (team.managers !== undefined) {
+          team.managers.map((manager) => {
+            if (member.id === manager.id) teamIsManagers.push(member);
+          });
+        }
+      });
+      rowData.isManagers = teamIsManagers;
+      managerNames.push(rowData);
+    });
+    setIsManager(managerNames);
     setTeams([...rows]);
-  }, [teamList]);
+  }, [teamList, tmanagerList, userList]);
 
   const handleSaveChanges = async () => {
     setIsSubmitting(true);
-    const updatedTeamList = teams;
+    const teamList = teams;
+    const managerList = isManager;
+    const updatedTeamList = [];
+    teamList.map((team, mIndex) => {
+      updatedTeamList.push(team);
+      managerList.map((manager) => {
+        if (team.id === manager.teamId)
+          updatedTeamList[mIndex].managers = manager.isManagers;
+      });
+    });
     await updateTeamList({ updatedTeamList });
     setIsChanged(true);
     setIsSubmitting(false);
@@ -81,10 +164,12 @@ export default function TeamLists() {
   };
 
   const handleAddTeam = async () => {
-    console.log('this is add team button');
     const id = await addTeam();
-    const data = createData(id, '#9900EF', '', '');
+    const data = createData(id, '#9900EF', '', '', [], []);
     rows.push(data);
+    const addManager = isManager;
+    addManager.push([]);
+    setIsManager([...addManager]);
     setTeams([...rows]);
   };
 
@@ -131,7 +216,7 @@ export default function TeamLists() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {teams.map((row, index) => (
+                {teams.map((row, index) => [
                   <TableRow key={index}>
                     <TableCellStyles
                       component="th"
@@ -196,21 +281,40 @@ export default function TeamLists() {
                         deleteProps={handleDeleteTeam}
                         deleteId={row.id}
                       />
-                      {/* <Button
-                        onClick={() => handleDeleteTeam(row.id)}
-                        color="error"
-                        sx={{
-                          borderRadius: '50%',
-                          minWidth: '0px',
-                          width: 50,
-                          height: 50
+                    </TableCellStyles>
+                  </TableRow>,
+                  <TableRow key={`sub_${index}`}>
+                    <TableCellStyles colSpan={5}>
+                      <Autocomplete
+                        multiple
+                        id="tags-outlined"
+                        options={row.members}
+                        value={
+                          isManager.length ? isManager[index].isManagers : []
+                        }
+                        getOptionLabel={(option) => option.name}
+                        filterSelectedOptions
+                        onChange={(event, value) => {
+                          const autoTemp = isManager;
+                          isManager.map((_, aIndex) => {
+                            if (index === aIndex)
+                              autoTemp[index].isManagers = value;
+                          });
+                          setIsManager([...autoTemp]);
+                          setIsChanged(false);
                         }}
-                      >
-                        <DeleteIcon />
-                      </Button> */}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            label="Team Manger"
+                            placeholder="Select team manager..."
+                          />
+                        )}
+                      />
                     </TableCellStyles>
                   </TableRow>
-                ))}
+                ])}
               </TableBody>
             </Table>
           </TableContainer>

@@ -37,6 +37,7 @@ ScheduleButton.propTypes = {
   halfday: PropTypes.bool,
   work: PropTypes.bool,
   detailInfo: PropTypes.object,
+  isActive: PropTypes.bool,
   iconProps: PropTypes.func
 };
 
@@ -49,6 +50,7 @@ export default function ScheduleButton({
   halfday,
   work,
   detailInfo,
+  isActive,
   iconProps
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -80,7 +82,11 @@ export default function ScheduleButton({
   }, [detailInfo, schedule]);
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (isActive) {
+      setAnchorEl(event.currentTarget);
+    } else {
+      setAnchorEl(null);
+    }
   };
 
   const handleClose = () => {
@@ -115,6 +121,7 @@ export default function ScheduleButton({
             maxHeight: '67px',
             position: 'relative',
             ...(!work && { backgroundColor: '#FEB6AC', color: 'black' }),
+            ...(!isActive && { backgroundColor: '#f7f5f5' }),
             [theme.breakpoints.down('md')]: {
               minWidth: '0px',
               width: '50px'

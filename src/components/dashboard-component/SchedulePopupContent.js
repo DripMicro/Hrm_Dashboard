@@ -119,6 +119,7 @@ export default function SchedulePopupContent({
       <Card
         sx={{
           borderRadius: theme.spacing(2.4),
+          minWidth: 320,
           [theme.breakpoints.up('sm')]: { minWidth: 350 }
         }}
       >
@@ -181,6 +182,7 @@ export default function SchedulePopupContent({
                             border: '3px solid #E7ECF5',
                             width: '50px',
                             height: '50px',
+                            paddingTop: '2px',
                             textAlign: 'center'
                           }}
                         >

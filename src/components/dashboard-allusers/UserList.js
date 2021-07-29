@@ -33,7 +33,6 @@ import UserListToolbar from './UserListToolbar';
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
-  { id: 'password', label: 'Password', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
   { id: 'offices', label: 'Offices', alignRight: false },
   { id: 'teams', label: 'Teams', alignRight: false },
@@ -185,7 +184,6 @@ export default function UserList() {
                     name,
                     roles,
                     email,
-                    password,
                     offices,
                     photoURL,
                     teams,
@@ -218,7 +216,6 @@ export default function UserList() {
                         </Stack>
                       </TableCell>
                       <TableCell align="left">{email}</TableCell>
-                      <TableCell align="left">{password}</TableCell>
                       <TableCell align="left">
                         <Label
                           variant="filled"

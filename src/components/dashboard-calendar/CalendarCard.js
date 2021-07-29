@@ -201,6 +201,13 @@ export default function CalendarCard({
   const [isDisableBack, setIsDisableBack] = useState(false);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
+  const [today, setToday] = useState(0);
+  const [thisMonth, setThisMonth] = useState(0);
+
+  useEffect(() => {
+    setToday(new Date().getDate() - 1);
+    setThisMonth(new Date().getMonth());
+  }, []);
 
   useEffect(() => {
     dispatch(getOrganizations());
@@ -239,6 +246,7 @@ export default function CalendarCard({
       );
 
       setCalendar(calendarInfo);
+      console.log('MonthInfo', month, calendarInfo);
     }
   }, [daystatus, month, year, allStatuses, schedule]);
 
@@ -355,6 +363,7 @@ export default function CalendarCard({
                       halfday={day.halfday}
                       Selection={handleSelected}
                       isSelected={day.selected}
+                      isActive={day.day > today || thisMonth < day.month}
                     />
                   )}
                 </GridItem>

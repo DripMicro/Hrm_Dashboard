@@ -12,6 +12,7 @@ module.exports = (app) => {
   // --------------------- Team Getting List section --------------------------------------------------------------
 
   app.get('/api/team/teams', controller.getTeamList);
+  app.get('/api/team/team-managers', controller.getTManagerList);
 
   // --------------------- Team CRUD section --------------------------------------------------------------
   app.post('/api/team/addTeam', controller.addTeam);

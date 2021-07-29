@@ -38,8 +38,7 @@ const TABLE_HEAD = [
   { id: 'offices', label: 'Offices', alignRight: false },
   { id: 'teams', label: 'Teams', alignRight: false },
   { id: 'adminName', label: 'Admin Name', alignRight: false },
-  { id: 'adminEmail', label: 'Email', alignRight: false },
-  { id: 'adminPass', label: 'Password', alignRight: false }
+  { id: 'adminEmail', label: 'Email', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -193,8 +192,7 @@ export default function UserList() {
                     teams,
                     adminAvatar,
                     adminName,
-                    adminEmail,
-                    adminPass
+                    adminEmail
                   } = row;
 
                   const isItemSelected = selected.indexOf(domain) !== -1;
@@ -229,7 +227,6 @@ export default function UserList() {
                         </Stack>
                       </TableCell>
                       <TableCell align="left">{adminEmail}</TableCell>
-                      <TableCell align="left">{adminPass}</TableCell>
                     </TableRow>
                   );
                 })}

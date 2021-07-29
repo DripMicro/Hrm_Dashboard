@@ -55,13 +55,25 @@ export default function RightSideBar({
   const theme = useTheme();
 
   const [icon, setIcon] = useState('');
+  const [day, setDay] = useState(0);
+  const [month, setMonth] = useState(0);
   const [isHalf, setIsHalf] = useState(false);
   const [isWork, setIsWork] = useState(false);
   const [detail, setDetail] = useState({});
   const [weekTitle, setWeekTitle] = useState('');
   const [notStatusYet, setNotStatusYet] = useState(false);
   const [sTitle, setTitle] = useState('');
+  const [today, setToday] = useState(0);
+  const [thisMonth, setThisMonth] = useState(0);
 
+  useEffect(() => {
+    setToday(new Date().getDate() - 1);
+    setThisMonth(new Date().getMonth());
+  }, []);
+
+  useEffect(() => {
+    console.log('Day, Today', day, today);
+  }, [day, today]);
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
@@ -73,6 +85,9 @@ export default function RightSideBar({
       daystatus.map((months, mIndex) => {
         months.map((day, dIndex) => {
           if (mIndex === cToday.month && dIndex === cToday.day - 1) {
+            console.log('This is Day data:', day);
+            setDay(day.id);
+            setMonth(cToday.month);
             setIcon(day.icon);
             setIsHalf(day.halfday);
             setIsWork(day.work);
@@ -128,6 +143,7 @@ export default function RightSideBar({
           iconProps={changeIcon}
           statusTitle={sTitle}
           notStatus={notStatusYet}
+          isActive={day >= today || month > thisMonth}
         />
         <Box m={5} />
         <UserScheduleStatus

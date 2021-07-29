@@ -10,7 +10,7 @@ import { Box, Typography } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
-const WeekTitle = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+const WeekTitle = ['Sa', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 const StyledToggleButtonGroup = withStyles((theme) => ({
   grouped: {
     margin: theme.spacing(0.5),
@@ -43,12 +43,13 @@ WeekList.propTypes = {
 export default function WeekList({ dayIndex, viewDetailByClick, daystatus }) {
   const [selected, setSelected] = useState(0);
 
+  console.log('Here is Mobile View:', daystatus);
   useEffect(() => {
     setSelected(dayIndex);
   }, [dayIndex]);
 
-  const handleListItemClick = (event, id, index) => {
-    viewDetailByClick(id);
+  const handleListItemClick = (event, id, month, index) => {
+    viewDetailByClick(id, month, index);
     setSelected(index);
   };
 
@@ -73,7 +74,7 @@ export default function WeekList({ dayIndex, viewDetailByClick, daystatus }) {
       >
         {daystatus.map((item, index) => (
           <Box key={index} sx={{ width: 50, textAlign: 'center' }}>
-            <Typography variant="h6">{WeekTitle[index]}</Typography>
+            <Typography variant="h6">{WeekTitle[item.week]}</Typography>
           </Box>
         ))}
       </Box>
@@ -85,7 +86,9 @@ export default function WeekList({ dayIndex, viewDetailByClick, daystatus }) {
         {daystatus.map((item, index) => (
           <ToggleButton
             key={index}
-            onClick={(event) => handleListItemClick(event, item.id, index)}
+            onClick={(event) =>
+              handleListItemClick(event, item.id, item.month, index)
+            }
             value={index}
             aria-label="week view"
             sx={{ borderRadius: '50% !important', width: 50, height: 50 }}

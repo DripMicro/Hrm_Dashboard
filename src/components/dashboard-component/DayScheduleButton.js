@@ -21,13 +21,14 @@ DayScheduleButton.propTypes = {
   icon: PropTypes.string,
   halfday: PropTypes.bool,
   isSelected: PropTypes.bool,
+  isActive: PropTypes.bool,
   Selection: PropTypes.func
 };
 
 const ScheduleDivider = styled('div')(({ theme }) => ({
   position: 'absolute',
-  left: '56%',
-  top: '7px',
+  left: '50%',
+  top: '10px',
   zIndex: 10,
   width: '2px',
   height: '48px',
@@ -48,6 +49,7 @@ export default function DayScheduleButton({
   icon,
   halfday,
   isSelected,
+  isActive,
   Selection
 }) {
   const theme = useTheme();
@@ -80,7 +82,7 @@ export default function DayScheduleButton({
         },
         '&:hover': {
           cursor: 'pointer',
-          backgroundColor: '#D6F5EA'
+          backgroundColor: '#f7f5f5'
         }
       }}
     >
@@ -88,8 +90,9 @@ export default function DayScheduleButton({
       <Box
         sx={{
           position: 'relative',
-          width: 60,
-          height: 70,
+          margin: '0px 1px',
+          borderRadius: '50%',
+          ...(!isActive && { backgroundColor: '#f7f5f5' }),
           [theme.breakpoints.down('sm')]: {
             width: 45,
             height: 50

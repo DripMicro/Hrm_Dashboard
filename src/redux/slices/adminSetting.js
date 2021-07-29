@@ -16,6 +16,7 @@ const initialState = {
   managerList: [],
   // team
   teamList: [],
+  tmanagerList: [],
   // organizations
   organizations: []
 };
@@ -47,6 +48,11 @@ const slice = createSlice({
       state.managerList = action.payload;
     },
 
+    // GET MANAGE USERS
+    getTManagerListSuccess(state, action) {
+      state.isLoading = false;
+      state.tmanagerList = action.payload;
+    },
     // GET TEAMS
     getTeamListSuccess(state, action) {
       state.isLoading = false;
@@ -141,6 +147,20 @@ export function getManagerList() {
     try {
       const response = await axios.get('/api/office/office-managers');
       dispatch(slice.actions.getManagerListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getTManagerList() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/team/team-managers');
+      dispatch(slice.actions.getTManagerListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -42,8 +42,7 @@ exports.signup = (req, res) => {
     lastname: req.body.lastname,
     email: req.body.email,
     photoURL: '/static/uploads/1.jpg',
-    password: bcrypt.hashSync(req.body.password, 8),
-    unHashedPassword: req.body.password
+    password: bcrypt.hashSync(req.body.password, 8)
   })
     .then((userData) => {
       let emailCount = 0;
@@ -245,7 +244,7 @@ async function initial(cId) {
   // user office initialize ...
   OFFICES.forEach((office) => {
     Office.create({
-      emoji: JSON.stringify(office.emoji),
+      emoji: office.emoji,
       name: office.name,
       capacity: office.capacity,
       companyId: cId
@@ -263,7 +262,7 @@ async function initial(cId) {
 
   BASICLIST.forEach((basic) => {
     BasicList.create({
-      emoji: JSON.stringify(basic.emoji),
+      emoji: basic.emoji,
       title: basic.title,
       description: basic.description,
       isActive: basic.isActive,
@@ -273,7 +272,7 @@ async function initial(cId) {
 
   CUSTOMLIST.forEach((custom) => {
     Customlist.create({
-      emoji: JSON.stringify(custom.emoji),
+      emoji: custom.emoji,
       title: custom.title,
       isActive: custom.isActive,
       companyId: cId

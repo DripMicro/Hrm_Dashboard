@@ -41,6 +41,7 @@ SelfSettingButton.propTypes = {
   statusTitle: PropTypes.string,
   weekTitle: PropTypes.string,
   notStatus: PropTypes.bool,
+  isActive: PropTypes.bool,
   iconProps: PropTypes.func
 };
 
@@ -53,6 +54,7 @@ export default function SelfSettingButton({
   statusTitle,
   weekTitle,
   notStatus,
+  isActive,
   iconProps
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -81,7 +83,12 @@ export default function SelfSettingButton({
   }, [detailInfo, schedule]);
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    console.log('Here is my value:', event, isActive);
+    if (isActive) {
+      setAnchorEl(event.currentTarget);
+    } else {
+      setAnchorEl(null);
+    }
   };
 
   const handleClose = () => {

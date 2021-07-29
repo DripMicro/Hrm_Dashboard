@@ -35,6 +35,28 @@ const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
 }));
 
+function createObj(mIndex, mDay, day, weekCount, curr) {
+  const w = weekCount % 7;
+  const dayObj = {
+    id: mIndex,
+    month: curr.getMonth(),
+    week: w,
+    weekday: `${Weeks[w]} ${day}`,
+    weekTitle: `${WeekListTitles[w]} ${Months[curr.getMonth()]} ${day}`,
+    icon: mDay.icon,
+    detail: {
+      morning: { id: mDay.morning.id, type: mDay.morning.type },
+      afternoon: { id: mDay.afternoon.id, type: mDay.afternoon.type }
+    },
+    halfday: mDay.isHalf,
+    work: mDay.isWork
+  };
+  return dayObj;
+}
+
+function getTitle(firstmonth, lastmonth, firstday, lastday) {
+  return `${Months[firstmonth]} ${firstday} - ${Months[lastmonth]} ${lastday}`;
+}
 export default function HomeContent() {
   const theme = useTheme();
   const { updateSchedule } = useGeneral();
@@ -46,6 +68,8 @@ export default function HomeContent() {
     (state) => state.adminSetting
   );
 
+  const [startingDay, setStartingDay] = useState(0);
+  const [workingDays, setWorkingDays] = useState([]);
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [thisWeekTitle, setThisWeekTitle] = useState('');
   const [todayTitle, setTodayTitle] = useState('');
@@ -74,6 +98,19 @@ export default function HomeContent() {
   }, [dispatch]);
 
   useEffect(() => {
+    const curr = new Date();
+    const today = curr.getDate();
+    const dayOfweek =
+      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
+    const tmpMonth = Months[curr.getMonth()];
+    const tmpYear = curr.getFullYear();
+    const tmpTodaytitle = `${dayOfweek} ${today} ${tmpMonth}. ${tmpYear}`;
+
+    setDayOfWeek(curr.getDay());
+    setTodayTitle(tmpTodaytitle);
+  }, []);
+
+  useEffect(() => {
     if (allStatus.length > 0) {
       setAllStatuses(allStatus);
     }
@@ -89,171 +126,111 @@ export default function HomeContent() {
     if (calendar.length > 0) {
       const curr = new Date();
       const thisMonth = calendar[curr.getMonth()];
-      const beforeMonth = calendar[curr.getMonth() - 1];
+      // const beforeMonth = calendar[curr.getMonth() - 1];
       const nextMonth = calendar[curr.getMonth() + 1];
 
       setCMonth(curr.getMonth());
 
-      const today = curr.getDate();
+      let first = 0;
+      let last = 0;
+      first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+      last = first + 6; // last day is the first day + 6
 
-      const dayOfweek =
-        WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
-      const tmpMonth = Months[curr.getMonth()];
-      const tmpYear = curr.getFullYear();
-      const tmpTodaytitle = `${dayOfweek} ${today} ${tmpMonth}. ${tmpYear}`;
+      let tmpFirstDay = 0;
+      let tmpStartingDay = startingDay;
+      let wDays = [...workingDays];
+      wDays = wDays.sort();
+      console.log('First => last', first, last, tmpStartingDay, wDays);
+      for (let i = first; i <= last; i += 1) {
+        curr.setDate(i);
+        const thisDay = curr.getDay();
+        if (thisDay === tmpStartingDay) {
+          if (wDays.indexOf(tmpStartingDay) !== -1) {
+            tmpFirstDay = i;
+            break;
+          } else {
+            tmpStartingDay += 1;
+          }
+        }
+      }
 
-      setDayOfWeek(curr.getDay() - 1);
-      setTodayTitle(tmpTodaytitle);
+      if (tmpFirstDay === 0) {
+        for (let i = first; i <= last; i += 1) {
+          curr.setDate(i);
+          const thisDay = curr.getDay();
+          if (wDays.length > 0) {
+            if (thisDay === wDays[0]) {
+              tmpFirstDay = i;
+              break;
+            }
+          }
+        }
+      }
 
-      const first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-      const last = first + 6; // last day is the first day + 6
-      setFirstDay(first + 1);
-      setLastDay(last - 1);
+      first = tmpFirstDay;
+      last = first + 4;
 
-      const firstday = new Date(curr.setDate(first)).getDate();
-      const lastday = new Date(curr.setDate(last)).getDate();
+      console.log('this is day ranges', first, last);
+      setFirstDay(first);
+      setLastDay(last);
+
+      const fMonth = new Date();
+      const eMonth = new Date();
+      const fday = new Date(fMonth.setDate(first)).getDate();
+      const eday = new Date(eMonth.setDate(last)).getDate();
+
       const thisWeekSchedules = [];
-      // const NextWeekSchedules = [];
 
-      if (firstday < lastday) {
-        let weekCount = 0;
-        const title = `${Months[curr.getMonth()]} ${firstday + 1} - ${
-          Months[curr.getMonth()]
-        } ${lastday - 1}`;
-        setThisWeekTitle(title);
+      const tmpDate = new Date();
+      tmpDate.setDate(fday);
+      let weekCount = tmpDate.getDay();
+      const title = getTitle(fMonth.getMonth(), eMonth.getMonth(), fday, eday);
+      setThisWeekTitle(title);
+
+      if (fMonth.getMonth() === eMonth.getMonth()) {
+        // schedule setting
         thisMonth.map((mDay, mIndex) => {
-          if (firstday < mIndex + 1 && mIndex + 1 < lastday) {
-            const dayObj = {
-              id: mIndex,
-              weekday: `${Weeks[weekCount]} ${mIndex + 1}`,
-              weekTitle: `${WeekListTitles[weekCount]} ${
-                Months[curr.getMonth()]
-              } ${mIndex + 1}`,
-              icon: mDay.icon,
-              detail: {
-                morning: { id: mDay.morning.id, type: mDay.morning.type },
-                afternoon: { id: mDay.afternoon.id, type: mDay.afternoon.type }
-              },
-              halfday: mDay.isHalf,
-              work: mDay.isWork
-            };
+          const day = mIndex + 1;
+          fMonth.setDate(day);
+          if (fday <= day && day <= eday) {
+            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
         });
       } else {
-        let weekCount = 0;
-        if (today > 25) {
-          const title = `${Months[curr.getMonth()]} ${firstday + 1} - ${
-            Months[curr.getMonth() + 1]
-          } ${lastday - 1}`;
-          setThisWeekTitle(title);
-          thisMonth.map((mDay, mIndex) => {
-            if (firstday < mIndex + 1) {
-              const dayObj = {
-                id: mIndex + 1,
-                weekday: `${Weeks[weekCount]} ${mIndex + 1}`,
-                weekTitle: `${WeekListTitles[weekCount]} ${
-                  Months[curr.getMonth()]
-                } ${mIndex}`,
-                icon: mDay.icon,
-                detail: {
-                  morning: { id: mDay.morning.id, type: mDay.morning.type },
-                  afternoon: {
-                    id: mDay.afternoon.id,
-                    type: mDay.afternoon.type
-                  }
-                },
-                halfday: mDay.isHalf,
-                work: mDay.isWork
-              };
-              thisWeekSchedules.push(dayObj);
-              weekCount += 1;
-            }
-          });
-          nextMonth.map((mDay, mIndex) => {
-            if (lastday - 1 > mIndex) {
-              const dayObj = {
-                id: mIndex + 1,
-                weekday: `${Weeks[weekCount]} ${mIndex + 1}`,
-                weekTitle: `${WeekListTitles[weekCount]} ${
-                  Months[curr.getMonth() + 1]
-                } ${mIndex}`,
-                icon: mDay.icon,
-                detail: {
-                  morning: { id: mDay.morning.id, type: mDay.morning.type },
-                  afternoon: {
-                    id: mDay.afternoon.id,
-                    type: mDay.afternoon.type
-                  }
-                },
-                halfday: mDay.isHalf,
-                work: mDay.isWork
-              };
-              thisWeekSchedules.push(dayObj);
-              weekCount += 1;
-            }
-          });
-        } else if (today < 5) {
-          const title = `${Months[curr.getMonth() - 1]} ${firstday + 1} - ${
-            Months[curr.getMonth()]
-          } ${lastday - 1}`;
-          setThisWeekTitle(title);
-          beforeMonth.map((mDay, mIndex) => {
-            if (firstday < mIndex + 1) {
-              const dayObj = {
-                id: mIndex + 1,
-                weekday: `${Weeks[weekCount]} ${mIndex + 1}`,
-                weekTitle: `${WeekListTitles[weekCount]} ${
-                  Months[curr.getMonth() - 1]
-                } ${mIndex}`,
-                icon: mDay.icon,
-                detail: {
-                  morning: { id: mDay.morning.id, type: mDay.morning.type },
-                  afternoon: {
-                    id: mDay.afternoon.id,
-                    type: mDay.afternoon.type
-                  }
-                },
-                halfday: mDay.isHalf,
-                work: mDay.isWork
-              };
-              thisWeekSchedules.push(dayObj);
-              weekCount += 1;
-            }
-          });
-          thisMonth.map((mDay, mIndex) => {
-            if (lastday - 1 > mIndex) {
-              const dayObj = {
-                id: mIndex + 1,
-                weekday: `${Weeks[weekCount]} ${mIndex + 1}`,
-                weekTitle: `${WeekListTitles[weekCount]} ${
-                  Months[curr.getMonth()]
-                } ${mIndex}`,
-                icon: mDay.icon,
-                detail: {
-                  morning: { id: mDay.morning.id, type: mDay.morning.type },
-                  afternoon: {
-                    id: mDay.afternoon.id,
-                    type: mDay.afternoon.type
-                  }
-                },
-                halfday: mDay.isHalf,
-                work: mDay.isWork
-              };
-              thisWeekSchedules.push(dayObj);
-              weekCount += 1;
-            }
-          });
-        }
+        // schedule setting
+        thisMonth.map((mDay, mIndex) => {
+          const day = mIndex + 1;
+          fMonth.setDate(day);
+          if (day >= fday) {
+            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth);
+            thisWeekSchedules.push(dayObj);
+            weekCount += 1;
+          }
+        });
+        // schedule setting
+        nextMonth.map((mDay, mIndex) => {
+          const day = mIndex + 1;
+          eMonth.setDate(day);
+          if (day <= eday) {
+            const dayObj = createObj(mIndex, mDay, day, weekCount, eMonth);
+            thisWeekSchedules.push(dayObj);
+            weekCount += 1;
+          }
+        });
       }
+
       setThisWeekSchedule(thisWeekSchedules);
     }
-  }, [calendar]);
+  }, [calendar, startingDay]);
 
   useEffect(() => {
     if (organizations.result !== undefined) {
-      const { statuses } = organizations.result;
+      const { statuses, calendar } = organizations.result;
+
+      setStartingDay(calendar.startingDay);
+      setWorkingDays(calendar.workDays);
 
       const schedules = [];
       const { basicList, customList } = statuses;
@@ -300,6 +277,7 @@ export default function HomeContent() {
 
     const curr = new Date();
     const today = cToday;
+    curr.setMonth(cMonth);
     curr.setDate(cToday);
 
     const dayOfweek =
@@ -307,8 +285,7 @@ export default function HomeContent() {
     const tmpMonth = Months[curr.getMonth()];
     const tmpYear = curr.getFullYear();
     const tmpTodaytitle = `${dayOfweek} ${today} ${tmpMonth}. ${tmpYear}`;
-
-    setDayOfWeek(curr.getDay() - 1);
+    // setDayOfWeek(curr.getDay() - startingDay);
     setTodayTitle(tmpTodaytitle);
 
     allStatuses.map((status) => {
@@ -428,7 +405,7 @@ export default function HomeContent() {
     }
 
     setScheduleUsers(schArr);
-  }, [allStatuses, cToday, allMembers]);
+  }, [allStatuses, cMonth, cToday, allMembers]);
 
   // change icon when set icon in schedule card
   const changeIcon = (icon1, icon2, detail1, detail2, status, index) => {
@@ -476,7 +453,7 @@ export default function HomeContent() {
     setThisWeekSchedule([...ThisWeekSchedule]);
   };
 
-  const initShowDetail = (day) => {
+  const initShowDetail = (day, selectedIndex) => {
     dispatch(getAllStatusById());
     setCToday(day);
 
@@ -488,13 +465,14 @@ export default function HomeContent() {
     const tmpYear = curr.getFullYear();
     const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
 
-    setDayOfWeek(curr.getDay() - 1);
+    setDayOfWeek(selectedIndex);
     setTodayTitle(tmpTodaytitle);
   };
 
-  const handleClickShowDetail = (id) => {
+  const handleClickShowDetail = (id, month, selectedIndex) => {
     const day = id + 1;
     dispatch(getAllStatusById());
+    setCMonth(month);
     setCToday(day);
 
     const curr = new Date();
@@ -504,15 +482,15 @@ export default function HomeContent() {
     const tmpMonth = Months[curr.getMonth()];
     const tmpYear = curr.getFullYear();
     const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
-
-    setDayOfWeek(curr.getDay() - 1);
+    setDayOfWeek(selectedIndex);
     setTodayTitle(tmpTodaytitle);
     setShowMobileDetail(true);
   };
 
-  const handleClickShowMobileDetail = (id) => {
+  const handleClickShowMobileDetail = (id, month, selectedIndex) => {
     const day = id + 1;
     dispatch(getAllStatusById());
+    setCMonth(month);
     setCToday(day);
 
     const curr = new Date();
@@ -522,8 +500,7 @@ export default function HomeContent() {
     const tmpMonth = Months[curr.getMonth()];
     const tmpYear = curr.getFullYear();
     const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
-
-    setDayOfWeek(curr.getDay() - 1);
+    setDayOfWeek(selectedIndex);
     setTodayTitle(tmpTodaytitle);
   };
 
@@ -600,15 +577,15 @@ export default function HomeContent() {
   );
 }
 
-const Weeks = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const Weeks = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const WeekListTitles = [
+  'Sunday',
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
-  'Saturday',
-  'Sunday'
+  'Saturday'
 ];
 const Months = [
   'Jan',

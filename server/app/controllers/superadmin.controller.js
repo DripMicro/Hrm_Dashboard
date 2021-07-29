@@ -42,8 +42,7 @@ async function getCompanies(companies) {
         teams: teams.length,
         adminAvatar: adminInfo.photoURL,
         adminName: `${adminInfo.firstname} ${adminInfo.lastname}`,
-        adminEmail: adminInfo.email,
-        adminPass: adminInfo.unHashedPassword
+        adminEmail: adminInfo.email
       };
 
       return comObj;
@@ -74,7 +73,6 @@ async function getUsers(users) {
         firstname,
         lastname,
         email,
-        unHashedPassword,
         photoURL,
         roleId,
         companyId
@@ -98,7 +96,6 @@ async function getUsers(users) {
         id,
         name: `${firstname} ${lastname}`,
         email,
-        password: unHashedPassword,
         roles: ROLES[roleId - 1],
         photoURL,
         offices: officeNames,

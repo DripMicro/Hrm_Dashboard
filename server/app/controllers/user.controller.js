@@ -93,6 +93,11 @@ async function getUserLists(datas) {
     for (let i = 0; i < offices.length; i += 1) {
       officeIds.push(`${offices[i].id}`);
     }
+    const teams = await datas[i].getTeams();
+    const teamIds = [];
+    for (let i = 0; i < teams.length; i += 1) {
+      teamIds.push(`${teams[i].id}`);
+    }
     users.push({
       id: datas[i].id,
       avatarUrl: datas[i].photoURL,
@@ -100,7 +105,8 @@ async function getUserLists(datas) {
       email: datas[i].email,
       role: ROLES[datas[i].roleId - 1],
       isLinked: false,
-      officeIds
+      officeIds,
+      teamIds
     });
   }
   return users;

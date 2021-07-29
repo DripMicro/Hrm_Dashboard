@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 
@@ -58,10 +59,19 @@ export default function WeekList({
   useEffect(() => {
     if (initShowDetail !== undefined && firstDay > 0 && lastDay > 0) {
       let today = new Date().getDate();
+      const thisMonth = new Date().getMonth();
       if (today > lastDay) {
         today = firstDay;
       }
-      initShowDetail(today);
+
+      let isset = false;
+      daystatus.map((schedule, sIndex) => {
+        if (schedule.id + 1 === today && schedule.month === thisMonth) {
+          isset = true;
+          initShowDetail(today, sIndex);
+        }
+      });
+      if (!isset) initShowDetail(today, 0);
     }
   }, [firstDay, lastDay]);
 
@@ -69,8 +79,8 @@ export default function WeekList({
     setSelected(dayIndex);
   }, [dayIndex]);
 
-  const handleListItemClick = (event, id, index) => {
-    viewDetailByClick(id);
+  const handleListItemClick = (event, id, month, index) => {
+    viewDetailByClick(id, month, index);
     setSelected(index);
   };
 
@@ -83,7 +93,9 @@ export default function WeekList({
               <ListItem
                 button
                 selected={selected === index}
-                onClick={(event) => handleListItemClick(event, item.id, index)}
+                onClick={(event) =>
+                  handleListItemClick(event, item.id, item.month, index)
+                }
                 sx={{
                   borderRadius: '10px',
                   '&.Mui-selected': {
