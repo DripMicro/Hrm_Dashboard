@@ -19,6 +19,7 @@ import MobileWeekView from './MobileWeekView';
 
 // hooks
 import useGeneral from '../../hooks/useGeneral';
+import useAuth from '../../hooks/useAuth';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import {
@@ -35,8 +36,19 @@ const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
 }));
 
-function createObj(mIndex, mDay, day, weekCount, curr) {
+function createObj(mIndex, mDay, day, weekCount, curr, scheduleUsers) {
   const w = weekCount % 7;
+  let isOffice = false;
+  let officeInfos = [];
+  scheduleUsers.map((scheUser) => {
+    if (
+      scheUser.id === mDay.morning.id &&
+      scheUser.type === mDay.morning.type
+    ) {
+      isOffice = true;
+      officeInfos = scheUser;
+    }
+  });
   const dayObj = {
     id: mIndex,
     month: curr.getMonth(),
@@ -49,7 +61,9 @@ function createObj(mIndex, mDay, day, weekCount, curr) {
       afternoon: { id: mDay.afternoon.id, type: mDay.afternoon.type }
     },
     halfday: mDay.isHalf,
-    work: mDay.isWork
+    work: mDay.isWork,
+    isOffice,
+    officeInfos
   };
   return dayObj;
 }
@@ -57,9 +71,204 @@ function createObj(mIndex, mDay, day, weekCount, curr) {
 function getTitle(firstmonth, lastmonth, firstday, lastday) {
   return `${Months[firstmonth]} ${firstday} - ${Months[lastmonth]} ${lastday}`;
 }
+
+function getTodayTitle(month, day) {
+  const curr = new Date();
+  curr.setMonth(month);
+  curr.setDate(day);
+  const dayOfweek = WeekListTitles[curr.getDay() < 0 ? 6 : curr.getDay()];
+  const tmpMonth = Months[curr.getMonth()];
+  const tmpYear = curr.getFullYear();
+  const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
+  return tmpTodaytitle;
+}
+
+function getScheduleUsersInfo(
+  userInfo,
+  allStatuses,
+  allMembers,
+  schedule,
+  cMonth,
+  cToday
+) {
+  const resData = {};
+  const newData = [];
+
+  allStatuses.map((status) => {
+    const dData = status.schedule[cMonth][cToday - 1];
+    const rObj = {
+      userId: status.userId,
+      data: dData
+    };
+    newData.push(rObj);
+  });
+
+  let schArr = [];
+  let notStatus = [];
+  schedule.map((sche) => {
+    const userArr = [];
+    newData.map((user) => {
+      if (user.data.isWork) {
+        if (user.data.isHalf) {
+          if (
+            sche.id === user.data.morning.id &&
+            sche.type === user.data.morning.type
+          ) {
+            userArr.push(user.userId);
+          } else if (
+            sche.id === user.data.afternoon.id &&
+            sche.type === user.data.afternoon.type
+          ) {
+            userArr.push(user.userId);
+          }
+        } else if (!user.data.isHalf) {
+          if (
+            sche.id === user.data.morning.id &&
+            sche.type === user.data.morning.type
+          ) {
+            userArr.push(user.userId);
+          }
+        }
+      }
+    });
+    if (userArr.length > 0) {
+      let schObj = {};
+      if (sche.type === 'office') {
+        const occupancy = (userArr.length / sche.capacity) * 100;
+        schObj = {
+          id: sche.id,
+          emoji: sche.emoji,
+          schTitle: sche.title,
+          users: userArr,
+          type: 'office',
+          capacity: sche.capacity,
+          occupancy: parseInt(occupancy)
+        };
+      } else {
+        schObj = {
+          id: sche.id,
+          emoji: sche.emoji,
+          schTitle: sche.title,
+          users: userArr,
+          type: 'status'
+        };
+      }
+      schArr.push(schObj);
+    }
+  });
+
+  newData.map((user) => {
+    let isSet = false;
+    schArr.map((sUser) => {
+      for (let i = 0; i < sUser.users.length; i += 1) {
+        if (user.userId === sUser.users[i]) {
+          isSet = true;
+          break;
+        }
+      }
+    });
+    if (!isSet) {
+      notStatus.push(user.userId);
+    }
+  });
+
+  const tmpSchArr = schArr;
+  tmpSchArr.map((sche, sIndex) => {
+    const updatedUsers = [];
+    sche.users.map((userId) => {
+      allMembers.map((member) => {
+        if (userId === member.id) {
+          let isTeam = false;
+          if (userInfo.teams.length > 0) {
+            for (let i = 0; i < userInfo.teams.length; i += 1) {
+              for (let j = 0; j < member.teamIds.length; j += 1) {
+                if (Number(userInfo.teams[i]) === member.teamIds[j]) {
+                  isTeam = true;
+                  break;
+                }
+              }
+            }
+          }
+          const userObj = {
+            id: userId,
+            avatarURL: member.avatarURL,
+            name: member.name,
+            isTeam
+          };
+          updatedUsers.push(userObj);
+        }
+      });
+    });
+    schArr[sIndex].users = updatedUsers;
+    const tmpSchArr = schArr;
+    schArr = [];
+    for (let i = 0; i < tmpSchArr.length; i += 1) {
+      let isTeam = false;
+      for (let j = 0; j < tmpSchArr[i].users.length; j += 1) {
+        if (tmpSchArr[i].users[j].isTeam) {
+          isTeam = true;
+          break;
+        }
+      }
+      if (isTeam) {
+        schArr.push(tmpSchArr[i]);
+      }
+    }
+    for (let i = 0; i < tmpSchArr.length; i += 1) {
+      let isTeam = false;
+      for (let j = 0; j < tmpSchArr[i].users.length; j += 1) {
+        if (tmpSchArr[i].users[j].isTeam) {
+          isTeam = true;
+          break;
+        }
+      }
+      if (!isTeam) {
+        schArr.push(tmpSchArr[i]);
+      }
+    }
+  });
+
+  if (notStatus.length > 0) {
+    const tmpNotStatus = notStatus;
+    const updatedUsers = [];
+    tmpNotStatus.map((userId) => {
+      allMembers.map((member) => {
+        if (userId === member.id) {
+          let isTeam = false;
+          if (userInfo.teams.length > 0) {
+            for (let i = 0; i < userInfo.teams.length; i += 1) {
+              for (let j = 0; j < member.teamIds.length; j += 1) {
+                if (Number(userInfo.teams[i]) === member.teamIds[j]) {
+                  isTeam = true;
+                  break;
+                }
+              }
+            }
+          }
+          const userObj = {
+            id: userId,
+            avatarURL: member.avatarURL,
+            name: member.name,
+            isTeam
+          };
+          updatedUsers.push(userObj);
+        }
+      });
+    });
+
+    notStatus = updatedUsers;
+    resData.notStatus = notStatus;
+  } else {
+    resData.notStatus = [];
+  }
+  resData.scheduleUsers = schArr;
+  return resData;
+}
+
 export default function HomeContent() {
   const theme = useTheme();
   const { updateSchedule } = useGeneral();
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { calendar, allStatus, allUsers } = useSelector(
     (state) => state.general
@@ -82,6 +291,8 @@ export default function HomeContent() {
   const [firstDay, setFirstDay] = useState(0);
   const [lastDay, setLastDay] = useState(0);
 
+  const [userInfo, setUserInfo] = useState({});
+
   // right side bar user setting
   const [scheduleUsers, setScheduleUsers] = useState([]);
   const [notStatusUsers, setNotStatusUsers] = useState([]);
@@ -90,10 +301,10 @@ export default function HomeContent() {
   const [showMobileDetail, setShowMobileDetail] = useState(false);
 
   useEffect(() => {
+    dispatch(getAllStatusById());
     dispatch(getCalendar());
     dispatch(getOrganizations());
     dispatch(getOfficeList());
-    dispatch(getAllStatusById());
     dispatch(getUsersByCompany());
   }, [dispatch]);
 
@@ -106,9 +317,14 @@ export default function HomeContent() {
     const tmpYear = curr.getFullYear();
     const tmpTodaytitle = `${dayOfweek} ${today} ${tmpMonth}. ${tmpYear}`;
 
+    setCMonth(curr.getMonth());
     setDayOfWeek(curr.getDay());
     setTodayTitle(tmpTodaytitle);
   }, []);
+
+  useEffect(() => {
+    setUserInfo(user);
+  }, [user]);
 
   useEffect(() => {
     if (allStatus.length > 0) {
@@ -126,10 +342,9 @@ export default function HomeContent() {
     if (calendar.length > 0) {
       const curr = new Date();
       const thisMonth = calendar[curr.getMonth()];
-      // const beforeMonth = calendar[curr.getMonth() - 1];
       const nextMonth = calendar[curr.getMonth() + 1];
 
-      setCMonth(curr.getMonth());
+      // setCMonth(curr.getMonth());
 
       let first = 0;
       let last = 0;
@@ -140,7 +355,6 @@ export default function HomeContent() {
       let tmpStartingDay = startingDay;
       let wDays = [...workingDays];
       wDays = wDays.sort();
-      console.log('First => last', first, last, tmpStartingDay, wDays);
       for (let i = first; i <= last; i += 1) {
         curr.setDate(i);
         const thisDay = curr.getDay();
@@ -170,7 +384,6 @@ export default function HomeContent() {
       first = tmpFirstDay;
       last = first + 4;
 
-      console.log('this is day ranges', first, last);
       setFirstDay(first);
       setLastDay(last);
 
@@ -193,7 +406,16 @@ export default function HomeContent() {
           const day = mIndex + 1;
           fMonth.setDate(day);
           if (fday <= day && day <= eday) {
-            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth);
+            const { scheduleUsers } = getScheduleUsersInfo(
+              userInfo,
+              allStatuses,
+              allMembers,
+              schedule,
+              fMonth.getMonth(),
+              day
+            );
+            // eslint-disable-next-line prettier/prettier
+            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth, scheduleUsers);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
@@ -204,7 +426,16 @@ export default function HomeContent() {
           const day = mIndex + 1;
           fMonth.setDate(day);
           if (day >= fday) {
-            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth);
+            const { scheduleUsers } = getScheduleUsersInfo(
+              userInfo,
+              allStatuses,
+              allMembers,
+              schedule,
+              fMonth.getMonth(),
+              day
+            );
+            // eslint-disable-next-line prettier/prettier
+            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth, scheduleUsers);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
@@ -214,7 +445,16 @@ export default function HomeContent() {
           const day = mIndex + 1;
           eMonth.setDate(day);
           if (day <= eday) {
-            const dayObj = createObj(mIndex, mDay, day, weekCount, eMonth);
+            const { scheduleUsers } = getScheduleUsersInfo(
+              userInfo,
+              allStatuses,
+              allMembers,
+              schedule,
+              eMonth.getMonth(),
+              day
+            );
+            // eslint-disable-next-line prettier/prettier
+            const dayObj = createObj(mIndex, mDay, day, weekCount, eMonth, scheduleUsers);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
@@ -223,7 +463,7 @@ export default function HomeContent() {
 
       setThisWeekSchedule(thisWeekSchedules);
     }
-  }, [calendar, startingDay]);
+  }, [calendar, allStatuses, startingDay, allMembers, schedule, userInfo]);
 
   useEffect(() => {
     if (organizations.result !== undefined) {
@@ -273,139 +513,18 @@ export default function HomeContent() {
   }, [organizations, officeList]);
 
   useEffect(() => {
-    const newData = [];
+    const { notStatus, scheduleUsers } = getScheduleUsersInfo(
+      userInfo,
+      allStatuses,
+      allMembers,
+      schedule,
+      cMonth,
+      cToday
+    );
 
-    const curr = new Date();
-    const today = cToday;
-    curr.setMonth(cMonth);
-    curr.setDate(cToday);
-
-    const dayOfweek =
-      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
-    const tmpMonth = Months[curr.getMonth()];
-    const tmpYear = curr.getFullYear();
-    const tmpTodaytitle = `${dayOfweek} ${today} ${tmpMonth}. ${tmpYear}`;
-    // setDayOfWeek(curr.getDay() - startingDay);
-    setTodayTitle(tmpTodaytitle);
-
-    allStatuses.map((status) => {
-      const dData = status.schedule[cMonth][cToday - 1];
-      const rObj = {
-        userId: status.userId,
-        data: dData
-      };
-      newData.push(rObj);
-    });
-
-    const schArr = [];
-    let notStatus = [];
-    schedule.map((sche) => {
-      const userArr = [];
-      // if (newData.data !== undefined) {}
-      newData.map((user) => {
-        if (user.data.isWork) {
-          if (user.data.isHalf) {
-            if (
-              sche.id === user.data.morning.id &&
-              sche.type === user.data.morning.type
-            ) {
-              userArr.push(user.userId);
-            } else if (
-              sche.id === user.data.afternoon.id &&
-              sche.type === user.data.afternoon.type
-            ) {
-              userArr.push(user.userId);
-            }
-          } else if (!user.data.isHalf) {
-            if (
-              sche.id === user.data.morning.id &&
-              sche.type === user.data.morning.type
-            ) {
-              userArr.push(user.userId);
-            }
-          }
-        }
-      });
-      if (userArr.length > 0) {
-        let schObj = {};
-        if (sche.type === 'office') {
-          const occupancy = (userArr.length / sche.capacity) * 100;
-          schObj = {
-            emoji: sche.emoji,
-            schTitle: sche.title,
-            users: userArr,
-            type: 'office',
-            capacity: sche.capacity,
-            occupancy: parseInt(occupancy)
-          };
-        } else {
-          schObj = {
-            emoji: sche.emoji,
-            schTitle: sche.title,
-            users: userArr,
-            type: 'status'
-          };
-        }
-        schArr.push(schObj);
-      }
-    });
-
-    newData.map((user) => {
-      let isSet = false;
-      schArr.map((sUser) => {
-        for (let i = 0; i < sUser.users.length; i += 1) {
-          if (user.userId === sUser.users[i]) {
-            isSet = true;
-            break;
-          }
-        }
-      });
-      if (!isSet) {
-        notStatus.push(user.userId);
-      }
-    });
-
-    const tmpSchArr = schArr;
-    tmpSchArr.map((sche, sIndex) => {
-      const updatedUsers = [];
-      sche.users.map((userId) => {
-        allMembers.map((member) => {
-          if (userId === member.id) {
-            const userObj = {
-              id: userId,
-              avatarURL: member.avatarURL,
-              name: member.name
-            };
-            updatedUsers.push(userObj);
-          }
-        });
-      });
-      schArr[sIndex].users = updatedUsers;
-    });
-
-    if (notStatus.length > 0) {
-      const tmpNotStatus = notStatus;
-      const updatedUsers = [];
-      tmpNotStatus.map((userId) => {
-        allMembers.map((member) => {
-          if (userId === member.id) {
-            const userObj = {
-              id: userId,
-              avatarURL: member.avatarURL,
-              name: member.name
-            };
-            updatedUsers.push(userObj);
-          }
-        });
-      });
-      notStatus = updatedUsers;
-      setNotStatusUsers(notStatus);
-    } else {
-      setNotStatusUsers([]);
-    }
-
-    setScheduleUsers(schArr);
-  }, [allStatuses, cMonth, cToday, allMembers]);
+    setNotStatusUsers(notStatus);
+    setScheduleUsers(scheduleUsers);
+  }, [allStatuses, cMonth, cToday, allMembers, userInfo]);
 
   // change icon when set icon in schedule card
   const changeIcon = (icon1, icon2, detail1, detail2, status, index) => {
@@ -449,8 +568,9 @@ export default function HomeContent() {
 
     updateSchedule({ updatedSchedule }).then(() => {
       dispatch(getAllStatusById());
+      dispatch(getCalendar());
     });
-    setThisWeekSchedule([...ThisWeekSchedule]);
+    // setThisWeekSchedule([...ThisWeekSchedule]);
   };
 
   const initShowDetail = (day, selectedIndex) => {
@@ -458,13 +578,7 @@ export default function HomeContent() {
     setCToday(day);
 
     const curr = new Date();
-    curr.setDate(day);
-    const dayOfweek =
-      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
-    const tmpMonth = Months[curr.getMonth()];
-    const tmpYear = curr.getFullYear();
-    const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
-
+    const tmpTodaytitle = getTodayTitle(curr.getMonth(), day);
     setDayOfWeek(selectedIndex);
     setTodayTitle(tmpTodaytitle);
   };
@@ -475,13 +589,7 @@ export default function HomeContent() {
     setCMonth(month);
     setCToday(day);
 
-    const curr = new Date();
-    curr.setDate(day);
-    const dayOfweek =
-      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
-    const tmpMonth = Months[curr.getMonth()];
-    const tmpYear = curr.getFullYear();
-    const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
+    const tmpTodaytitle = getTodayTitle(month, day);
     setDayOfWeek(selectedIndex);
     setTodayTitle(tmpTodaytitle);
     setShowMobileDetail(true);
@@ -493,13 +601,7 @@ export default function HomeContent() {
     setCMonth(month);
     setCToday(day);
 
-    const curr = new Date();
-    curr.setDate(day);
-    const dayOfweek =
-      WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];
-    const tmpMonth = Months[curr.getMonth()];
-    const tmpYear = curr.getFullYear();
-    const tmpTodaytitle = `${dayOfweek} ${day} ${tmpMonth}. ${tmpYear}`;
+    const tmpTodaytitle = getTodayTitle(month, day);
     setDayOfWeek(selectedIndex);
     setTodayTitle(tmpTodaytitle);
   };

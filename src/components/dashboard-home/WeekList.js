@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
@@ -13,10 +14,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
+  // ListItemIcon,
   Divider,
-  Button
+  // Button,
+  Typography,
+  AvatarGroup,
+  Avatar
 } from '@material-ui/core';
+
+import ScheduleHeatmap from '../dashboard-component/ScheduleHeatmap';
 
 // ----------------------------------------------------------------------
 
@@ -24,14 +30,14 @@ const ListWrapperStyle = styled('div')(() => ({
   width: '100%'
 }));
 
-const ScheduleDivider = styled('div')(() => ({
-  position: 'absolute',
-  width: '2px',
-  height: '40px',
-  borderRadius: '8px',
-  backgroundColor: '#e7ecf5',
-  transform: 'rotate(15deg)'
-}));
+// const ScheduleDivider = styled('div')(() => ({
+//   position: 'absolute',
+//   width: '2px',
+//   height: '40px',
+//   borderRadius: '8px',
+//   backgroundColor: '#e7ecf5',
+//   transform: 'rotate(15deg)'
+// }));
 
 WeekList.propTypes = {
   firstDay: PropTypes.number,
@@ -56,6 +62,9 @@ export default function WeekList({
 
   const theme = useTheme();
 
+  useEffect(() => {
+    // console.log('Here is WeekList:', daystatus);
+  }, [daystatus]);
   useEffect(() => {
     if (initShowDetail !== undefined && firstDay > 0 && lastDay > 0) {
       let today = new Date().getDate();
@@ -97,7 +106,7 @@ export default function WeekList({
                   handleListItemClick(event, item.id, item.month, index)
                 }
                 sx={{
-                  borderRadius: '10px',
+                  display: 'block',
                   '&.Mui-selected': {
                     borderLeft: '3px solid #00AB55',
                     borderTopLeftRadius: 0,
@@ -107,59 +116,118 @@ export default function WeekList({
                   }
                 }}
               >
-                <ListItemIcon>
-                  <Button
-                    disabled
-                    sx={{
-                      border: '1px solid #E7ECF5',
-                      borderRadius: '40%',
-                      padding: theme.spacing(1.7, 0),
-                      position: 'relative',
-                      [theme.breakpoints.down('md')]: {
-                        minWidth: '0px',
-                        width: '50px'
-                      }
-                    }}
-                  >
-                    <Box
-                      role="img"
-                      aria-label="Panda"
+                <Box m={2} />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <ListItemIcon>
+                    <Button
+                      disabled
                       sx={{
-                        fontSize: '15px',
-                        [theme.breakpoints.up('md')]: { fontSize: '20px' }
+                        border: '1px solid red',
+                        borderRadius: '40%',
+                        padding: theme.spacing(1.7, 0),
+                        position: 'relative',
+                        [theme.breakpoints.down('md')]: {
+                          minWidth: '0px',
+                          width: '50px'
+                        }
                       }}
                     >
-                      {item.icon}
+                      <Box
+                        role="img"
+                        aria-label="Panda"
+                        sx={{
+                          fontSize: '15px',
+                          [theme.breakpoints.up('md')]: { fontSize: '20px' }
+                        }}
+                      >
+                        {item.icon}
+                      </Box>
+                      {item.halfday && <ScheduleDivider />}
+                      {item.work ? (
+                        <Box
+                          component="img"
+                          src="/static/dashboard/home/ok.svg"
+                          sx={{
+                            width: 18,
+                            height: 18,
+                            position: 'absolute',
+                            right: 0,
+                            bottom: 0
+                          }}
+                        />
+                      ) : (
+                        <Box
+                          component="img"
+                          src="/static/dashboard/home/cancel.svg"
+                          sx={{
+                            width: 18,
+                            height: 18,
+                            position: 'absolute',
+                            right: 0,
+                            bottom: 0
+                          }}
+                        />
+                      )}
+                    </Button>
+                  </ListItemIcon> */}
+                  <ListItemText primary={item.weekTitle} />
+                </Box>
+                {item.isOffice && (
+                  <Box sx={{ ml: 4, mt: 1 }}>
+                    <Box sx={{ display: 'flex' }}>
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          width: 45,
+                          height: 45
+                        }}
+                      >
+                        <ScheduleHeatmap
+                          occupancy={item.officeInfos.occupancy}
+                        />
+                        <Box
+                          role="img"
+                          aria-label="Panda"
+                          sx={{
+                            fontSize: '20px',
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)'
+                          }}
+                        >
+                          {item.officeInfos.emoji}
+                        </Box>
+                      </Box>
+                      <Typography variant="body2" sx={{ py: 1.2, px: 0.5 }}>
+                        {item.officeInfos.schTitle}{' '}
+                        <Typography variant="caption">
+                          ({item.officeInfos.capacity}/
+                          {item.officeInfos.users.length})
+                        </Typography>
+                      </Typography>
                     </Box>
-                    {item.halfday && <ScheduleDivider />}
-                    {item.work ? (
-                      <Box
-                        component="img"
-                        src="/static/dashboard/home/ok.svg"
-                        sx={{
-                          width: 18,
-                          height: 18,
-                          position: 'absolute',
-                          right: 0,
-                          bottom: 0
-                        }}
-                      />
-                    ) : (
-                      <Box
-                        component="img"
-                        src="/static/dashboard/home/cancel.svg"
-                        sx={{
-                          width: 18,
-                          height: 18,
-                          position: 'absolute',
-                          right: 0,
-                          bottom: 0
-                        }}
-                      />
-                    )}
-                  </Button>
-                </ListItemIcon>
-                <ListItemText primary={item.weekTitle} />
+                    <Box>
+                      <AvatarGroup
+                        max={5}
+                        sx={{ ml: 2, justifyContent: 'flex-end' }}
+                      >
+                        {item.officeInfos.users.map((item, index) => (
+                          <Avatar
+                            key={index}
+                            alt={item.name}
+                            src={item.avatarURL}
+                            sx={{
+                              width: theme.spacing(4.5),
+                              height: theme.spacing(4.5)
+                            }}
+                          />
+                        ))}
+                      </AvatarGroup>
+                    </Box>
+                  </Box>
+                )}
+                <Box m={2} />
               </ListItem>
               <Divider />
             </Box>

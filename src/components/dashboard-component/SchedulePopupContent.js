@@ -14,10 +14,9 @@ import {
   Button,
   CardContent,
   ListItemText,
-  ListItemIcon
+  ListItemIcon,
+  ToggleButton
 } from '@material-ui/core';
-
-import ToggleButton from '@material-ui/lab/ToggleButton';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';

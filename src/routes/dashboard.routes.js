@@ -8,6 +8,7 @@ import { PATH_DASHBOARD } from './paths';
 import AuthGuard from '../guards/AuthGuard';
 import AdminGuard from '../guards/AdminGuard';
 import SuperAdminGuard from '../guards/SuperAdminGuard';
+import IsSuperAdminRedirect from '../guards/IsSuperAdminRedirect';
 // ----------------------------------------------------------------------
 
 const DashboardRoutes = {
@@ -34,6 +35,7 @@ const DashboardRoutes = {
     {
       exact: true,
       path: PATH_DASHBOARD.general.home,
+      guard: IsSuperAdminRedirect,
       component: lazy(() => import('../views/DashboardHomePage'))
     },
     {

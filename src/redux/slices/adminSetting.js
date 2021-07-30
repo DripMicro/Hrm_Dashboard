@@ -173,7 +173,6 @@ export function getOrganizations() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      console.log('here is redux, it is working well');
       const response = await axios.get('/api/organization/organizations');
       dispatch(slice.actions.getOrganizationsSuccess(response.data));
     } catch (error) {
@@ -193,7 +192,6 @@ export function updateOfficeList({ updatedOfficeList }) {
 }
 
 export function updateTeamList({ updatedTeamList }) {
-  console.log('Here is redux:', updatedTeamList);
   const data = updatedTeamList;
   return async () => {
     await axios.post('/api/team/updateTeamList', data);
@@ -201,7 +199,6 @@ export function updateTeamList({ updatedTeamList }) {
 }
 
 export function updateOrganizations({ updatedOrg }) {
-  console.log('Here is redux:', updatedOrg);
   const data = updatedOrg;
   return async () => {
     await axios.post('/api/organization/updateOrganizations', data);

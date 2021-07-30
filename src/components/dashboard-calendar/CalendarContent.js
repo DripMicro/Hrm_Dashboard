@@ -342,6 +342,7 @@ export default function CalendarContent() {
     setCToday(today);
 
     const curr = new Date();
+    curr.setMonth(month);
     curr.setDate(day);
     const dayOfweek =
       WeekListTitles[curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1];

@@ -81,7 +81,6 @@ export default function RightSideBar({
     if (daystatus.length > 0 && schedule.length > 0) {
       daystatus.map((day, dIndex) => {
         if (dayIndex === dIndex) {
-          console.log('DATE:', day.id, day.month, ':', today, thisMonth);
           setDay(day.id);
           setMonth(day.month);
           setIcon(day.icon);

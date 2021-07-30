@@ -88,7 +88,7 @@ db.WORKINGDAYS = '1,2,3,4,6';
 db.ORGANIZATIONS = {
   isEmail: 1,
   isGoogleSignIn: 0,
-  startingDay: 0,
+  startingDay: 1,
   monthRange: 3,
   isCities: 0,
   isHalfDays: 1

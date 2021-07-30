@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, ToggleButton } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +42,6 @@ WeekList.propTypes = {
 export default function WeekList({ dayIndex, viewDetailByClick, daystatus }) {
   const [selected, setSelected] = useState(0);
 
-  console.log('Here is Mobile View:', daystatus);
   useEffect(() => {
     setSelected(dayIndex);
   }, [dayIndex]);

@@ -83,7 +83,6 @@ export default function SelfSettingButton({
   }, [detailInfo, schedule]);
 
   const handleClick = (event) => {
-    console.log('Here is my value:', event, isActive);
     if (isActive) {
       setAnchorEl(event.currentTarget);
     } else {

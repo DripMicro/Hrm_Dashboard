@@ -67,7 +67,7 @@ export default function RightSideBar({
   const [thisMonth, setThisMonth] = useState(0);
 
   useEffect(() => {
-    setToday(new Date().getDate() - 1);
+    setToday(new Date().getDate());
     setThisMonth(new Date().getMonth());
   }, []);
 

@@ -8,6 +8,7 @@ const db = require('../models');
 const Calendar = db.calendar;
 const User = db.user;
 const config = require('../config/auth.config');
+const { user } = require('../models');
 
 const JWT_SECRET = config.secret;
 
@@ -59,16 +60,8 @@ exports.getUsersByCompany = (req, res) => {
   const { companyId } = jwt.verify(accessToken, JWT_SECRET);
   User.findAll({
     where: { companyId }
-  }).then((users) => {
-    const resData = [];
-    users.map((user) => {
-      const userObj = {
-        id: user.id,
-        avatarURL: user.photoURL,
-        name: `${user.firstname} ${user.lastname}`
-      };
-      resData.push(userObj);
-    });
+  }).then(async (users) => {
+    const resData = await getUsers(users);
     res.status(200).send(resData);
   });
 };
@@ -114,3 +107,24 @@ exports.updateSchedule = (req, res) => {
     });
   });
 };
+
+async function getUsers(users) {
+  const resData = [];
+  for (let i = 0; i < users.length; i += 1) {
+    console.log('Console--------> A');
+    const teams = await users[i].getTeams();
+    const teamIds = [];
+    teams.map((team) => {
+      teamIds.push(team.id);
+    });
+    const userObj = {
+      id: users[i].id,
+      avatarURL: users[i].photoURL,
+      name: `${users[i].firstname} ${users[i].lastname}`,
+      teamIds
+    };
+    console.log('----------------------------->', userObj);
+    resData.push(userObj);
+  }
+  return resData;
+}

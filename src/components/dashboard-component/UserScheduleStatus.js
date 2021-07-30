@@ -132,7 +132,13 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                       key={index}
                       alt={item.name}
                       src={item.avatarURL}
-                      sx={{ width: theme.spacing(5), height: theme.spacing(5) }}
+                      sx={{
+                        width: theme.spacing(5),
+                        height: theme.spacing(5),
+                        ...(item.isTeam && {
+                          border: '2px solid #003cff !important'
+                        })
+                      }}
                     />
                   ))}
                 </AvatarGroup>
@@ -237,7 +243,10 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                       src={item.avatarURL}
                       sx={{
                         width: theme.spacing(6),
-                        height: theme.spacing(6)
+                        height: theme.spacing(6),
+                        ...(item.isTeam && {
+                          border: '2px solid #003cff !important'
+                        })
                       }}
                     />
                   </Box>

@@ -115,7 +115,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   }, [pathname]);
 
   const NewMenuLinks = [];
-  console.log('This is user Role', user.roles);
   if (user.roles === 'SUPER ADMIN') {
     MenuLinks.map((links) => {
       if (links.subheader === 'super admin') {
