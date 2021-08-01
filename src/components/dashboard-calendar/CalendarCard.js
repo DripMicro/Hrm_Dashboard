@@ -209,7 +209,6 @@ export default function CalendarCard({
   useEffect(() => {
     setToday(new Date().getDate() - 1);
     setThisMonth(new Date().getMonth() - 1);
-    console.log(new Date());
   }, []);
 
   useEffect(() => {
