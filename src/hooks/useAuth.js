@@ -1,7 +1,12 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 // redux
-import { login, register, logout } from '../redux/slices/authJwt';
+import {
+  login,
+  register,
+  logout,
+  resetPassword
+} from '../redux/slices/authJwt';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +49,13 @@ export default function useAuth() {
 
     logout: () => dispatch(logout()),
 
-    resetPassword: () => {}
+    resetPassword: ({ password, newPassword, newConfirmPassword }) =>
+      dispatch(
+        resetPassword({
+          password,
+          newPassword,
+          newConfirmPassword
+        })
+      )
   };
 }

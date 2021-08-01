@@ -9,6 +9,7 @@ import { Container, Box } from '@material-ui/core';
 // ----------------------------------------------------------------------
 // hooks
 import useGeneral from '../../hooks/useGeneral';
+import useAuth from '../../hooks/useAuth';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import {
@@ -32,6 +33,7 @@ export default function CalendarContent() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { updateSchedule } = useGeneral();
+  const { user } = useAuth();
   const { officeList, teamList } = useSelector((state) => state.adminSetting);
   const { calendar, allStatus, allUsers } = useSelector(
     (state) => state.general
@@ -48,6 +50,7 @@ export default function CalendarContent() {
 
   const [todayTitle, setTodayTitle] = useState('');
 
+  const [userInfo, setUserInfo] = useState({});
   // calendar setting
   const [cToday, setCToday] = useState({});
   const [schedule, setSchedule] = useState([]);
@@ -66,6 +69,10 @@ export default function CalendarContent() {
     dispatch(getAllStatusById());
     dispatch(getUsersByCompany());
   }, [dispatch]);
+
+  useEffect(() => {
+    setUserInfo(user);
+  }, [user]);
 
   useEffect(() => {
     if (allStatus.length > 0) {
@@ -205,124 +212,18 @@ export default function CalendarContent() {
   }, [organizations, officeList]);
 
   useEffect(() => {
-    const newData = [];
-    allStatuses.map((status) => {
-      const dData = status.schedule[cToday.month][cToday.day - 1];
-      const rObj = {
-        userId: status.userId,
-        data: dData
-      };
-      newData.push(rObj);
-    });
+    const { notStatus, scheduleUsers } = getScheduleUsersInfo(
+      userInfo,
+      allStatuses,
+      allMembers,
+      schedule,
+      cToday.month,
+      cToday.day
+    );
 
-    const schArr = [];
-    let notStatus = [];
-    schedule.map((sche) => {
-      const userArr = [];
-      newData.map((user) => {
-        if (user.data.isWork) {
-          if (user.data.isHalf) {
-            if (
-              sche.id === user.data.morning.id &&
-              sche.type === user.data.morning.type
-            ) {
-              userArr.push(user.userId);
-            } else if (
-              sche.id === user.data.afternoon.id &&
-              sche.type === user.data.afternoon.type
-            ) {
-              userArr.push(user.userId);
-            }
-          } else if (!user.data.isHalf) {
-            if (
-              sche.id === user.data.morning.id &&
-              sche.type === user.data.morning.type
-            ) {
-              userArr.push(user.userId);
-            }
-          }
-        }
-      });
-      if (userArr.length > 0) {
-        let schObj = {};
-        if (sche.type === 'office') {
-          const occupancy = (userArr.length / sche.capacity) * 100;
-          schObj = {
-            emoji: sche.emoji,
-            schTitle: sche.title,
-            users: userArr,
-            type: 'office',
-            capacity: sche.capacity,
-            occupancy: parseInt(occupancy)
-          };
-        } else {
-          schObj = {
-            emoji: sche.emoji,
-            schTitle: sche.title,
-            users: userArr,
-            type: 'status'
-          };
-        }
-        schArr.push(schObj);
-      }
-    });
-
-    newData.map((user) => {
-      let isSet = false;
-      schArr.map((sUser) => {
-        for (let i = 0; i < sUser.users.length; i += 1) {
-          if (user.userId === sUser.users[i]) {
-            isSet = true;
-            break;
-          }
-        }
-      });
-      if (!isSet) {
-        notStatus.push(user.userId);
-      }
-    });
-
-    const tmpSchArr = schArr;
-    tmpSchArr.map((sche, sIndex) => {
-      const updatedUsers = [];
-      sche.users.map((userId) => {
-        allMembers.map((member) => {
-          if (userId === member.id) {
-            const userObj = {
-              id: userId,
-              avatarURL: member.avatarURL,
-              name: member.name
-            };
-            updatedUsers.push(userObj);
-          }
-        });
-      });
-      schArr[sIndex].users = updatedUsers;
-    });
-
-    if (notStatus.length > 0) {
-      const tmpNotStatus = notStatus;
-      const updatedUsers = [];
-      tmpNotStatus.map((userId) => {
-        allMembers.map((member) => {
-          if (userId === member.id) {
-            const userObj = {
-              id: userId,
-              avatarURL: member.avatarURL,
-              name: member.name
-            };
-            updatedUsers.push(userObj);
-          }
-        });
-      });
-      notStatus = updatedUsers;
-      setNotStatusUsers(notStatus);
-    } else {
-      setNotStatusUsers([]);
-    }
-
-    setScheduleUsers(schArr);
-  }, [allStatuses, cToday, allMembers]);
+    setNotStatusUsers(notStatus);
+    setScheduleUsers(scheduleUsers);
+  }, [allStatuses, cToday, allMembers, userInfo]);
 
   const setStatusProps = (selectedIds) => {
     setOfficeIds(selectedIds);
@@ -461,3 +362,185 @@ const Months = [
   'Nov',
   'Dec'
 ];
+
+function getScheduleUsersInfo(
+  userInfo,
+  allStatuses,
+  allMembers,
+  schedule,
+  cMonth,
+  cToday
+) {
+  const resData = {};
+  const newData = [];
+
+  allStatuses.map((status) => {
+    const dData = status.schedule[cMonth][cToday - 1];
+    const rObj = {
+      userId: status.userId,
+      data: dData
+    };
+    newData.push(rObj);
+  });
+
+  let schArr = [];
+  let notStatus = [];
+  schedule.map((sche) => {
+    const userArr = [];
+    newData.map((user) => {
+      if (user.data.isWork) {
+        if (user.data.isHalf) {
+          if (
+            sche.id === user.data.morning.id &&
+            sche.type === user.data.morning.type
+          ) {
+            userArr.push(user.userId);
+          } else if (
+            sche.id === user.data.afternoon.id &&
+            sche.type === user.data.afternoon.type
+          ) {
+            userArr.push(user.userId);
+          }
+        } else if (!user.data.isHalf) {
+          if (
+            sche.id === user.data.morning.id &&
+            sche.type === user.data.morning.type
+          ) {
+            userArr.push(user.userId);
+          }
+        }
+      }
+    });
+    if (userArr.length > 0) {
+      let schObj = {};
+      if (sche.type === 'office') {
+        const occupancy = (userArr.length / sche.capacity) * 100;
+        schObj = {
+          id: sche.id,
+          emoji: sche.emoji,
+          schTitle: sche.title,
+          users: userArr,
+          type: 'office',
+          capacity: sche.capacity,
+          occupancy: parseInt(occupancy)
+        };
+      } else {
+        schObj = {
+          id: sche.id,
+          emoji: sche.emoji,
+          schTitle: sche.title,
+          users: userArr,
+          type: 'status'
+        };
+      }
+      schArr.push(schObj);
+    }
+  });
+
+  newData.map((user) => {
+    let isSet = false;
+    schArr.map((sUser) => {
+      for (let i = 0; i < sUser.users.length; i += 1) {
+        if (user.userId === sUser.users[i]) {
+          isSet = true;
+          break;
+        }
+      }
+    });
+    if (!isSet) {
+      notStatus.push(user.userId);
+    }
+  });
+
+  const tmpSchArr = schArr;
+  tmpSchArr.map((sche, sIndex) => {
+    const updatedUsers = [];
+    sche.users.map((userId) => {
+      allMembers.map((member) => {
+        if (userId === member.id) {
+          let isTeam = false;
+          if (userInfo.teams.length > 0) {
+            for (let i = 0; i < userInfo.teams.length; i += 1) {
+              for (let j = 0; j < member.teamIds.length; j += 1) {
+                if (Number(userInfo.teams[i]) === member.teamIds[j]) {
+                  isTeam = true;
+                  break;
+                }
+              }
+            }
+          }
+          const userObj = {
+            id: userId,
+            avatarURL: member.avatarURL,
+            name: member.name,
+            isTeam
+          };
+          updatedUsers.push(userObj);
+        }
+      });
+    });
+    schArr[sIndex].users = updatedUsers;
+    const tmpSchArr = schArr;
+    schArr = [];
+    for (let i = 0; i < tmpSchArr.length; i += 1) {
+      let isTeam = false;
+      for (let j = 0; j < tmpSchArr[i].users.length; j += 1) {
+        if (tmpSchArr[i].users[j].isTeam) {
+          isTeam = true;
+          break;
+        }
+      }
+      if (isTeam) {
+        schArr.push(tmpSchArr[i]);
+      }
+    }
+    for (let i = 0; i < tmpSchArr.length; i += 1) {
+      let isTeam = false;
+      for (let j = 0; j < tmpSchArr[i].users.length; j += 1) {
+        if (tmpSchArr[i].users[j].isTeam) {
+          isTeam = true;
+          break;
+        }
+      }
+      if (!isTeam) {
+        schArr.push(tmpSchArr[i]);
+      }
+    }
+  });
+
+  if (notStatus.length > 0) {
+    const tmpNotStatus = notStatus;
+    const updatedUsers = [];
+    tmpNotStatus.map((userId) => {
+      allMembers.map((member) => {
+        if (userId === member.id) {
+          let isTeam = false;
+          if (userInfo.teams.length > 0) {
+            for (let i = 0; i < userInfo.teams.length; i += 1) {
+              for (let j = 0; j < member.teamIds.length; j += 1) {
+                if (Number(userInfo.teams[i]) === member.teamIds[j]) {
+                  isTeam = true;
+                  break;
+                }
+              }
+            }
+          }
+          const userObj = {
+            id: userId,
+            avatarURL: member.avatarURL,
+            name: member.name,
+            isTeam
+          };
+          updatedUsers.push(userObj);
+        }
+      });
+    });
+
+    notStatus = updatedUsers;
+    resData.notStatus = notStatus;
+  } else {
+    resData.notStatus = [];
+  }
+  resData.scheduleUsers = schArr;
+  return resData;
+}

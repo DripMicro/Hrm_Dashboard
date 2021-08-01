@@ -7,6 +7,7 @@ import { useState } from 'react';
 import bellFill from '@iconify/icons-eva/bell-fill';
 import roundReceipt from '@iconify/icons-ic/round-receipt';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
+import LockIcon from '@material-ui/icons/Lock';
 // material
 import { Container, Tab, Box, Tabs } from '@material-ui/core';
 
@@ -15,45 +16,9 @@ import SlackIntegration from './SlackIntegration';
 import GeneralProfile from './GeneralProfile';
 import AboutProfile from './AboutProfile';
 import ContactProfile from './ContactProfile';
+import ChangePassword from './ChangePassword';
 
 // ----------------------------------------------------------------------
-// const ThisWeekSchedule = [
-//   {
-//     id: 0,
-//     weekday: 'Mon 21',
-//     icon: '💼🚶‍♂️',
-//     halfday: true,
-//     work: true
-//   },
-//   {
-//     id: 1,
-//     weekday: 'Tue 22',
-//     icon: '🚶‍♂️🏝',
-//     halfday: true,
-//     work: true
-//   },
-//   {
-//     id: 2,
-//     weekday: 'Wed 23',
-//     icon: '👨‍👨‍👦‍👦',
-//     halfday: false,
-//     work: true
-//   },
-//   {
-//     id: 3,
-//     weekday: 'Thu 24',
-//     icon: '🤒🏡',
-//     halfday: true,
-//     work: true
-//   },
-//   {
-//     id: 4,
-//     weekday: 'Fri 25',
-//     icon: '?',
-//     halfday: false,
-//     work: false
-//   }
-// ];
 
 export default function UserAccount() {
   const [currentTab, setCurrentTab] = useState('informations');
@@ -73,6 +38,11 @@ export default function UserAccount() {
       value: 'contact',
       icon: <Icon icon={bellFill} width={20} height={20} />,
       component: <ContactProfile />
+    },
+    {
+      value: 'Change Password',
+      icon: <LockIcon />,
+      component: <ChangePassword />
     }
   ];
 

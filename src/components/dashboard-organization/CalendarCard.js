@@ -155,37 +155,37 @@ const WeekDays = [
 const days = [
   {
     id: 0,
-    label: 'S',
+    label: 'Su',
     color: '#00AB55'
   },
   {
     id: 1,
-    label: 'M',
+    label: 'Mo',
     color: '#00AB55'
   },
   {
     id: 2,
-    label: 'T',
+    label: 'Tu',
     color: '#00AB55'
   },
   {
     id: 3,
-    label: 'W',
+    label: 'We',
     color: '#00AB55'
   },
   {
     id: 4,
-    label: 'T',
+    label: 'Th',
     color: '#00AB55'
   },
   {
     id: 5,
-    label: 'F',
+    label: 'Fr',
     color: '#00AB55'
   },
   {
     id: 6,
-    label: 'S',
+    label: 'Sa',
     color: '#00AB55'
   }
 ];

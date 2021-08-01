@@ -17,6 +17,7 @@ import { LoadingButton } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getOfficeList, getTeamList } from '../../redux/slices/adminSetting';
+// import { getProfile } from '../../redux/slices/user';
 // hooks
 import useAuth from '../../hooks/useAuth';
 import useAdmin from '../../hooks/useAdmin';
@@ -46,6 +47,9 @@ export default function AccountGeneral() {
   const { user } = useAuth();
   const dispatch = useDispatch();
   const { officeList, teamList } = useSelector((state) => state.adminSetting);
+  // const { myProfile } = useSelector((state) => state.user);
+
+  // const [user, setUser] = useState({});
 
   const [offices, setOffices] = useState([]);
   const [officeIds, setOfficeIds] = useState([]);
@@ -56,6 +60,7 @@ export default function AccountGeneral() {
   useEffect(() => {
     dispatch(getOfficeList());
     dispatch(getTeamList());
+    // dispatch(getProfile());
   }, [dispatch]);
 
   useEffect(() => {
@@ -86,22 +91,22 @@ export default function AccountGeneral() {
   }, [officeList, teamList]);
 
   useEffect(() => {
-    user.offices.map((office) => {
-      initialOffices.push(Number(office));
-    });
-    setOfficeIds(initialOffices);
+    if (user.offices !== undefined) {
+      user.offices.map((office) => {
+        initialOffices.push(Number(office));
+      });
+      setOfficeIds(initialOffices);
 
-    user.teams.map((team) => {
-      initialTeams.push(Number(team));
-    });
-    console.log(initialTeams);
-    setTeamIds(initialTeams);
+      user.teams.map((team) => {
+        initialTeams.push(Number(team));
+      });
+      setTeamIds(initialTeams);
+    }
   }, [user]);
 
   const UpdateUserSchema = Yup.object().shape({
     firstname: Yup.string().required('FirstName is required'),
-    lastname: Yup.string().required('LastName is required'),
-    roles: Yup.string().required('Position is required')
+    lastname: Yup.string().required('LastName is required')
   });
 
   const setStatusProps = (selectedIds) => {
@@ -115,11 +120,13 @@ export default function AccountGeneral() {
   const formik = useFormik({
     enableReinitialize: false,
     initialValues: {
-      firstname: user.firstname,
-      lastname: user.lastname,
+      firstname: user.firstname === null ? '' : user.firstname,
+      lastname: user.lastname === null ? '' : user.lastname,
+      prefferedname: user.prefferedname === null ? '' : user.prefferedname,
+      jobtitle: user.jobtitle === null ? '' : user.jobtitle,
       email: user.email,
-      photoURL: user.photoURL,
-      roles: user.roles
+      departmentname: user.departmentname === null ? '' : user.departmentname,
+      photoURL: user.photoURL === '/static/uploads/1.jpg' ? null : user.photoURL
     },
 
     validationSchema: UpdateUserSchema,
@@ -167,7 +174,6 @@ export default function AccountGeneral() {
                 }}
               >
                 <UploadAvatar
-                  disabled={user.email === 'admin@thimble.com'} // You can remove this
                   value={values.photoURL}
                   onChange={(value) => setFieldValue('photoURL', value)}
                 />
@@ -181,7 +187,6 @@ export default function AccountGeneral() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      disabled={user.email === 'admin@thimble.com'} // You can remove this
                       fullWidth
                       label="First Name"
                       {...getFieldProps('firstname')}
@@ -192,12 +197,27 @@ export default function AccountGeneral() {
 
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      disabled={user.email === 'admin@thimble.com'} // You can remove this
                       fullWidth
                       label="Last Name"
                       {...getFieldProps('lastname')}
                       error={Boolean(touched.lastname && errors.lastname)}
                       helperText={touched.lastname && errors.lastname}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Preffered Name"
+                      {...getFieldProps('prefferedname')}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Job Title"
+                      {...getFieldProps('jobtitle')}
                     />
                   </Grid>
 
@@ -213,8 +233,8 @@ export default function AccountGeneral() {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="Position"
-                      {...getFieldProps('roles')}
+                      label="Department Name"
+                      {...getFieldProps('departmentname')}
                     />
                   </Grid>
                 </Grid>

@@ -3,6 +3,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable array-callback-return */
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const multer = require('multer');
 
 const config = require('../config/auth.config');
@@ -12,7 +13,10 @@ const JWT_SECRET = config.secret;
 const db = require('../models');
 
 const User = db.user;
-const { ROLES } = db;
+const Calendar = db.calendar;
+
+const { ROLES, SCHEDULES } = db;
+const MEMBER = 4;
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -118,6 +122,9 @@ exports.updateProfile = (req, res) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       photoURL: req.body.photoURL,
+      prefferedname: req.body.prefferedname,
+      jobtitle: req.body.jobtitle,
+      departmentname: req.body.departmentname,
       roles: 1
     },
     { where: { email: req.body.email } }
@@ -179,6 +186,9 @@ exports.getProfile = (req, res) => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
+          prefferedname: userData.prefferedname,
+          jobtitle: userData.jobtitle,
+          departmentname: userData.departmentname,
           photoURL: userData.photoURL,
           roles: ROLES[userData.roleId - 1].toUpperCase(),
           offices: officeIds,
@@ -189,3 +199,93 @@ exports.getProfile = (req, res) => {
     });
   });
 };
+
+exports.addMemberList = (req, res) => {
+  const memberList = req.body;
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { companyId } = jwt.verify(accessToken, JWT_SECRET);
+
+  const role = MEMBER;
+
+  memberList.map((member) => {
+    console.log(member.email);
+    User.findOne({ where: { email: member.email } }).then((userData) => {
+      if (userData === null) {
+        console.log(
+          'UserData:',
+          member.firstname,
+          member.lastname,
+          member.prefferedname,
+          member.jobtitle,
+          member.departmentname
+        );
+        User.create({
+          firstname: member.firstname === null ? '' : member.firstname,
+          lastname: member.lastname === null ? '' : member.lastname,
+          prefferedname:
+            member.prefferedname === null ? '' : member.prefferedname,
+          jobtitle: member.jobtitle === null ? '' : member.jobtitle,
+          email: member.email,
+          departmentname:
+            member.departmentname === null ? '' : member.departmentname,
+          photoURL: '/static/uploads/1.jpg',
+          password: bcrypt.hashSync('thimble1234', 8),
+          roleId: role,
+          companyId
+        }).then((userInfo) => {
+          const { officeIds, teamIds } = getIds(member);
+          generateUser(userInfo, companyId, officeIds, teamIds);
+        });
+      }
+    });
+  });
+  res.status(200).send('success');
+};
+
+async function generateUser(userData, cId, officeIds, teamIds) {
+  Calendar.create({
+    schedule: JSON.stringify(SCHEDULES),
+    userId: userData.id,
+    companyId: cId
+  });
+
+  console.log('OfficeIds:', officeIds);
+  // set user office
+  await userData.setOffices(officeIds);
+  await userData.setTeams(teamIds);
+}
+
+function getIds(member) {
+  const officeIds = [];
+  if (member.offices !== null) {
+    if (typeof member.offices === 'number') {
+      officeIds.push(member.offices);
+    } else {
+      const tmpOffices = member.offices.split(',');
+      tmpOffices.map((office) => {
+        officeIds.push(Number(office));
+      });
+    }
+  }
+
+  const teamIds = [];
+  if (member.teams !== null) {
+    if (typeof member.teams === 'number') {
+      teamIds.push(member.teams);
+    } else {
+      const tmpTeams = member.teams.split(',');
+      tmpTeams.map((team) => {
+        teamIds.push(Number(team));
+      });
+    }
+  }
+  const resData = {};
+  resData.officeIds = officeIds;
+  resData.teamIds = teamIds;
+  return resData;
+}

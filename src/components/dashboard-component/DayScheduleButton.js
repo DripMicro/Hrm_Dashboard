@@ -55,6 +55,11 @@ export default function DayScheduleButton({
   const theme = useTheme();
 
   const [occupancy, setOccupancy] = useState(0);
+
+  // useEffect(() => {
+  //   console.log('IsActive:', isActive);
+  // }, [isActive]);
+
   useEffect(() => {
     if (officeInfo.length > 0) {
       officeInfo.map((office) => {
@@ -73,7 +78,7 @@ export default function DayScheduleButton({
     <Box
       onClick={handleClick}
       sx={{
-        ...(isSelected && { backgroundColor: '#D6F5EA' }),
+        ...(isSelected && { backgroundColor: '#f7f5f5' }),
         transition: 'all .3s',
         borderRadius: theme.spacing(1),
         [theme.breakpoints.up('sm')]: {

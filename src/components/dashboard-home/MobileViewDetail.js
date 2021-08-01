@@ -141,7 +141,7 @@ export default function MobileViewDetail({
             iconProps={changeIcon}
             statusTitle={sTitle}
             notStatus={notStatusYet}
-            isActive={day >= today || month > thisMonth}
+            isActive={day >= today && month >= thisMonth}
           />
           <Box m={5} />
           <UserScheduleStatus

@@ -76,20 +76,22 @@ function getDaybyWeek(year, month) {
   return res;
 }
 
+// eslint-disable-next-line prettier/prettier
 function getCalendar(days, status, allStatus, schedules, month, year) {
+  console.log('Month', month);
   const monthCalendar = [];
 
   days.map((weekdays) => {
     const weeks = [];
-    for (const day of weekdays) {
+    for (let dIndex = 0; dIndex < weekdays.length; dIndex += 1) {
       const dayObj = {};
       for (let i = 0; i < status.length; i += 1) {
-        dayObj.day = day;
-        if (day - 1 === i) {
+        dayObj.day = weekdays[dIndex];
+        if (weekdays[dIndex] - 1 === i) {
           // set occupancy by day
           const newData = [];
           allStatus.map((stat) => {
-            const dData = stat.schedule[month][day - 1];
+            const dData = stat.schedule[month][weekdays[dIndex] - 1];
             const rObj = {
               userId: stat.userId,
               data: dData
@@ -140,7 +142,7 @@ function getCalendar(days, status, allStatus, schedules, month, year) {
 
           dayObj.year = year;
           dayObj.month = month;
-          dayObj.day = day;
+          dayObj.day = weekdays[dIndex];
           dayObj.officeInfo = schArr;
           dayObj.icon = status[i].icon;
           dayObj.halfday = status[i].halfday;
@@ -206,7 +208,7 @@ export default function CalendarCard({
 
   useEffect(() => {
     setToday(new Date().getDate() - 1);
-    setThisMonth(new Date().getMonth());
+    setThisMonth(new Date().getMonth() - 1);
   }, []);
 
   useEffect(() => {
@@ -215,7 +217,6 @@ export default function CalendarCard({
 
   useEffect(() => {
     const { result } = organizations;
-    console.log('Here is Pop', result);
     let mRange = 0;
     if (result !== undefined) {
       mRange = result.calendar.monthRange;
@@ -236,6 +237,7 @@ export default function CalendarCard({
     // was changed regarding allStatuses, schedule
     if (monthData.length > 0) {
       const days = getDaybyWeek(year, month);
+      // console.log('Calendar', calendar);
       const calendarInfo = getCalendar(
         days,
         monthData[month],
@@ -246,7 +248,8 @@ export default function CalendarCard({
       );
 
       setCalendar(calendarInfo);
-      console.log('MonthInfo', month, calendarInfo);
+
+      console.log('CalendarInfo:', calendarInfo, today, thisMonth, month);
     }
   }, [daystatus, month, year, allStatuses, schedule]);
 
@@ -297,6 +300,7 @@ export default function CalendarCard({
         if (item.day === day) agenda[wIndex][dIndex].selected = selected;
       });
     });
+    // console.log(agenda);
     setCalendar([...agenda]);
     viewDetailByClick(year, month, day);
   };
@@ -363,7 +367,7 @@ export default function CalendarCard({
                       halfday={day.halfday}
                       Selection={handleSelected}
                       isSelected={day.selected}
-                      isActive={day.day > today || thisMonth < day.month}
+                      isActive={day.day > today && thisMonth < day.month}
                     />
                   )}
                 </GridItem>

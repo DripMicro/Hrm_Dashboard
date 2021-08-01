@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
@@ -17,8 +19,8 @@ import {
   TablePagination
 } from '@material-ui/core';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getUserList, deleteUser } from '../../redux/slices/user';
+import { useDispatch } from '../../redux/store';
+import { deleteUser } from '../../redux/slices/user';
 import useAuth from '../../hooks/useAuth';
 // components
 import Label from '../Label';
@@ -73,10 +75,14 @@ function applySortFilter(arrays, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserList() {
+UserList.propTypes = {
+  userList: PropTypes.array
+};
+
+export default function UserList({ userList }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  // const { userList } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -85,9 +91,9 @@ export default function UserList() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    dispatch(getUserList());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUserList());
+  // }, [dispatch]);
 
   useEffect(() => {
     console.log(user);

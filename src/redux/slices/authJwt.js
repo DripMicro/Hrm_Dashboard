@@ -80,7 +80,6 @@ export function login({ email, password }) {
       password
     });
     const { accessToken, user } = response.data;
-    console.log('here is login:', user);
     setSession(accessToken);
     dispatch(slice.actions.loginSuccess({ user }));
   };
@@ -97,10 +96,21 @@ export function register({ email, password, firstname, lastname }) {
   };
   return async (dispatch) => {
     const response = await axios.post('/api/auth/signup', data);
-    console.log(response);
     const { accessToken, user } = response.data;
     setSession(accessToken);
     dispatch(slice.actions.registerSuccess({ user }));
+  };
+}
+
+export function resetPassword({ password, newPassword, newConfirmPassword }) {
+  const data = {
+    newPassword,
+    newConfirmPassword,
+    password
+  };
+  return async () => {
+    const response = await axios.post('/api/auth/resetPasword', data);
+    console.log('ResetPassword', response);
   };
 }
 

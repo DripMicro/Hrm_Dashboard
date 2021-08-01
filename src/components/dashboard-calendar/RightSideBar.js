@@ -72,7 +72,7 @@ export default function RightSideBar({
   }, []);
 
   useEffect(() => {
-    console.log('Day, Today', day, today);
+    // console.log('Day, Today', day, today);
   }, [day, today]);
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
@@ -85,7 +85,6 @@ export default function RightSideBar({
       daystatus.map((months, mIndex) => {
         months.map((day, dIndex) => {
           if (mIndex === cToday.month && dIndex === cToday.day - 1) {
-            console.log('This is Day data:', day);
             setDay(day.id);
             setMonth(cToday.month);
             setIcon(day.icon);
@@ -143,7 +142,7 @@ export default function RightSideBar({
           iconProps={changeIcon}
           statusTitle={sTitle}
           notStatus={notStatusYet}
-          isActive={day >= today || month > thisMonth}
+          isActive={day >= today && month >= thisMonth}
         />
         <Box m={5} />
         <UserScheduleStatus

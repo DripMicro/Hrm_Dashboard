@@ -256,3 +256,11 @@ export function addStatus() {
     return id;
   };
 }
+
+export function addMemberList(memberList) {
+  console.log('Here is Redux:', memberList);
+  const data = memberList;
+  return async () => {
+    await axios.post('/api/user/addMemberList', data);
+  };
+}

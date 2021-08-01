@@ -16,4 +16,7 @@ module.exports = (app) => {
 
   app.post('/api/user/updateProfile', controller.updateProfile);
   app.post('/api/user/uploadAvatar', controller.uploadAvatar);
+
+  // -----------------------------------------------------------------------------------
+  app.post('/api/user/addMemberList', controller.addMemberList);
 };

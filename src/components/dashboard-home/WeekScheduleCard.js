@@ -70,7 +70,7 @@ export default function WeekSchedule({
               weekTitle={day.weekTitle}
               schedule={schedule}
               dayIndex={index}
-              isActive={day.id >= today || day.month > thisMonth}
+              isActive={day.id >= today && day.month >= thisMonth}
               iconProps={changeIcon}
             />
           ))}

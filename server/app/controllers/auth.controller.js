@@ -151,6 +151,9 @@ exports.signin = (req, res) => {
             lastname: userData.lastname,
             email: userData.email,
             photoURL: userData.photoURL,
+            prefferedname: userData.prefferedname,
+            jobtitle: userData.jobtitle,
+            departmentname: userData.departmentname,
             roles: ROLES[userData.roleId - 1].toUpperCase(),
             offices: officeIds,
             teams: teamIds,
@@ -165,6 +168,41 @@ exports.signin = (req, res) => {
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.resetPassword = (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { userId } = jwt.verify(accessToken, JWT_SECRET);
+
+  User.findOne({
+    where: {
+      id: userId
+    }
+  }).then((userData) => {
+    const passwordIsValid = bcrypt.compareSync(
+      req.body.password,
+      userData.password
+    );
+
+    if (!passwordIsValid) {
+      return res.status(400).send({
+        accessToken: null,
+        message: 'auth/wrong-password'
+      });
+    }
+
+    User.update(
+      { password: bcrypt.hashSync(req.body.newPassword, 8) },
+      { where: { id: userId } }
+    ).then(() => {
+      res.status(200).send({ message: 'Password Changed successfully!' });
+    });
+  });
 };
 
 async function generateUser(userData, role, cId, isNew) {
@@ -204,6 +242,9 @@ async function generateUser(userData, role, cId, isNew) {
     id: userData.id,
     firstname: userData.firstname,
     lastname: userData.lastname,
+    prefferedname: userData.prefferedname,
+    jobtitle: userData.jobtitle,
+    departmentname: userData.departmentname,
     email: userData.email,
     photoURL: userData.photoURL,
     roles: ROLES[role - 1].toUpperCase(),
