@@ -3,6 +3,7 @@
 
 // scroll bar
 import 'simplebar/src/simplebar.css';
+import './checkout.css';
 
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';

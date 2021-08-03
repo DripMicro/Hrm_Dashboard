@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 
 import { Grid } from '@material-ui/core';
 // ----------------------------------------------------------------------
-
+// hooks
+import useAuth from '../../hooks/useAuth';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import {
@@ -23,6 +24,7 @@ import OccupancyRateCard from './OccupancyRateCard';
 import StatusRate from './StatusRateCard';
 import WorkforceRateCard from './WorkforceRateCard';
 import AverageWeekCard from './AverageWeekCard';
+import FreePlanCard from './FreePlanCard';
 
 function getFirstDay(y, m) {
   return new Date(y, m, 1);
@@ -35,6 +37,7 @@ function init() {
 }
 
 export default function AnalyticsContent() {
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { officeList, organizations } = useSelector(
     (state) => state.adminSetting
@@ -51,6 +54,8 @@ export default function AnalyticsContent() {
   const [month, setMonth] = useState(0);
   const [year, setYear] = useState(0);
 
+  const [plan, setPlan] = useState('');
+
   useEffect(() => {
     setMonth(init().getMonth());
     setYear(init().getFullYear());
@@ -64,6 +69,10 @@ export default function AnalyticsContent() {
     dispatch(getAllStatusById());
     dispatch(getUsersByCompany());
   }, [dispatch]);
+
+  useEffect(() => {
+    setPlan(user.planType.toUpperCase());
+  }, [user]);
 
   useEffect(() => {
     if (allStatus.length > 0) {
@@ -129,38 +138,46 @@ export default function AnalyticsContent() {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <OccupancyRateCard
-          year={year}
-          month={month}
-          allStatuses={allStatuses}
-          schedule={schedule}
-          daystatus={calendarProps}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <StatusRate
-          year={year}
-          month={month}
-          allStatuses={allStatuses}
-          allMembers={allMembers}
-          schedule={schedule}
-          daystatus={calendarProps}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <WorkforceRateCard
-          year={year}
-          month={month}
-          allStatuses={allStatuses}
-          allMembers={allMembers}
-          schedule={schedule}
-          daystatus={calendarProps}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <AverageWeekCard />
-      </Grid>
+      {plan === 'FREE' ? (
+        <Grid item xs={12}>
+          <FreePlanCard />
+        </Grid>
+      ) : (
+        <>
+          <Grid item xs={12}>
+            <OccupancyRateCard
+              year={year}
+              month={month}
+              allStatuses={allStatuses}
+              schedule={schedule}
+              daystatus={calendarProps}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <StatusRate
+              year={year}
+              month={month}
+              allStatuses={allStatuses}
+              allMembers={allMembers}
+              schedule={schedule}
+              daystatus={calendarProps}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <WorkforceRateCard
+              year={year}
+              month={month}
+              allStatuses={allStatuses}
+              allMembers={allMembers}
+              schedule={schedule}
+              daystatus={calendarProps}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <AverageWeekCard />
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }

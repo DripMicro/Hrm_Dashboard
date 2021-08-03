@@ -298,10 +298,16 @@ export default function CalendarContent() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        marginTop: -10,
+        [theme.breakpoints.down('md')]: { marginTop: 0 }
+      }}
+    >
       <Container maxWidth="xl">
         <Container
-          maxWidth="md"
+          maxWidth="sm"
           sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
         >
           <DayStatusButtonGroup

@@ -11,6 +11,7 @@ const config = require('../config/auth.config');
 const JWT_SECRET = config.secret;
 
 const Office = db.office;
+const Company = db.company;
 const { sequelize } = db;
 
 exports.getOfficeList = (req, res) => {
@@ -22,19 +23,30 @@ exports.getOfficeList = (req, res) => {
   const accessToken = authorization.split(' ')[1];
   const { companyId } = jwt.verify(accessToken, JWT_SECRET);
 
-  Office.findAll({
-    where: { companyId, isActive: 1 }
-  }).then((offices) => {
-    const officeList = [];
-    offices.map((office) => {
-      officeList.push({
-        id: office.id,
-        emoji: office.emoji,
-        name: office.name,
-        capacity: office.capacity
+  Company.findOne({ where: { id: companyId } }).then((company) => {
+    const plan = company.planType;
+    Office.findAll({
+      where: { companyId, isActive: 1 }
+    }).then((offices) => {
+      const officeList = [];
+      let limits = 0;
+      if (plan === 'free') {
+        limits = 2;
+      } else {
+        limits = offices.length;
+      }
+      offices.map((office, index) => {
+        if (index < limits) {
+          officeList.push({
+            id: office.id,
+            emoji: office.emoji,
+            name: office.name,
+            capacity: office.capacity
+          });
+        }
       });
+      res.status(200).send(officeList);
     });
-    res.status(200).send(officeList);
   });
 };
 

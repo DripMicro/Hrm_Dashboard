@@ -20,7 +20,9 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 
+// HOOKS
 import useAdmin from '../../hooks/useAdmin';
+
 import EmojiButton from '../dashboard-component/EmojiButton';
 
 function createData(id, emoji, title, description, isActive) {
@@ -41,15 +43,17 @@ let basicList = [
 let customList = [customData(0, '🙂', 'Custom 1', true)];
 
 StatusesCard.propTypes = {
+  plan: PropTypes.string,
   dataProps: PropTypes.object,
   setStatusProps: PropTypes.func
 };
 
-export default function StatusesCard({ dataProps, setStatusProps }) {
+export default function StatusesCard({ dataProps, setStatusProps, plan }) {
+  const { addStatus } = useAdmin();
+
   const [basics, setBasics] = useState([]);
   const [customs, setCustoms] = useState([]);
 
-  const { addStatus } = useAdmin();
   useEffect(() => {
     const sData = dataProps;
     const basic = sData.basicList !== undefined ? sData.basicList : [];
@@ -245,6 +249,7 @@ export default function StatusesCard({ dataProps, setStatusProps }) {
           ))}
         </Grid>
         <Button
+          disabled={plan === 'FREE'}
           onClick={handleAddStatus}
           variant="contained"
           sx={{ width: '100%', mt: 2 }}

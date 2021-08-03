@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { filter } from 'lodash';
 // import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
@@ -6,21 +7,27 @@ import { useState, useEffect } from 'react';
 import {
   Card,
   Table,
-  Stack,
-  Avatar,
+  // Stack,
+  // Avatar,
   Checkbox,
   TableRow,
   TableBody,
   TableCell,
-  Typography,
+  // Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Switch,
+  FormControlLabel
 } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList } from '../../redux/slices/user';
 import { getCompanyList } from '../../redux/slices/superAdmin';
-// import useAuth from '../../hooks/useAuth';
+import useSuperAdmin from '../../hooks/useSuperAdmin';
 // components
 // import Label from '../Label';
 import Scrollbar from '../Scrollbar';
@@ -37,8 +44,10 @@ const TABLE_HEAD = [
   { id: 'members', label: 'Members', alignRight: false },
   { id: 'offices', label: 'Offices', alignRight: false },
   { id: 'teams', label: 'Teams', alignRight: false },
-  { id: 'adminName', label: 'Admin Name', alignRight: false },
-  { id: 'adminEmail', label: 'Email', alignRight: false }
+  // { id: 'adminName', label: 'Admin Name', alignRight: false },
+  { id: 'adminEmail', label: 'Admin Email', alignRight: false },
+  { id: 'planType', label: 'Plan Type', alignRight: false },
+  { id: 'auto', label: 'Auto/Manual', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -81,7 +90,7 @@ export default function UserList() {
   const dispatch = useDispatch();
   const { userList } = useSelector((state) => state.user);
   const { companies } = useSelector((state) => state.superAdmin);
-  // const { user } = useAuth();
+  const { updatePlan, updateIsManual } = useSuperAdmin();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -89,13 +98,15 @@ export default function UserList() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const [companyList, setCompanyList] = useState([]);
+
   useEffect(() => {
     dispatch(getUserList());
     dispatch(getCompanyList());
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(companies);
+    setCompanyList([...companies]);
   }, [companies]);
 
   const handleRequestSort = (event, property) => {
@@ -106,7 +117,7 @@ export default function UserList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = companies.map((n) => n.domain);
+      const newSelecteds = companyList.map((n) => n.domain);
       setSelected(newSelecteds);
       return;
     }
@@ -144,15 +155,11 @@ export default function UserList() {
     setFilterName(event.target.value);
   };
 
-  // const handleDeleteUser = (userId) => {
-  //   dispatch(deleteUser(userId));
-  // };
-
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - companies.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - companyList.length) : 0;
 
   const filteredUsers = applySortFilter(
-    companies,
+    companyList,
     getComparator(order, orderBy),
     filterName
   );
@@ -174,7 +181,7 @@ export default function UserList() {
               order={order}
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
-              rowCount={companies.length}
+              rowCount={companyList.length}
               numSelected={selected.length}
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
@@ -182,7 +189,7 @@ export default function UserList() {
             <TableBody>
               {filteredUsers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((row, index) => {
                   const {
                     id,
                     name,
@@ -190,9 +197,11 @@ export default function UserList() {
                     members,
                     offices,
                     teams,
-                    adminAvatar,
-                    adminName,
-                    adminEmail
+                    // adminAvatar,
+                    // adminName,
+                    adminEmail,
+                    planType,
+                    isSetBySuper
                   } = row;
 
                   const isItemSelected = selected.indexOf(domain) !== -1;
@@ -200,7 +209,7 @@ export default function UserList() {
                   return (
                     <TableRow
                       hover
-                      key={id + 1}
+                      key={index}
                       tabIndex={-1}
                       role="checkbox"
                       selected={isItemSelected}
@@ -218,15 +227,102 @@ export default function UserList() {
                       <TableCell align="left">{offices}</TableCell>
                       <TableCell align="left">{teams}</TableCell>
 
-                      <TableCell component="th" scope="row" padding="none">
+                      {/* <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Avatar alt={adminName} src={adminAvatar} />
                           <Typography variant="subtitle2" noWrap>
                             {adminName}
                           </Typography>
                         </Stack>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="left">{adminEmail}</TableCell>
+                      <TableCell align="left">
+                        <FormControl variant="outlined">
+                          <InputLabel id="demo-simple-select-outlined-label">
+                            Plan Type
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={planType}
+                            onChange={(e) => {
+                              console.log(id, index + 1);
+                              const tmpCompanies = [];
+                              let tmpCompany = {};
+                              companyList.map((company) => {
+                                if (company.id === id) {
+                                  tmpCompany = company;
+                                }
+                              });
+
+                              const insData = {
+                                ...tmpCompany,
+                                planType: e.target.value,
+                                isSetBySuper: 0
+                              };
+
+                              companyList.map((item) => {
+                                if (item.id === id) {
+                                  tmpCompanies.push(insData);
+                                } else {
+                                  tmpCompanies.push(item);
+                                }
+                              });
+                              setCompanyList([...tmpCompanies]);
+                              const data = { id, planType: e.target.value };
+                              updatePlan({ data });
+                              const manualData = {
+                                id,
+                                isSetBySuper: 0
+                              };
+                              updateIsManual({ manualData });
+                            }}
+                            label="Plan Type"
+                          >
+                            <MenuItem value="trial">Trial</MenuItem>
+                            <MenuItem value="free">Free</MenuItem>
+                            <MenuItem value="premium">Premium</MenuItem>
+                            <MenuItem value="enterprise">Enterprise</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </TableCell>
+                      <TableCell align="center">
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={!isSetBySuper}
+                              onChange={() => {
+                                const tmpCompanies = [];
+                                let tmpCompany = {};
+                                companyList.map((company) => {
+                                  if (company.id === id) {
+                                    tmpCompany = company;
+                                  }
+                                });
+
+                                const insData = {
+                                  ...tmpCompany,
+                                  isSetBySuper: !isSetBySuper
+                                };
+
+                                companyList.map((item) => {
+                                  if (item.id === id) {
+                                    tmpCompanies.push(insData);
+                                  } else {
+                                    tmpCompanies.push(item);
+                                  }
+                                });
+                                setCompanyList([...tmpCompanies]);
+                                const manualData = {
+                                  id,
+                                  isSetBySuper: !isSetBySuper
+                                };
+                                updateIsManual({ manualData });
+                              }}
+                            />
+                          }
+                        />
+                      </TableCell>
                     </TableRow>
                   );
                 })}

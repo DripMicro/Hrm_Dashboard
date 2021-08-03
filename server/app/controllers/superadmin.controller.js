@@ -16,6 +16,8 @@ const { ROLES } = db;
 exports.getCompanyList = (req, res) => {
   Company.findAll().then(async (companies) => {
     const CompanyList = await getCompanies(companies);
+    CompanyList.pop();
+    console.log('aaaaaa_-------->', CompanyList);
     res.status(200).send(CompanyList);
   });
 };
@@ -23,29 +25,44 @@ exports.getCompanyList = (req, res) => {
 async function getCompanies(companies) {
   const asyncRes = await Promise.all(
     companies.map(async (company) => {
-      const { id, name, domain } = company;
-      const users = await User.findAll({ where: { companyId: id } });
-      const offices = await Office.findAll({ where: { companyId: id } });
-      const teams = await Team.findAll({ where: { companyId: id } });
-      let adminInfo = {};
-      users.map((user) => {
-        if (user.roleId === ADMIN) {
-          adminInfo = user;
-        }
-      });
-      const comObj = {
+      const {
         id,
         name,
         domain,
-        members: users.length,
-        offices: offices.length,
-        teams: teams.length,
-        adminAvatar: adminInfo.photoURL,
-        adminName: `${adminInfo.firstname} ${adminInfo.lastname}`,
-        adminEmail: adminInfo.email
-      };
-
-      return comObj;
+        planType,
+        isActive,
+        isPaid,
+        isSetBySuper
+      } = company;
+      if (id !== 1111) {
+        console.log(id, name, domain);
+        const users = await User.findAll({ where: { companyId: id } });
+        const offices = await Office.findAll({ where: { companyId: id } });
+        const teams = await Team.findAll({ where: { companyId: id } });
+        let adminInfo = {};
+        users.map((user) => {
+          if (user.roleId === ADMIN) {
+            adminInfo = user;
+          }
+        });
+        const comObj = {
+          id,
+          name,
+          domain,
+          planType,
+          isActive,
+          isPaid,
+          isSetBySuper,
+          members: users.length,
+          offices: offices.length,
+          teams: teams.length,
+          adminAvatar: adminInfo.photoURL,
+          adminName: `${adminInfo.firstname} ${adminInfo.lastname}`,
+          adminEmail: adminInfo.email
+        };
+        console.log('----------->', comObj);
+        return comObj;
+      }
     })
   );
   return asyncRes;
@@ -107,3 +124,17 @@ async function getUsers(users) {
   );
   return asyncRes;
 }
+
+exports.updatePlan = (req, res) => {
+  console.log('Here is updatePlan:', req.body);
+  const { id, planType } = req.body;
+  Company.update({ planType }, { where: { id } });
+  res.status(200).send({ message: 'success' });
+};
+
+exports.updateIsManual = (req, res) => {
+  console.log('Here is updatePlan:', req.body);
+  const { id, isSetBySuper } = req.body;
+  Company.update({ isSetBySuper }, { where: { id } });
+  res.status(200).send({ message: 'success' });
+};

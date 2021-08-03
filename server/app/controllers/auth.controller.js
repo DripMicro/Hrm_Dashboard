@@ -80,14 +80,45 @@ exports.signup = (req, res) => {
           });
         } else {
           Company.create({
-            domain: company
+            domain: company,
+            isActive: 1,
+            isPaid: 0
           }).then(async (company) => {
-            const { accessToken, user } = await generateUser(
+            // eslint-disable-next-line prefer-const
+            let { accessToken, user } = await generateUser(
               userData,
               role,
               company.id,
               true
             );
+
+            const today = new Date();
+            const createdDate = today;
+
+            const oneDay = 1000 * 60 * 60 * 24;
+            const diffTime = Math.abs(today - createdDate);
+            const passedDays = Math.ceil(diffTime / oneDay);
+            const remainedDays = 15 - passedDays;
+            const tmpExpDate = new Date(createdDate);
+            const expiredDay = new Date(
+              tmpExpDate.setDate(tmpExpDate.getDate() + 14)
+            )
+              .toISOString()
+              .split('T')[0];
+
+            Company.update(
+              { planType: 'trial' },
+              { where: { id: company.id } }
+            );
+
+            user = {
+              ...user,
+              isActive: 1,
+              isPaid: 0,
+              remainedDays,
+              expiredDay,
+              planType: 'trial'
+            };
             await User.update(
               {
                 companyId: company.id
@@ -145,23 +176,86 @@ exports.signin = (req, res) => {
           for (let i = 0; i < teams.length; i += 1) {
             teamIds.push(`${teams[i].id}`);
           }
-          const user = {
-            id: userData.id,
-            firstname: userData.firstname,
-            lastname: userData.lastname,
-            email: userData.email,
-            photoURL: userData.photoURL,
-            prefferedname: userData.prefferedname,
-            jobtitle: userData.jobtitle,
-            departmentname: userData.departmentname,
-            roles: ROLES[userData.roleId - 1].toUpperCase(),
-            offices: officeIds,
-            teams: teamIds,
-            companyId: userData.comapnyId
-          };
 
-          const accessToken = token;
-          res.status(200).send({ accessToken, user });
+          console.log('CompanyId:---->', userData.companyId);
+          if (userData.companyId === 1111) {
+            const user = {
+              id: userData.id,
+              firstname: userData.firstname,
+              lastname: userData.lastname,
+              email: userData.email,
+              photoURL: userData.photoURL,
+              prefferedname: userData.prefferedname,
+              jobtitle: userData.jobtitle,
+              departmentname: userData.departmentname,
+              roles: ROLES[userData.roleId - 1].toUpperCase()
+            };
+
+            const accessToken = token;
+            res.status(200).send({ accessToken, user });
+          } else {
+            Company.findOne({
+              where: { id: userData.companyId }
+            }).then((company) => {
+              const today = new Date();
+              const createdDate = company.createdAt;
+
+              const oneDay = 1000 * 60 * 60 * 24;
+              const diffTime = Math.abs(today - createdDate);
+              const passedDays = Math.ceil(diffTime / oneDay);
+              const remainedDays = 15 - passedDays;
+              const tmpExpDate = new Date(createdDate);
+              const expiredDay = new Date(
+                tmpExpDate.setDate(tmpExpDate.getDate() + 14)
+              )
+                .toISOString()
+                .split('T')[0];
+
+              let planType = 'trial';
+
+              if (company.isActive === 1) {
+                if (company.isPaid === 1) {
+                  planType = 'premium';
+                } else if (remainedDays > 0) {
+                  planType = 'trial';
+                } else {
+                  planType = 'free';
+                }
+              }
+
+              if (company.isSetBySuper === 0) {
+                planType = company.planType;
+              } else {
+                Company.update(
+                  { planType },
+                  { where: { id: userData.companyId } }
+                );
+              }
+
+              const user = {
+                id: userData.id,
+                firstname: userData.firstname,
+                lastname: userData.lastname,
+                email: userData.email,
+                photoURL: userData.photoURL,
+                prefferedname: userData.prefferedname,
+                jobtitle: userData.jobtitle,
+                departmentname: userData.departmentname,
+                roles: ROLES[userData.roleId - 1].toUpperCase(),
+                offices: officeIds,
+                teams: teamIds,
+                companyId: userData.comapnyId,
+                remainedDays,
+                expiredDay,
+                isActive: company.isActive,
+                isPaid: company.isPaid,
+                planType
+              };
+
+              const accessToken = token;
+              res.status(200).send({ accessToken, user });
+            });
+          }
         });
       });
     })

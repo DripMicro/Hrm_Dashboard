@@ -32,7 +32,7 @@ export default function WeekSchedule({
   const [thisMonth, setThisMonth] = useState(0);
 
   useEffect(() => {
-    setToday(new Date().getDate() - 1);
+    setToday(new Date().getDate() - 2);
     setThisMonth(new Date().getMonth());
   }, []);
 
@@ -70,7 +70,12 @@ export default function WeekSchedule({
               weekTitle={day.weekTitle}
               schedule={schedule}
               dayIndex={index}
-              isActive={day.id >= today && day.month >= thisMonth}
+              // isActive={day.id >= today && day.month >= thisMonth}
+              isActive={
+                thisMonth < day.month
+                  ? true
+                  : today < day.id && thisMonth === day.month
+              }
               iconProps={changeIcon}
             />
           ))}

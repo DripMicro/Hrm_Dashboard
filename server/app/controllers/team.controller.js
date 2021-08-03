@@ -7,6 +7,7 @@ const db = require('../models');
 
 const { sequelize } = db;
 const Team = db.team;
+const Company = db.company;
 const config = require('../config/auth.config');
 
 const JWT_SECRET = config.secret;
@@ -19,20 +20,31 @@ exports.getTeamList = (req, res) => {
 
   const accessToken = authorization.split(' ')[1];
   const { companyId } = jwt.verify(accessToken, JWT_SECRET);
-  Team.findAll({
-    where: { companyId, isActive: 1 }
-  }).then((teams) => {
-    const teamList = [];
-    teams.map((team) => {
-      teamList.push({
-        id: team.id,
-        color: team.color,
-        name: team.name,
-        capacity: team.capacity
+  Company.findOne({ where: { id: companyId } }).then((company) => {
+    const plan = company.planType;
+    Team.findAll({
+      where: { companyId, isActive: 1 }
+    }).then((teams) => {
+      const teamList = [];
+      let limits = 0;
+      if (plan === 'free') {
+        limits = 2;
+      } else {
+        limits = teams.length;
+      }
+      teams.map((team, index) => {
+        if (index < limits) {
+          teamList.push({
+            id: team.id,
+            color: team.color,
+            name: team.name,
+            capacity: team.capacity
+          });
+        }
       });
+      console.log(teamList);
+      res.status(200).send(teamList);
     });
-    console.log(teamList);
-    res.status(200).send(teamList);
   });
 };
 

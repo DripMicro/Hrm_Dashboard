@@ -67,7 +67,7 @@ export default function RightSideBar({
   const [thisMonth, setThisMonth] = useState(0);
 
   useEffect(() => {
-    setToday(new Date().getDate());
+    setToday(new Date().getDate() - 1);
     setThisMonth(new Date().getMonth());
   }, []);
 
@@ -142,7 +142,9 @@ export default function RightSideBar({
           iconProps={changeIcon}
           statusTitle={sTitle}
           notStatus={notStatusYet}
-          isActive={day >= today && month >= thisMonth}
+          isActive={
+            thisMonth < month ? true : today < day && thisMonth === month
+          }
         />
         <Box m={5} />
         <UserScheduleStatus

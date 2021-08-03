@@ -61,6 +61,8 @@
     "@material-ui/utils": "^5.0.0-alpha.29",
     "@react-pdf/renderer": "^2.0.4",
     "@reduxjs/toolkit": "^1.5.1",
+    "@stripe/react-stripe-js": "^1.4.1",
+    "@stripe/stripe-js": "^1.16.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.0",
     "@testing-library/user-event": "^12.2.2",

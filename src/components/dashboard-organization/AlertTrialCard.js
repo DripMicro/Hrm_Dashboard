@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   useTheme,
@@ -6,6 +6,9 @@ import {
 } from '@material-ui/core/styles';
 
 import { Card, CardContent, Typography, Box } from '@material-ui/core';
+
+// hooks
+import useAuth from '../../hooks/useAuth';
 
 const YellowBadge = styled('div')(({ theme }) => ({
   backgroundColor: '#FAF6D0',
@@ -34,6 +37,18 @@ const RedBadge = styled('div')(({ theme }) => ({
 
 export default function AlertTrialCard() {
   const theme = useTheme();
+  const { user } = useAuth();
+
+  const [expiredDate, setExpiredDate] = useState('');
+  const [remainedDays, setRemainedDays] = useState(0);
+  const [plan, setPlan] = useState('');
+
+  useEffect(() => {
+    setExpiredDate(user.expiredDay);
+    setRemainedDays(user.remainedDays);
+    setPlan(user.planType.toUpperCase());
+  }, [user]);
+
   return (
     <Card>
       <CardContent
@@ -65,7 +80,7 @@ export default function AlertTrialCard() {
             <Typography variant="subtitle1" sx={{ mr: 1 }}>
               Subscription
             </Typography>
-            <YellowBadge>TRIAL</YellowBadge>
+            <YellowBadge>{plan}</YellowBadge>
           </Box>
           <Box
             sx={{
@@ -76,11 +91,15 @@ export default function AlertTrialCard() {
               }
             }}
           >
-            <Typography>ends on</Typography>
-            <Box m={1} />
-            <GreyBadge>July 5, 2021</GreyBadge>
-            <Box m={1} />
-            <RedBadge>10 Days Left</RedBadge>
+            {plan === 'TRIAL' && (
+              <>
+                <Typography>ends on</Typography>
+                <Box m={1} />
+                <GreyBadge>{expiredDate}</GreyBadge>
+                <Box m={1} />
+                <RedBadge>{remainedDays} Days Left</RedBadge>
+              </>
+            )}
           </Box>
         </Box>
       </CardContent>

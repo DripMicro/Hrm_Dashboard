@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 // material
 import { Grid, Box } from '@material-ui/core';
 // ----------------------------------------------------------------------
+// HOOKS
+import useAuth from '../../hooks/useAuth';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getOrganizations } from '../../redux/slices/adminSetting';
@@ -15,6 +17,7 @@ import StatusesCard from './StatusesCard';
 import SaveChanges from './SaveChanges';
 
 export default function OrganizationContent() {
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { organizations } = useSelector((state) => state.adminSetting);
 
@@ -24,6 +27,12 @@ export default function OrganizationContent() {
   const [features, setFeatures] = useState({});
   const [statuses, setStatuses] = useState({});
   const [isSave, setIsSave] = useState(false);
+
+  const [plan, setPlan] = useState('');
+
+  useEffect(() => {
+    setPlan(user.planType.toUpperCase());
+  }, [user]);
 
   useEffect(() => {
     dispatch(getOrganizations());
@@ -97,11 +106,13 @@ export default function OrganizationContent() {
         />
         <Box m={3} />
         <FeaturesCard
+          plan={plan}
           dataProps={features}
           setFeatureProps={handleFeatureSetting}
         />
         <Box m={3} />
         <StatusesCard
+          plan={plan}
           dataProps={statuses}
           setStatusProps={handleStatusSetting}
         />

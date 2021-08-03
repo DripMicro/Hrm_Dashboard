@@ -112,7 +112,7 @@ export default function DayScheduleButton({
             position: 'absolute',
             width: '100%',
             top: '50%',
-            left: '56%',
+            left: '50%',
             transform: 'translate(-50%, -50%)',
             fontSize: '12px',
             [theme.breakpoints.up('sm')]: { fontSize: '18px' }

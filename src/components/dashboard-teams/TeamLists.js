@@ -29,7 +29,9 @@ import ColorButton from '../dashboard-component/ColorButton';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList } from '../../redux/slices/user';
 import { getTeamList, getTManagerList } from '../../redux/slices/adminSetting';
+
 import useAdmin from '../../hooks/useAdmin';
+import useAuth from '../../hooks/useAuth';
 
 const TableCellStyles = withStyles((theme) => ({
   root: {
@@ -61,6 +63,7 @@ let teamManagers = [];
 
 export default function TeamLists() {
   const theme = useTheme();
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { addTeam, deleteTeam, updateTeamList } = useAdmin();
@@ -72,11 +75,17 @@ export default function TeamLists() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChanged, setIsChanged] = useState(true);
 
+  const [plan, setPlan] = useState('');
+
   useEffect(() => {
     dispatch(getTeamList());
     dispatch(getUserList());
     dispatch(getTManagerList());
   }, [dispatch]);
+
+  useEffect(() => {
+    setPlan(user.planType.toUpperCase());
+  }, [user]);
 
   useEffect(() => {
     teamManagersData = [];
@@ -320,6 +329,7 @@ export default function TeamLists() {
           </TableContainer>
           <Box sx={{ width: '100%', px: 3 }}>
             <Button
+              disabled={plan === 'FREE'}
               onClick={handleAddTeam}
               variant="contained"
               sx={{ width: '100%', mt: 2 }}

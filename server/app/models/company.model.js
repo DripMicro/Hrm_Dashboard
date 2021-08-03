@@ -6,6 +6,18 @@ module.exports = (sequelize, Sequelize) => {
     domain: {
       type: Sequelize.STRING
     },
+    planType: {
+      type: Sequelize.STRING
+    },
+    isActive: {
+      type: Sequelize.INTEGER
+    },
+    isPaid: {
+      type: Sequelize.INTEGER
+    },
+    isSetBySuper: {
+      type: Sequelize.INTEGER
+    },
     createdAt: {
       type: 'TIMESTAMP',
       defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),

@@ -55,7 +55,14 @@ db.user.belongsToMany(db.team, {
   otherKey: 'teamId'
 });
 
+// calendar vs user relative
+db.user.hasOne(db.calendar, {
+  foreignKey: 'userId'
+});
+db.calendar.belongsTo(db.user);
+
 db.ROLES = ['super admin', 'admin', 'leader', 'member'];
+
 db.OFFICES = [
   { emoji: '👨‍👨‍👧', name: 'Office 1', capacity: 10 },
   { emoji: '⚖️', name: 'Office 2', capacity: 10 }

@@ -27,7 +27,10 @@ import DeleteButton from '../dashboard-component/ConfirmDialog';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList } from '../../redux/slices/user';
 import { getOfficeList, getManagerList } from '../../redux/slices/adminSetting';
+
+// hooks
 import useAdmin from '../../hooks/useAdmin';
+import useAuth from '../../hooks/useAuth';
 
 function createData(id, emoji, name, capacity, members, managers) {
   return { id, emoji, name, capacity, members, managers };
@@ -59,6 +62,8 @@ const TableCellStyles = withStyles((theme) => ({
 
 export default function OfficeLists() {
   const theme = useTheme();
+  const { user } = useAuth();
+
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { addOffice, deleteOffice, updateOfficeList } = useAdmin();
@@ -71,11 +76,17 @@ export default function OfficeLists() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChanged, setIsChanged] = useState(true);
 
+  const [plan, setPlan] = useState('');
+
   useEffect(() => {
     dispatch(getOfficeList());
     dispatch(getUserList());
     dispatch(getManagerList());
   }, [dispatch]);
+
+  useEffect(() => {
+    setPlan(user.planType.toUpperCase());
+  }, [user]);
 
   useEffect(() => {
     officeManagersData = [];
@@ -315,6 +326,7 @@ export default function OfficeLists() {
           </TableContainer>
           <Box sx={{ width: '100%', px: 3 }}>
             <Button
+              disabled={plan === 'FREE'}
               onClick={handleAddOffice}
               variant="contained"
               sx={{ width: '100%', mt: 2 }}

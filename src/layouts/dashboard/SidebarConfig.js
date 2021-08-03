@@ -17,6 +17,7 @@ const ICONS = {
   page: getIcon('ic_page', 'general'),
   dashboard: getIcon('ic_dashboard', 'admin'),
   ndashboard: getIcon('dashboard', 'admin'),
+  plans: getIcon('plans', 'admin'),
   organization: getIcon('organization-line', 'admin'),
   home: getIcon('home-line', 'general'),
   calendar: getIcon('calendar-date', 'general'),
@@ -99,6 +100,11 @@ const sidebarConfig = [
         title: 'Dashboard',
         href: PATH_DASHBOARD.admin.analytics,
         icon: ICONS.ndashboard
+      },
+      {
+        title: 'Subscription',
+        href: PATH_DASHBOARD.admin.plans,
+        icon: ICONS.plans
       }
     ]
   },

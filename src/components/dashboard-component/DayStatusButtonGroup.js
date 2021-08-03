@@ -53,19 +53,27 @@ export default function DayStatusButtonGroup({
           value={types}
           onChange={handleTypes}
           aria-label="day type"
-          sx={{ display: 'block', textAlign: 'center', mb: 3, ...sx }}
+          sx={{
+            display: 'block',
+            textAlign: 'center',
+            mb: 3,
+            ...sx
+          }}
         >
           {officeGroups.map((item) => (
             <ToggleButton
               key={item.id}
               value={item.id}
-              style={{ height: '42px' }}
+              style={{ height: '42px', zIndex: 1202 }}
               sx={{
                 mr: 1,
                 mb: 1,
                 heigth: '42px !important',
                 borderRadius: '20px !important',
                 borderLeft: '1px solid #D5D9DF !important',
+                '&.css-am98t8-MuiButtonBase-root-MuiToggleButton-root': {
+                  zIndex: '1202 !important'
+                },
                 '&.Mui-selected': {
                   border: '1px solid #00AB55',
                   borderLeft: '1px solid #00AB55 !important',

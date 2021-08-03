@@ -623,7 +623,7 @@ export default function HomeContent() {
           Welcome to Thimble
         </Typography>
         <Container
-          maxWidth="md"
+          maxWidth="sm"
           sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
         >
           <WeekScheduleCard

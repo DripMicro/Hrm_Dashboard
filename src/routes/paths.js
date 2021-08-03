@@ -42,7 +42,8 @@ export const PATH_DASHBOARD = {
     offices: path(ROOTS_DASHBOARD, '/offices'),
     teams: path(ROOTS_DASHBOARD, '/teams'),
     organization: path(ROOTS_DASHBOARD, '/organization'),
-    analytics: path(ROOTS_DASHBOARD, '/analytics')
+    analytics: path(ROOTS_DASHBOARD, '/analytics'),
+    plans: path(ROOTS_DASHBOARD, '/plans')
   },
   other: {
     slack: path(ROOTS_DASHBOARD, '/slack'),

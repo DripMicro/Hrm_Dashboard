@@ -30,11 +30,12 @@ const ScheduleDivider = styled('div')(() => ({
 }));
 
 FeaturesCard.propTypes = {
+  plan: PropTypes.string,
   dataProps: PropTypes.object,
   setFeatureProps: PropTypes.func
 };
 
-export default function FeaturesCard({ dataProps, setFeatureProps }) {
+export default function FeaturesCard({ dataProps, setFeatureProps, plan }) {
   const theme = useTheme();
 
   const [isHalfDays, setIsHalfDays] = useState(0);
@@ -70,7 +71,8 @@ export default function FeaturesCard({ dataProps, setFeatureProps }) {
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h5">Half days</Typography>
               <Checkbox
-                checked={isHalfDays === 1}
+                disabled={plan === 'FREE'}
+                checked={isHalfDays === 1 && plan !== 'FREE'}
                 onChange={handleChangeIsHalfDays}
                 color="primary"
                 inputProps={{ 'aria-label': 'secondary checkbox' }}

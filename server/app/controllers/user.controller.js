@@ -14,6 +14,8 @@ const db = require('../models');
 
 const User = db.user;
 const Calendar = db.calendar;
+const Company = db.company;
+const Organization = db.organizations;
 
 const { ROLES, SCHEDULES } = db;
 const MEMBER = 4;
@@ -181,20 +183,71 @@ exports.getProfile = (req, res) => {
         for (let i = 0; i < teams.length; i += 1) {
           teamIds.push(`${teams[i].id}`);
         }
-        const user = {
-          id: userData.id,
-          firstname: userData.firstname,
-          lastname: userData.lastname,
-          email: userData.email,
-          prefferedname: userData.prefferedname,
-          jobtitle: userData.jobtitle,
-          departmentname: userData.departmentname,
-          photoURL: userData.photoURL,
-          roles: ROLES[userData.roleId - 1].toUpperCase(),
-          offices: officeIds,
-          teams: teamIds
-        };
-        res.status(200).send({ user });
+
+        Company.findOne({
+          where: { id: userData.companyId }
+        }).then((company) => {
+          const today = new Date();
+          const createdDate = company.createdAt;
+
+          const oneDay = 1000 * 60 * 60 * 24;
+          const diffTime = Math.abs(today - createdDate);
+          const passedDays = Math.ceil(diffTime / oneDay);
+          const remainedDays = 15 - passedDays;
+          const tmpExpDate = new Date(createdDate);
+          const expiredDay = new Date(
+            tmpExpDate.setDate(tmpExpDate.getDate() + 14)
+          )
+            .toISOString()
+            .split('T')[0];
+
+          let planType = 'trial';
+
+          if (company.isActive === 1) {
+            if (company.isPaid === 1) {
+              planType = 'premium';
+            } else if (remainedDays > 0) {
+              planType = 'trial';
+            } else {
+              planType = 'free';
+            }
+          }
+
+          if (company.isSetBySuper === 0) {
+            planType = company.planType;
+          } else {
+            Company.update({ planType }, { where: { id: userData.companyId } });
+          }
+
+          if (planType === 'free') {
+            Organization.update(
+              { isHalfDays: 0 },
+              { where: { companyId: userData.companyId } }
+            );
+          }
+
+          const user = {
+            id: userData.id,
+            firstname: userData.firstname,
+            lastname: userData.lastname,
+            email: userData.email,
+            photoURL: userData.photoURL,
+            prefferedname: userData.prefferedname,
+            jobtitle: userData.jobtitle,
+            departmentname: userData.departmentname,
+            roles: ROLES[userData.roleId - 1].toUpperCase(),
+            offices: officeIds,
+            teams: teamIds,
+            companyId: userData.companyId,
+            remainedDays,
+            expiredDay,
+            isActive: company.isActive,
+            isPaid: company.isPaid,
+            planType
+          };
+
+          res.status(200).send({ user });
+        });
       });
     });
   });
@@ -250,10 +303,11 @@ exports.addMemberList = (req, res) => {
 async function generateUser(userData, cId, officeIds, teamIds) {
   Calendar.create({
     schedule: JSON.stringify(SCHEDULES),
-    userId: userData.id,
+    // userId: userData.id,
     companyId: cId
   });
 
+  // await Calendar.setUser(userData.id);
   console.log('OfficeIds:', officeIds);
   // set user office
   await userData.setOffices(officeIds);

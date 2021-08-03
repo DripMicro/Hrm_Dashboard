@@ -79,6 +79,12 @@ const DashboardRoutes = {
       guard: AdminGuard,
       component: lazy(() => import('../views/DashboardAnalyticsPage'))
     },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.admin.plans,
+      guard: AdminGuard,
+      component: lazy(() => import('../views/DashboardPlanPage'))
+    },
 
     // other
     // ----------------------------------------------------------------------

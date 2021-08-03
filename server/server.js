@@ -25,15 +25,15 @@ const db = require('./app/models');
 
 const Role = db.role;
 const User = db.user;
+const Company = db.company;
 
 const { ROLES } = db;
 
 // eslint-disable-next-line no-unused-vars
 function initial() {
   // user roles initialize ...
-  ROLES.forEach((role, index) => {
+  ROLES.forEach((role) => {
     Role.create({
-      id: index + 1,
       name: role
     });
   });
@@ -47,6 +47,14 @@ function initial() {
     roleId: 1,
     companyId: 1111,
     password: bcrypt.hashSync('superadmin', 8)
+  });
+
+  // Company initialize
+  Company.create({
+    id: 1111,
+    domain: 'thimble.com',
+    isActive: 1,
+    isPaid: 1
   });
 }
 

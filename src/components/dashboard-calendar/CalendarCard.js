@@ -208,7 +208,8 @@ export default function CalendarCard({
 
   useEffect(() => {
     setToday(new Date().getDate() - 1);
-    setThisMonth(new Date().getMonth() - 1);
+    setThisMonth(new Date().getMonth());
+    console.log(new Date().getMonth());
   }, []);
 
   useEffect(() => {
@@ -309,7 +310,8 @@ export default function CalendarCard({
     <Card>
       <CardContent
         sx={{
-          [theme.breakpoints.down('md')]: { padding: theme.spacing(3, 0.2) }
+          padding: theme.spacing(2, 3),
+          [theme.breakpoints.down('md')]: { padding: theme.spacing(1, 0.2) }
         }}
       >
         <Box
@@ -340,9 +342,9 @@ export default function CalendarCard({
             <ArrowForwardIosIcon fontSize="medium" />
           </IconButton>
         </Box>
-        <Box m={3} />
+        <Box m={1} />
         <Box sx={{ textAlign: 'center' }}>
-          <GridContainer spacing={3}>
+          <GridContainer spacing={2}>
             {Weeks.map((week, index) => (
               <GridItem key={index}>
                 <Typography variant="caption">{week}</Typography>
@@ -350,10 +352,10 @@ export default function CalendarCard({
             ))}
           </GridContainer>
         </Box>
-        <Box m={4} />
+        <Box m={1} />
         <Box sx={{ width: '100%', textAlign: 'center' }}>
           {calendar.map((weeks, wIndex) => (
-            <GridContainer spacing={3} key={wIndex} sx={{ mb: 1 }}>
+            <GridContainer spacing={3} key={wIndex}>
               {weeks.map((day, dIndex) => (
                 <GridItem key={dIndex}>
                   {day.day > 0 && (
@@ -367,7 +369,11 @@ export default function CalendarCard({
                       halfday={day.halfday}
                       Selection={handleSelected}
                       isSelected={day.selected}
-                      isActive={day.day > today && thisMonth < day.month}
+                      isActive={
+                        thisMonth < day.month
+                          ? true
+                          : today < day.day && thisMonth === day.month
+                      }
                     />
                   )}
                 </GridItem>

@@ -48,51 +48,64 @@ exports.getOrganizations = async (req, res) => {
 
   const basicListInfo = await BasicList.findAll({ where: { companyId } });
   const customListInfo = await CustomList.findAll({ where: { companyId } });
-  const basicInfo = [];
-  const customInfo = [];
-  basicListInfo.map((item) => {
-    basicInfo.push({
-      id: item.id,
-      emoji: item.emoji,
-      title: item.title,
-      description: item.description,
-      isActive: item.isActive
+  Company.findOne({ where: { id: companyId } }).then((com) => {
+    const plan = com.planType;
+    let limits = 0;
+    if (plan === 'free') {
+      limits = 2;
+    } else {
+      limits = customListInfo.length;
+    }
+
+    const basicInfo = [];
+    const customInfo = [];
+    basicListInfo.map((item) => {
+      basicInfo.push({
+        id: item.id,
+        emoji: item.emoji,
+        title: item.title,
+        description: item.description,
+        isActive: item.isActive
+      });
     });
-  });
-  customListInfo.map((item) => {
-    customInfo.push({
-      id: item.id,
-      emoji: item.emoji,
-      title: item.title,
-      isActive: item.isActive
+
+    customListInfo.map((item, index) => {
+      if (index < limits) {
+        customInfo.push({
+          id: item.id,
+          emoji: item.emoji,
+          title: item.title,
+          isActive: item.isActive
+        });
+      }
     });
+
+    company = {
+      name: companyInfo.name,
+      domain: companyInfo.domain,
+      isEmail: orgInfo.isEmail,
+      isGoogleSignIn: orgInfo.isGoogleSignIn
+    };
+
+    calendar = {
+      startingDay: orgInfo.startingDay,
+      monthRange: orgInfo.monthRange,
+      workDays: workDayInfo
+    };
+
+    features = {
+      isHalfDays: orgInfo.isHalfDays,
+      isCities: orgInfo.isCities
+    };
+
+    statuses = {
+      basicList: basicInfo,
+      customList: customInfo
+    };
+
+    const result = { company, calendar, features, statuses };
+    res.status(200).send({ result });
   });
-
-  company = {
-    name: companyInfo.name,
-    domain: companyInfo.domain,
-    isEmail: orgInfo.isEmail,
-    isGoogleSignIn: orgInfo.isGoogleSignIn
-  };
-
-  calendar = {
-    startingDay: orgInfo.startingDay,
-    monthRange: orgInfo.monthRange,
-    workDays: workDayInfo
-  };
-
-  features = {
-    isHalfDays: orgInfo.isHalfDays,
-    isCities: orgInfo.isCities
-  };
-
-  statuses = {
-    basicList: basicInfo,
-    customList: customInfo
-  };
-
-  const result = { company, calendar, features, statuses };
-  res.status(200).send({ result });
 };
 
 exports.addCustomStatus = (req, res) => {
