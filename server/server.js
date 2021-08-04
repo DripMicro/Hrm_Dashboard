@@ -5,12 +5,29 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 
+// const corsOptions = {
+//   origin: 'http://localhost:3000'
+//   // origin: 'http://3.68.219.73/'
+// };
+// app.use(cors(corsOptions));
+
+const whitelist = ['https://checkout.stripe.com', 'http://localhost:3000'];
 const corsOptions = {
-  origin: 'http://localhost:3000'
-  // origin: 'http://3.68.219.73/'
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error());
+    }
+  }
 };
 
 app.use(cors(corsOptions));
+app.use(
+  cors({
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
+  })
+);
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -82,6 +99,7 @@ require('./app/routes/team.routes')(app);
 require('./app/routes/organization.routes')(app);
 require('./app/routes/general.routes')(app);
 require('./app/routes/superadmin.routes')(app);
+require('./app/routes/payment.routes')(app);
 
 // set port, listen for requests
 // const PORT = process.env.PORT || 8080;

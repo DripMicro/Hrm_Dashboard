@@ -258,9 +258,24 @@ export function addStatus() {
 }
 
 export function addMemberList(memberList) {
-  console.log('Here is Redux:', memberList);
   const data = memberList;
   return async () => {
     await axios.post('/api/user/addMemberList', data);
+  };
+}
+
+// ----------------------------------------------------------------------
+// Payment checkout
+// ----------------------------------------------------------------------
+
+export function createCheckoutSession(payData) {
+  const data = payData;
+  return async () => {
+    const response = await axios.post(
+      '/api/payment/create-checkout-session',
+      data
+    );
+    const { url } = response.data;
+    return url;
   };
 }

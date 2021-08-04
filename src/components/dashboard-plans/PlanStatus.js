@@ -20,14 +20,15 @@ import {
   Grid,
   RadioGroup,
   FormControlLabel,
-  Radio,
-  Button
+  Radio
 } from '@material-ui/core';
 
+import { LoadingButton } from '@material-ui/lab';
 // import CheckoutDialog from './CheckoutDialog';
 
 // hooks
 import useAuth from '../../hooks/useAuth';
+import useAdmin from '../../hooks/useAdmin';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 
@@ -65,6 +66,7 @@ PlanStatus.propTypes = {
 export default function PlanStatus({ planProps }) {
   const theme = useTheme();
   const { user } = useAuth();
+  const { createCheckoutSession } = useAdmin();
   const dispatch = useDispatch();
 
   const { userList } = useSelector((state) => state.user);
@@ -73,7 +75,7 @@ export default function PlanStatus({ planProps }) {
   const [planPrice, setPlanPrice] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
 
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [expiredDate, setExpiredDate] = useState('');
   const [remainedDays, setRemainedDays] = useState(0);
@@ -92,11 +94,9 @@ export default function PlanStatus({ planProps }) {
   useEffect(() => {
     setActiveUsers(userList.length);
     if (planType === 'yearly') {
-      setTotalPrice(userList.length * 5 * 12);
       setPlanPrice(userList.length * 5);
       planProps(5);
     } else if (planType === 'monthly') {
-      setTotalPrice(userList.length * 7 * 12);
       setPlanPrice(userList.length * 7);
       planProps(7);
     }
@@ -106,8 +106,16 @@ export default function PlanStatus({ planProps }) {
     setPlanType(event.target.value);
   };
 
-  const handleClickCheckout = () => {
-    console.log('Hello');
+  const handleClickCheckout = async () => {
+    setIsSubmitting(true);
+    const payData = {
+      trialEnd: remainedDays,
+      quantity: activeUsers,
+      plan: planType
+    };
+    const url = await createCheckoutSession({ payData });
+    setIsSubmitting(false);
+    window.location.href = url;
   };
 
   return (
@@ -242,12 +250,9 @@ export default function PlanStatus({ planProps }) {
             </Grid>
             <Grid item xs={12} md={3}>
               <Box sx={{ py: 2, textAlign: 'center' }}>
-                {/* <CheckoutDialog
-                  freeDays={remainedDays}
-                  totalPrice={totalPrice}
-                  planType={planType}
-                /> */}
-                <Button
+                <LoadingButton
+                  type="button"
+                  pending={isSubmitting}
                   disabled={plan === 'PREMIUM' || plan === 'ENTERPRISE'}
                   variant="contained"
                   color="secondary"
@@ -257,7 +262,7 @@ export default function PlanStatus({ planProps }) {
                   sx={{ minWidth: 210 }}
                 >
                   Upgrade plan now
-                </Button>
+                </LoadingButton>
               </Box>
             </Grid>
           </Grid>
