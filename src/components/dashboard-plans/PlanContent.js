@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 // import { useTheme } from '@material-ui/core/styles';
 
 import { Container, Box, Grid } from '@material-ui/core';
@@ -9,7 +8,6 @@ import PricingPlanCard from './PricingPlanCard';
 
 export default function PlanContent() {
   // const theme = useTheme();
-
   const [plans, setPlans] = useState(PLANS);
 
   useEffect(() => {

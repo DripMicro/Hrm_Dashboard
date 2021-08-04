@@ -13,7 +13,8 @@ const initialState = {
   error: false,
   // get all user status by companyId
   companies: [],
-  userList: []
+  userList: [],
+  insights: []
 };
 
 const slice = createSlice({
@@ -41,6 +42,12 @@ const slice = createSlice({
     getUserListSuccess(state, action) {
       state.isLoading = false;
       state.userList = action.payload;
+    },
+
+    // GET USERLIST
+    getInsightsListSuccess(state, action) {
+      state.isLoading = false;
+      state.insights = action.payload;
     },
 
     // ON TOGGLE FOLLOW
@@ -96,6 +103,17 @@ export function getUserList() {
   };
 }
 
+export function getInsightsList() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/superadmin/insights');
+      dispatch(slice.actions.getInsightsListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
 // ----------------------------------------------------------------------
 // Update
 // ----------------------------------------------------------------------

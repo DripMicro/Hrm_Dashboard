@@ -279,3 +279,10 @@ export function createCheckoutSession(payData) {
     return url;
   };
 }
+
+export function updatePaidStatus(payData) {
+  const data = payData;
+  return async () => {
+    await axios.post('/api/payment/update-paid-status', data);
+  };
+}

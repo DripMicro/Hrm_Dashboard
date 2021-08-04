@@ -68,7 +68,6 @@ function initial() {
 
   // Company initialize
   Company.create({
-    id: 1111,
     domain: 'thimble.com',
     isActive: 1,
     isPaid: 1

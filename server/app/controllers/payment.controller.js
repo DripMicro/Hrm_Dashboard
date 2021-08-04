@@ -10,6 +10,7 @@ const express = require('express');
 const db = require('../models');
 
 const User = db.user;
+const Company = db.company;
 
 const config = require('../config/auth.config');
 
@@ -28,7 +29,7 @@ exports.createCheckoutSession = async (req, res) => {
   }
 
   const accessToken = authorization.split(' ')[1];
-  const { userId } = jwt.verify(accessToken, JWT_SECRET);
+  const { userId, companyId } = jwt.verify(accessToken, JWT_SECRET);
 
   const { email } = await User.findOne({ where: { id: userId } });
 
@@ -68,6 +69,9 @@ exports.createCheckoutSession = async (req, res) => {
 
   const customerId = customer.id;
 
+  await Company.update({ customerId }, { where: { id: companyId } });
+  console.log(customer);
+
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     payment_method_types: ['card'],
@@ -83,9 +87,24 @@ exports.createCheckoutSession = async (req, res) => {
     ],
     mode: 'subscription',
     allow_promotion_codes: true,
-    success_url: `${YOUR_DOMAIN}/dashboard/home`,
+    success_url: `${YOUR_DOMAIN}/dashboard/plans/${customerId}`,
     cancel_url: `${YOUR_DOMAIN}/dashboard/plans`
   });
   // res.redirect(303, session.url);
+
   res.status(200).send({ url: session.url });
+};
+
+exports.updatePaidStatus = async (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(400).send([]);
+  }
+
+  const accessToken = authorization.split(' ')[1];
+  const { companyId } = jwt.verify(accessToken, JWT_SECRET);
+  const { payData } = req.body;
+  const { planType, isPaid } = payData;
+  await Company.update({ planType, isPaid }, { where: { id: companyId } });
+  res.status(200).send({ message: 'success' });
 };

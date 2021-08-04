@@ -88,7 +88,7 @@ function applySortFilter(arrays, comparator, query) {
 export default function UserList() {
   // const theme = useTheme();
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  // const { userList } = useSelector((state) => state.user);
   const { companies } = useSelector((state) => state.superAdmin);
   const { updatePlan, updateIsManual } = useSuperAdmin();
   const [page, setPage] = useState(0);
@@ -348,7 +348,7 @@ export default function UserList() {
       <TablePagination
         rowsPerPageOptions={[10, 15, 25]}
         component="div"
-        count={userList.length}
+        count={companyList.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

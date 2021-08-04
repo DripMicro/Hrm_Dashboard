@@ -14,5 +14,6 @@ module.exports = (app) => {
     '/api/payment/create-checkout-session',
     controller.createCheckoutSession
   );
+  app.post('/api/payment/update-paid-status', controller.updatePaidStatus);
   // -----------------------------------------------------------------------------------
 };

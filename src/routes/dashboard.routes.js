@@ -30,6 +30,12 @@ const DashboardRoutes = {
       guard: SuperAdminGuard,
       component: lazy(() => import('../views/DashboardAllUserListPage'))
     },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.superadmin.insights,
+      guard: SuperAdminGuard,
+      component: lazy(() => import('../views/DashboardInsightsPage'))
+    },
     // GENERAL
     // ----------------------------------------------------------------------
     {
@@ -85,7 +91,12 @@ const DashboardRoutes = {
       guard: AdminGuard,
       component: lazy(() => import('../views/DashboardPlanPage'))
     },
-
+    {
+      exact: true,
+      path: PATH_DASHBOARD.admin.plansetting,
+      guard: AdminGuard,
+      component: lazy(() => import('../views/DashboardPlanPage'))
+    },
     // other
     // ----------------------------------------------------------------------
     {

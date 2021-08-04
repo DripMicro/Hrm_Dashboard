@@ -243,6 +243,7 @@ exports.getProfile = (req, res) => {
             expiredDay,
             isActive: company.isActive,
             isPaid: company.isPaid,
+            customerId: company.customerId,
             planType
           };
 

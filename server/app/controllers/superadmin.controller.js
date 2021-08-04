@@ -17,7 +17,6 @@ exports.getCompanyList = (req, res) => {
   Company.findAll().then(async (companies) => {
     const CompanyList = await getCompanies(companies);
     CompanyList.pop();
-    console.log('aaaaaa_-------->', CompanyList);
     res.status(200).send(CompanyList);
   });
 };
@@ -35,7 +34,6 @@ async function getCompanies(companies) {
         isSetBySuper
       } = company;
       if (id !== 1111) {
-        console.log(id, name, domain);
         const users = await User.findAll({ where: { companyId: id } });
         const offices = await Office.findAll({ where: { companyId: id } });
         const teams = await Team.findAll({ where: { companyId: id } });
@@ -60,7 +58,6 @@ async function getCompanies(companies) {
           adminName: `${adminInfo.firstname} ${adminInfo.lastname}`,
           adminEmail: adminInfo.email
         };
-        console.log('----------->', comObj);
         return comObj;
       }
     })
@@ -77,7 +74,6 @@ exports.getUserList = (req, res) => {
       }
     });
     const UserList = await getUsers(pUsers);
-    console.log(UserList);
     res.status(200).send(UserList);
   });
 };
@@ -106,7 +102,6 @@ async function getUsers(users) {
         teamNames.push({ name: team.name, color: team.color });
       });
       const companyInfo = await Company.findOne({ where: { id: companyId } });
-      console.log(companyInfo.domain, companyInfo.name, companyInfo.id);
       const companyName =
         companyInfo.name === null ? companyInfo.domain : companyInfo.name;
       const userObj = {
@@ -126,15 +121,44 @@ async function getUsers(users) {
 }
 
 exports.updatePlan = (req, res) => {
-  console.log('Here is updatePlan:', req.body);
   const { id, planType } = req.body;
   Company.update({ planType }, { where: { id } });
   res.status(200).send({ message: 'success' });
 };
 
 exports.updateIsManual = (req, res) => {
-  console.log('Here is updatePlan:', req.body);
   const { id, isSetBySuper } = req.body;
   Company.update({ isSetBySuper }, { where: { id } });
   res.status(200).send({ message: 'success' });
+};
+
+exports.getInsightList = (req, res) => {
+  Company.findAll().then((companies) => {
+    const companyList = [];
+    companies.map((company) => {
+      const today = new Date();
+      const createdDate = company.createdAt;
+
+      const oneDay = 1000 * 60 * 60 * 24;
+      const diffTime = Math.abs(today - createdDate);
+      const passedDays = Math.ceil(diffTime / oneDay);
+      const remainedDays = 15 - passedDays;
+      const tmpExpDate = new Date(createdDate);
+      const expiredDay = new Date(tmpExpDate.setDate(tmpExpDate.getDate() + 14))
+        .toISOString()
+        .split('T')[0];
+
+      const comObj = {
+        name: company.name,
+        domain: company.domain,
+        plans: company.planType,
+        trialDays: remainedDays,
+        endOn: expiredDay,
+        isPaid: company.isPaid,
+        passedDays
+      };
+      companyList.push(comObj);
+    });
+    res.status(200).send(companyList);
+  });
 };

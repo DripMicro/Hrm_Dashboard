@@ -5,7 +5,7 @@ import { CompanyContent } from '../components/dashboard-companies';
 
 // ----------------------------------------------------------------------
 
-export default function DirectoryPage() {
+export default function DashboardCompaniesPage() {
   return (
     <Page title="Thimble | Company List">
       <CompanyContent />

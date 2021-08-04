@@ -13,7 +13,9 @@ import {
   addStatus,
   // Directory
   addMemberList,
-  createCheckoutSession
+  // Payment
+  createCheckoutSession,
+  updatePaidStatus
 } from '../redux/slices/adminSetting';
 import { updateProfile } from '../redux/slices/user';
 
@@ -74,6 +76,8 @@ export default function useUserManage() {
 
     addMemberList: (memberList) => dispatch(addMemberList(memberList)), // in Directory by admin
 
-    createCheckoutSession: (payData) => dispatch(createCheckoutSession(payData)) // in Directory by admin
+    createCheckoutSession: (payData) =>
+      dispatch(createCheckoutSession(payData)), // in Directory by admin
+    updatePaidStatus: (payData) => dispatch(updatePaidStatus(payData)) // in Directory by admin
   };
 }

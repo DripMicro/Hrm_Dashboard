@@ -249,6 +249,7 @@ exports.signin = (req, res) => {
                 expiredDay,
                 isActive: company.isActive,
                 isPaid: company.isPaid,
+                customerId: company.customerId,
                 planType
               };
 
@@ -344,6 +345,7 @@ async function generateUser(userData, role, cId, isNew) {
     roles: ROLES[role - 1].toUpperCase(),
     offices: [officeId],
     teams: [],
+    customerId: null,
     companyId: cId
   };
 

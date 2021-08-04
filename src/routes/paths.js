@@ -30,7 +30,8 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   superadmin: {
     companies: path(ROOTS_DASHBOARD, '/companylist'),
-    allusers: path(ROOTS_DASHBOARD, '/allusers')
+    allusers: path(ROOTS_DASHBOARD, '/allusers'),
+    insights: path(ROOTS_DASHBOARD, '/insights')
   },
   general: {
     home: path(ROOTS_DASHBOARD, '/home'),
@@ -43,7 +44,8 @@ export const PATH_DASHBOARD = {
     teams: path(ROOTS_DASHBOARD, '/teams'),
     organization: path(ROOTS_DASHBOARD, '/organization'),
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
-    plans: path(ROOTS_DASHBOARD, '/plans')
+    plans: path(ROOTS_DASHBOARD, '/plans'),
+    plansetting: path(ROOTS_DASHBOARD, '/plans/:sessionId')
   },
   other: {
     slack: path(ROOTS_DASHBOARD, '/slack'),

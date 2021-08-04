@@ -28,7 +28,8 @@ const ICONS = {
   slack: getIcon('slack', 'app'),
   invite: getIcon('invite', 'app'),
   mobile: getIcon('mobile-phone-with-arrow', 'app'),
-  contact: getIcon('online-support', 'app')
+  contact: getIcon('online-support', 'app'),
+  insights: getIcon('insights', 'superadmin')
 };
 
 const sidebarConfig = [
@@ -46,6 +47,11 @@ const sidebarConfig = [
         title: 'User List',
         href: PATH_DASHBOARD.superadmin.allusers,
         icon: ICONS.teams
+      },
+      {
+        title: 'Insights',
+        href: PATH_DASHBOARD.superadmin.insights,
+        icon: ICONS.insights
       }
     ]
   },

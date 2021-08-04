@@ -13,6 +13,7 @@ module.exports = (app) => {
 
   app.get('/api/superadmin/companies', controller.getCompanyList);
   app.get('/api/superadmin/allusers', controller.getUserList);
+  app.get('/api/superadmin/insights', controller.getInsightList);
 
   // --------------------- Super admin Setting List section --------------------------------------------------------------
   app.post('/api/superadmin/updatePlan', controller.updatePlan);

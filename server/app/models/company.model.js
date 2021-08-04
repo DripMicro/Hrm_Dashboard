@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
     isPaid: {
       type: Sequelize.INTEGER
     },
+    customerId: {
+      type: Sequelize.STRING
+    },
     isSetBySuper: {
       type: Sequelize.INTEGER
     },

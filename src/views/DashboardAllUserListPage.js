@@ -5,7 +5,7 @@ import { AllUsersContent } from '../components/dashboard-allusers';
 
 // ----------------------------------------------------------------------
 
-export default function DirectoryPage() {
+export default function DashboardAllUserListPage() {
   return (
     <Page title="Thimble | All Users">
       <AllUsersContent />

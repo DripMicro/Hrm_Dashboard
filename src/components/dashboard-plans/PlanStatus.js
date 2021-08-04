@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 
 import React, { useEffect, useState } from 'react';
 
@@ -65,8 +66,9 @@ PlanStatus.propTypes = {
 
 export default function PlanStatus({ planProps }) {
   const theme = useTheme();
+  const { sessionId } = useParams();
   const { user } = useAuth();
-  const { createCheckoutSession } = useAdmin();
+  const { createCheckoutSession, updatePaidStatus } = useAdmin();
   const dispatch = useDispatch();
 
   const { userList } = useSelector((state) => state.user);
@@ -82,6 +84,21 @@ export default function PlanStatus({ planProps }) {
   const [plan, setPlan] = useState('');
 
   useEffect(() => {
+    console.log(sessionId);
+    if (sessionId !== undefined && user.customerId !== null) {
+      if (sessionId === user.customerId) {
+        setPlan('PREMIUM');
+        const payData = {
+          planType: 'premium',
+          isPaid: 1
+        };
+        updatePaidStatus({ payData });
+      }
+    }
+  }, [sessionId, user]);
+
+  useEffect(() => {
+    console.log('UserInfo:', user);
     setExpiredDate(user.expiredDay);
     setRemainedDays(user.remainedDays);
     setPlan(user.planType.toUpperCase());
