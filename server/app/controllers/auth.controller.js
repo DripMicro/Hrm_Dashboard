@@ -178,7 +178,7 @@ exports.signin = (req, res) => {
           }
 
           console.log('CompanyId:---->', userData.companyId);
-          if (userData.companyId === 1111) {
+          if (userData.companyId === 1) {
             const user = {
               id: userData.id,
               firstname: userData.firstname,

@@ -62,7 +62,7 @@ function initial() {
     lastname: 'Riss',
     email: 'superadmin@thimble.com',
     roleId: 1,
-    companyId: 1111,
+    companyId: 1,
     password: bcrypt.hashSync('superadmin', 8)
   });
 

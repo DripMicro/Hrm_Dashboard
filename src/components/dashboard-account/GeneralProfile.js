@@ -135,7 +135,15 @@ export default function AccountGeneral() {
         const officeId = officeIds;
         const teamId = teamIds;
 
-        await updateProfile({ ...values, officeId, teamId });
+        console.log('This is photoURL:L', values);
+        const tmpPhoto =
+          values.photoURL === null ? '/static/uploads/1.jpg' : values.photoURL;
+        await updateProfile({
+          ...values,
+          photoURL: tmpPhoto,
+          officeId,
+          teamId
+        });
         enqueueSnackbar('Update success', { variant: 'success' });
         if (isMountedRef.current) {
           setSubmitting(false);

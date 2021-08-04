@@ -16,7 +16,8 @@ const { ROLES } = db;
 exports.getCompanyList = (req, res) => {
   Company.findAll().then(async (companies) => {
     const CompanyList = await getCompanies(companies);
-    CompanyList.pop();
+    console.log('------------>', CompanyList);
+    CompanyList.shift();
     res.status(200).send(CompanyList);
   });
 };
@@ -33,7 +34,7 @@ async function getCompanies(companies) {
         isPaid,
         isSetBySuper
       } = company;
-      if (id !== 1111) {
+      if (id !== 1) {
         const users = await User.findAll({ where: { companyId: id } });
         const offices = await Office.findAll({ where: { companyId: id } });
         const teams = await Team.findAll({ where: { companyId: id } });
@@ -69,7 +70,7 @@ exports.getUserList = (req, res) => {
   User.findAll().then(async (users) => {
     const pUsers = [];
     users.map((user) => {
-      if (user.companyId !== 1111) {
+      if (user.companyId !== 1) {
         pUsers.push(user);
       }
     });
@@ -136,28 +137,32 @@ exports.getInsightList = (req, res) => {
   Company.findAll().then((companies) => {
     const companyList = [];
     companies.map((company) => {
-      const today = new Date();
-      const createdDate = company.createdAt;
+      if (company.id !== 1) {
+        const today = new Date();
+        const createdDate = company.createdAt;
 
-      const oneDay = 1000 * 60 * 60 * 24;
-      const diffTime = Math.abs(today - createdDate);
-      const passedDays = Math.ceil(diffTime / oneDay);
-      const remainedDays = 15 - passedDays;
-      const tmpExpDate = new Date(createdDate);
-      const expiredDay = new Date(tmpExpDate.setDate(tmpExpDate.getDate() + 14))
-        .toISOString()
-        .split('T')[0];
+        const oneDay = 1000 * 60 * 60 * 24;
+        const diffTime = Math.abs(today - createdDate);
+        const passedDays = Math.ceil(diffTime / oneDay);
+        const remainedDays = 15 - passedDays;
+        const tmpExpDate = new Date(createdDate);
+        const expiredDay = new Date(
+          tmpExpDate.setDate(tmpExpDate.getDate() + 14)
+        )
+          .toISOString()
+          .split('T')[0];
 
-      const comObj = {
-        name: company.name,
-        domain: company.domain,
-        plans: company.planType,
-        trialDays: remainedDays,
-        endOn: expiredDay,
-        isPaid: company.isPaid,
-        passedDays
-      };
-      companyList.push(comObj);
+        const comObj = {
+          name: company.name,
+          domain: company.domain,
+          plans: company.planType,
+          trialDays: remainedDays,
+          endOn: expiredDay,
+          isPaid: company.isPaid,
+          passedDays
+        };
+        companyList.push(comObj);
+      }
     });
     res.status(200).send(companyList);
   });

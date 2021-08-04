@@ -20,7 +20,7 @@ import {
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getCompanyList, getInsightsList } from '../../redux/slices/superAdmin';
-import useSuperAdmin from '../../hooks/useSuperAdmin';
+
 // components
 import Label from '../Label';
 import Scrollbar from '../Scrollbar';
@@ -77,7 +77,6 @@ function applySortFilter(arrays, comparator, query) {
 }
 
 export default function UserList() {
-  const theme = useTheme();
   const dispatch = useDispatch();
   const { insights, companies } = useSelector((state) => state.superAdmin);
   const [page, setPage] = useState(0);
@@ -235,8 +234,12 @@ export default function UserList() {
                           {isPaid === 0 ? 'UNPAID' : 'PAID'}
                         </Label>
                       </TableCell>
-                      <TableCell align="left">{trialDays}</TableCell>
-                      <TableCell align="left">{endOn}</TableCell>
+                      <TableCell align="left">
+                        {plans === 'trial' ? trialDays : '0'}
+                      </TableCell>
+                      <TableCell align="left">
+                        {plans === 'trial' ? endOn : 'Infinity'}
+                      </TableCell>
                       <TableCell align="left">{passedDays}</TableCell>
                     </TableRow>
                   );
