@@ -33,8 +33,9 @@ exports.getOrganizations = async (req, res) => {
   // featching the data;
   const companyInfo = await Company.findOne({ where: { id: companyId } });
   const orgInfo = await Organizations.findOne({
-    where: { id: companyId }
+    where: { companyId }
   });
+  console.log('this is orgInfo', orgInfo, companyId);
   let workingDaysInfo = await WorkingDays.findOne({
     where: { companyId }
   });
@@ -44,7 +45,6 @@ exports.getOrganizations = async (req, res) => {
   workingDaysInfo.map((item) => {
     workDayInfo.push(Number(item));
   });
-  console.log('this is workingday info', workDayInfo);
 
   const basicListInfo = await BasicList.findAll({ where: { companyId } });
   const customListInfo = await CustomList.findAll({ where: { companyId } });
@@ -159,7 +159,7 @@ exports.updateOrganizations = async (req, res) => {
       isHalfDays: features.isHalfDays,
       isCities: features.isCities
     },
-    { where: { id: companyId } }
+    { where: { companyId } }
   );
   const ids = calendar.workDays.toString();
   await WorkingDays.update({ isWorking: ids }, { where: { companyId } });
