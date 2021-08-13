@@ -17,7 +17,7 @@ import { LoadingButton } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getOfficeList, getTeamList } from '../../redux/slices/adminSetting';
-// import { getProfile } from '../../redux/slices/user';
+
 // hooks
 import useAuth from '../../hooks/useAuth';
 import useAdmin from '../../hooks/useAdmin';
@@ -47,9 +47,6 @@ export default function AccountGeneral() {
   const { user } = useAuth();
   const dispatch = useDispatch();
   const { officeList, teamList } = useSelector((state) => state.adminSetting);
-  // const { myProfile } = useSelector((state) => state.user);
-
-  // const [user, setUser] = useState({});
 
   const [offices, setOffices] = useState([]);
   const [officeIds, setOfficeIds] = useState([]);
