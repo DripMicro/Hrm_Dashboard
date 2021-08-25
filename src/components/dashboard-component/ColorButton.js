@@ -24,7 +24,6 @@ export default function ColorButton({ color, changeColorProps, index }) {
   const [backgroundColor, setBackgroundColor] = useState(color);
 
   useEffect(() => {
-    console.log('OK:', color);
     setBackgroundColor(color);
   }, [color]);
 

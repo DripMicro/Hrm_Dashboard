@@ -246,7 +246,6 @@ export default function UserList() {
                             id="demo-simple-select-outlined"
                             value={planType}
                             onChange={(e) => {
-                              console.log(id, index + 1);
                               const tmpCompanies = [];
                               let tmpCompany = {};
                               companyList.map((company) => {

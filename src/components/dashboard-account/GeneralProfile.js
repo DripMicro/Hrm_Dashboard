@@ -132,7 +132,6 @@ export default function AccountGeneral() {
         const officeId = officeIds;
         const teamId = teamIds;
 
-        console.log('This is photoURL:L', values);
         const tmpPhoto =
           values.photoURL === null ? '/static/uploads/1.jpg' : values.photoURL;
         await updateProfile({

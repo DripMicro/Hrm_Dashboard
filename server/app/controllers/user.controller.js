@@ -267,17 +267,8 @@ exports.addMemberList = (req, res) => {
   const role = MEMBER;
 
   memberList.map((member) => {
-    console.log(member.email);
     User.findOne({ where: { email: member.email } }).then((userData) => {
       if (userData === null) {
-        console.log(
-          'UserData:',
-          member.firstname,
-          member.lastname,
-          member.prefferedname,
-          member.jobtitle,
-          member.departmentname
-        );
         User.create({
           firstname: member.firstname === null ? '' : member.firstname,
           lastname: member.lastname === null ? '' : member.lastname,
@@ -308,8 +299,6 @@ async function generateUser(userData, cId, officeIds, teamIds) {
     companyId: cId
   });
 
-  // await Calendar.setUser(userData.id);
-  console.log('OfficeIds:', officeIds);
   // set user office
   await userData.setOffices(officeIds);
   await userData.setTeams(teamIds);

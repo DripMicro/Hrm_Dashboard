@@ -80,7 +80,6 @@ export default function SchedulePopover(props) {
     setOpen(false);
     setIcon(LANGS[value].icon);
     setSelected(value);
-    console.log(LANGS[value].icon);
   };
   return (
     <ScheduleItem>

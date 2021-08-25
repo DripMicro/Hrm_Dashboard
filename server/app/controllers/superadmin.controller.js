@@ -16,7 +16,6 @@ const { ROLES } = db;
 exports.getCompanyList = (req, res) => {
   Company.findAll().then(async (companies) => {
     const CompanyList = await getCompanies(companies);
-    console.log('------------>', CompanyList);
     CompanyList.shift();
     res.status(200).send(CompanyList);
   });

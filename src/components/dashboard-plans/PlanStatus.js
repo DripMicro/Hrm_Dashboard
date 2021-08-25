@@ -84,7 +84,6 @@ export default function PlanStatus({ planProps }) {
   const [plan, setPlan] = useState('');
 
   useEffect(() => {
-    console.log(sessionId);
     if (sessionId !== undefined && user.customerId !== null) {
       if (sessionId === user.customerId) {
         setPlan('PREMIUM');
@@ -98,7 +97,6 @@ export default function PlanStatus({ planProps }) {
   }, [sessionId, user]);
 
   useEffect(() => {
-    console.log('UserInfo:', user);
     setExpiredDate(user.expiredDay);
     setRemainedDays(user.remainedDays);
     setPlan(user.planType.toUpperCase());

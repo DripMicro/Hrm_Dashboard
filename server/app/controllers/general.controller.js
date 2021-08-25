@@ -111,7 +111,6 @@ exports.updateSchedule = (req, res) => {
 async function getUsers(users) {
   const resData = [];
   for (let i = 0; i < users.length; i += 1) {
-    console.log('Console--------> A');
     const teams = await users[i].getTeams();
     const teamIds = [];
     teams.map((team) => {
@@ -123,7 +122,6 @@ async function getUsers(users) {
       name: `${users[i].firstname} ${users[i].lastname}`,
       teamIds
     };
-    console.log('----------------------------->', userObj);
     resData.push(userObj);
   }
   return resData;

@@ -125,7 +125,6 @@ export default function DirectoryContent() {
       setHasError(true);
       setErrorContent('The email is duplicated!');
     } else {
-      console.log(members);
       const memberList = members;
       addMemberList(memberList);
       setTimeout(() => {
@@ -138,7 +137,6 @@ export default function DirectoryContent() {
   };
 
   const handleHasError = () => {
-    console.log('Error is seet');
     setHasError(false);
   };
 

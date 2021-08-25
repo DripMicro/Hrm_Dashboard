@@ -40,7 +40,6 @@ export default function OrganizationContent() {
 
   useEffect(() => {
     const { result } = organizations;
-    console.log(result);
     if (result !== undefined) {
       setCompany(result.company);
       setCalendar(result.calendar);

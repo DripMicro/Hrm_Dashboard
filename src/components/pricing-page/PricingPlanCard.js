@@ -46,7 +46,6 @@ export default function PricingPlanCard({ card, index }) {
     backColor
   } = card;
 
-  console.log(backColor);
   return (
     <RootStyle
       sx={{

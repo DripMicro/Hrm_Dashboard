@@ -202,8 +202,8 @@ export default function WeekList({
                       <Typography variant="body2" sx={{ py: 1.2, px: 0.5 }}>
                         {item.officeInfos.schTitle}{' '}
                         <Typography variant="caption">
-                          ({item.officeInfos.capacity}/
-                          {item.officeInfos.users.length})
+                          ({item.officeInfos.users.length}/
+                          {item.officeInfos.capacity})
                         </Typography>
                       </Typography>
                     </Box>

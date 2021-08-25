@@ -56,10 +56,6 @@ export default function DayScheduleButton({
 
   const [occupancy, setOccupancy] = useState(0);
 
-  // useEffect(() => {
-  //   console.log('IsActive:', isActive);
-  // }, [isActive]);
-
   useEffect(() => {
     if (officeInfo.length > 0) {
       officeInfo.map((office) => {

@@ -51,11 +51,14 @@ export default function CalendarContent() {
   const [todayTitle, setTodayTitle] = useState('');
 
   const [userInfo, setUserInfo] = useState({});
+
   // calendar setting
   const [cToday, setCToday] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [allStatuses, setAllStatuses] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
+
+  const [isWorking, setIsWorking] = useState([]);
 
   // right side bar user setting
   const [scheduleUsers, setScheduleUsers] = useState([]);
@@ -107,6 +110,8 @@ export default function CalendarContent() {
 
   useEffect(() => {
     if (calendar.length > 0) {
+      const today = new Date().getDate();
+      const tMonth = new Date().getMonth();
       const yearData = [];
       calendar.map((months, mIndex) => {
         const curr = new Date();
@@ -118,6 +123,16 @@ export default function CalendarContent() {
         thisMonth.map((mDay, dIndex) => {
           curr.setDate(dIndex + 1);
           const dayListIndex = curr.getDay() - 1 < 0 ? 6 : curr.getDay() - 1;
+
+          // eslint-disable-next-line prettier/prettier
+          const isAvailable = tMonth < mIndex ? true : today <= dIndex + 1 && tMonth === mIndex;
+
+          let isActive = false;
+
+          if (isWorking[curr.getDay()]) {
+            isActive = isAvailable;
+          }
+
           const dayObj = {
             id: dIndex + 1,
             weekTitle: `${WeekListTitles[dayListIndex]} ${
@@ -129,7 +144,8 @@ export default function CalendarContent() {
               afternoon: { id: mDay.afternoon.id, type: mDay.afternoon.type }
             },
             halfday: mDay.isHalf,
-            work: mDay.isWork
+            work: mDay.isWork,
+            isActive
           };
           monthData.push(dayObj);
         });
@@ -138,7 +154,7 @@ export default function CalendarContent() {
 
       setCalendarProps(yearData);
     }
-  }, [calendar]);
+  }, [calendar, isWorking]);
 
   useEffect(() => {
     const OfficeStatus = [];
@@ -169,7 +185,25 @@ export default function CalendarContent() {
 
   useEffect(() => {
     if (organizations.result !== undefined) {
-      const { statuses } = organizations.result;
+      const { statuses, calendar } = organizations.result;
+
+      const { workDays } = calendar;
+
+      let wDays = [...workDays];
+      wDays = wDays.sort();
+
+      const isWorkingArr = [];
+
+      for (let i = 0; i < 7; i += 1) {
+        let isWorking = false;
+        wDays.map((day) => {
+          if (i === day) isWorking = true;
+        });
+        if (isWorking) isWorkingArr.push(1);
+        else isWorkingArr.push(0);
+      }
+
+      setIsWorking([...isWorkingArr]);
 
       const schedules = [];
       const { basicList, customList } = statuses;
@@ -326,6 +360,7 @@ export default function CalendarContent() {
             allStatuses={allStatuses}
             schedule={schedule}
             daystatus={calendarProps}
+            isWorkingArr={isWorking}
             viewDetailByClick={handleClickShowDetail}
           />
         </Container>

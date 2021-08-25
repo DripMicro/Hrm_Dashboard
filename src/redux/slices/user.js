@@ -162,7 +162,6 @@ export function updateProfile({
     teamId
   };
   return async () => {
-    const response = await axios.post('/api/user/updateProfile', data);
-    console.log(response);
+    await axios.post('/api/user/updateProfile', data);
   };
 }

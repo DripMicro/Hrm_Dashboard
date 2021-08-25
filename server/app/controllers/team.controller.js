@@ -42,7 +42,6 @@ exports.getTeamList = (req, res) => {
           });
         }
       });
-      console.log(teamList);
       res.status(200).send(teamList);
     });
   });
@@ -85,7 +84,6 @@ exports.deleteTeam = (req, res) => {
 
 exports.updateTeamList = (req, res) => {
   const teamList = req.body;
-  console.log(teamList);
   teamList.map((team) => {
     const updateValues = {
       color: team.color,
@@ -120,7 +118,6 @@ exports.getTManagerList = (req, res) => {
       type: sequelize.QueryTypes.SELECT
     })
     .then((users) => {
-      console.log(users);
       res.status(200).send(users);
     });
 };

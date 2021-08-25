@@ -177,7 +177,6 @@ exports.signin = (req, res) => {
             teamIds.push(`${teams[i].id}`);
           }
 
-          console.log('CompanyId:---->', userData.companyId);
           if (userData.companyId === 1) {
             const user = {
               id: userData.id,
@@ -348,8 +347,6 @@ async function generateUser(userData, role, cId, isNew) {
     customerId: null,
     companyId: cId
   };
-
-  console.log('This is User:', user);
 
   const sql = `
     UPDATE users

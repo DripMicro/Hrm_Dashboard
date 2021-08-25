@@ -55,25 +55,15 @@ export default function RightSideBar({
   const theme = useTheme();
 
   const [icon, setIcon] = useState('');
-  const [day, setDay] = useState(0);
-  const [month, setMonth] = useState(0);
   const [isHalf, setIsHalf] = useState(false);
   const [isWork, setIsWork] = useState(false);
   const [detail, setDetail] = useState({});
   const [weekTitle, setWeekTitle] = useState('');
   const [notStatusYet, setNotStatusYet] = useState(false);
   const [sTitle, setTitle] = useState('');
-  const [today, setToday] = useState(0);
-  const [thisMonth, setThisMonth] = useState(0);
 
-  useEffect(() => {
-    setToday(new Date().getDate() - 1);
-    setThisMonth(new Date().getMonth());
-  }, []);
+  const [isActive, setIsActive] = useState(false);
 
-  useEffect(() => {
-    // console.log('Day, Today', day, today);
-  }, [day, today]);
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
       onCloseSidebar();
@@ -83,14 +73,13 @@ export default function RightSideBar({
   useEffect(() => {
     if (daystatus.length > 0 && schedule.length > 0) {
       daystatus.map((months, mIndex) => {
-        months.map((day, dIndex) => {
-          if (mIndex === cToday.month && dIndex === cToday.day - 1) {
-            setDay(day.id);
-            setMonth(cToday.month);
+        months.map((day) => {
+          if (mIndex === cToday.month && day.id === cToday.day) {
             setIcon(day.icon);
             setIsHalf(day.halfday);
             setIsWork(day.work);
             setWeekTitle(day.weekTitle);
+            setIsActive(day.isActive);
             const detailInfo = {
               morning: {
                 id: day.detail.morning.id,
@@ -142,9 +131,7 @@ export default function RightSideBar({
           iconProps={changeIcon}
           statusTitle={sTitle}
           notStatus={notStatusYet}
-          isActive={
-            thisMonth < month ? true : today < day && thisMonth === month
-          }
+          isActive={isActive}
         />
         <Box m={5} />
         <UserScheduleStatus

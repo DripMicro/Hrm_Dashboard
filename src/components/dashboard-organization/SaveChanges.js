@@ -41,7 +41,6 @@ export default function SaveChange({ setCancelProps, saveDataProps }) {
   const handleChangedSaveAll = async () => {
     setIsSubmitting(true);
     const updatedOrg = saveData;
-    console.log(updatedOrg);
     await updateOrganizations({ updatedOrg });
     enqueueSnackbar('Update success', { variant: 'success' });
     setIsSubmitting(false);

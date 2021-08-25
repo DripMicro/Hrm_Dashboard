@@ -1,6 +1,7 @@
+/* eslint-disable array-callback-return */
 import PropTypes from 'prop-types';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { useTheme } from '@material-ui/core/styles';
 
@@ -27,14 +28,6 @@ export default function WeekSchedule({
   const changeIcon = (icon1, icon2, detail1, detail2, status, index) => {
     iconProps(icon1, icon2, detail1, detail2, status, index);
   };
-
-  const [today, setToday] = useState(0);
-  const [thisMonth, setThisMonth] = useState(0);
-
-  useEffect(() => {
-    setToday(new Date().getDate() - 2);
-    setThisMonth(new Date().getMonth());
-  }, []);
 
   return (
     <Card>
@@ -70,12 +63,7 @@ export default function WeekSchedule({
               weekTitle={day.weekTitle}
               schedule={schedule}
               dayIndex={index}
-              // isActive={day.id >= today && day.month >= thisMonth}
-              isActive={
-                thisMonth < day.month
-                  ? true
-                  : today < day.id && thisMonth === day.month
-              }
+              isActive={day.isActive}
               iconProps={changeIcon}
             />
           ))}

@@ -80,7 +80,6 @@ export function login({ email, password }) {
       password
     });
     const { accessToken, user } = response.data;
-    console.log('UserInfo', user);
     setSession(accessToken);
     dispatch(slice.actions.loginSuccess({ user }));
   };
@@ -98,7 +97,6 @@ export function register({ email, password, firstname, lastname }) {
   return async (dispatch) => {
     const response = await axios.post('/api/auth/signup', data);
     const { accessToken, user } = response.data;
-    console.log('RegisterInfo', user);
     setSession(accessToken);
     dispatch(slice.actions.registerSuccess({ user }));
   };
@@ -111,8 +109,7 @@ export function resetPassword({ password, newPassword, newConfirmPassword }) {
     password
   };
   return async () => {
-    const response = await axios.post('/api/auth/resetPasword', data);
-    console.log('ResetPassword', response);
+    await axios.post('/api/auth/resetPasword', data);
   };
 }
 
@@ -137,7 +134,6 @@ export function getInitialize() {
         setSession(accessToken);
 
         const response = await axios.get('/api/user/profile');
-        console.log('Response Initial:', response);
         dispatch(
           slice.actions.getInitialize({
             isAuthenticated: true,

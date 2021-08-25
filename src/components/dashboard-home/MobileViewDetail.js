@@ -42,21 +42,14 @@ export default function MobileViewDetail({
   const { pathname } = useLocation();
 
   const [icon, setIcon] = useState('');
-  const [day, setDay] = useState(0);
-  const [month, setMonth] = useState(0);
   const [isHalf, setIsHalf] = useState(false);
   const [isWork, setIsWork] = useState(false);
   const [detail, setDetail] = useState({});
   const [weekTitle, setWeekTitle] = useState('');
   const [notStatusYet, setNotStatusYet] = useState(false);
   const [sTitle, setTitle] = useState('');
-  const [today, setToday] = useState(0);
-  const [thisMonth, setThisMonth] = useState(0);
 
-  useEffect(() => {
-    setToday(new Date().getDate() - 1);
-    setThisMonth(new Date().getMonth());
-  }, []);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (isOpenSidebar && onCloseSidebar) {
@@ -68,12 +61,11 @@ export default function MobileViewDetail({
     if (daystatus.length > 0 && schedule.length > 0) {
       daystatus.map((day, dIndex) => {
         if (dayIndex === dIndex) {
-          setDay(day.id);
-          setMonth(day.month);
           setIcon(day.icon);
           setIsHalf(day.halfday);
           setIsWork(day.work);
           setWeekTitle(day.weekTitle);
+          setIsActive(day.isActive);
           const detailInfo = {
             morning: {
               id: day.detail.morning.id,
@@ -141,7 +133,7 @@ export default function MobileViewDetail({
             iconProps={changeIcon}
             statusTitle={sTitle}
             notStatus={notStatusYet}
-            isActive={day >= today && month >= thisMonth}
+            isActive={isActive}
           />
           <Box m={5} />
           <UserScheduleStatus

@@ -120,7 +120,6 @@ export function getInsightsList() {
 
 export function updatePlan({ data }) {
   return async () => {
-    console.log('Here is redux:', data);
     await axios.post('/api/superadmin/updatePlan', data);
   };
 }
@@ -128,7 +127,6 @@ export function updatePlan({ data }) {
 export function updateIsManual({ manualData }) {
   const data = manualData;
   return async () => {
-    console.log('Here is redux:', data);
     await axios.post('/api/superadmin/updateIsManual', data);
   };
 }

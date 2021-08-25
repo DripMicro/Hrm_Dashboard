@@ -36,7 +36,15 @@ const SpaceStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(4)
 }));
 
-function createObj(mIndex, mDay, day, weekCount, curr, scheduleUsers) {
+function createObj(
+  mIndex,
+  mDay,
+  day,
+  weekCount,
+  curr,
+  scheduleUsers,
+  isWorkingArr
+) {
   const w = weekCount % 7;
   let isOffice = false;
   let officeInfos = [];
@@ -49,6 +57,21 @@ function createObj(mIndex, mDay, day, weekCount, curr, scheduleUsers) {
       officeInfos = scheUser;
     }
   });
+
+  const today = new Date().getDate();
+  const thisMonth = new Date().getMonth();
+
+  const isAvailable =
+    thisMonth < curr.getMonth()
+      ? true
+      : today <= mIndex + 1 && thisMonth === curr.getMonth();
+
+  let isActive = false;
+
+  if (isWorkingArr[w]) {
+    isActive = isAvailable;
+  }
+
   const dayObj = {
     id: mIndex,
     month: curr.getMonth(),
@@ -63,7 +86,8 @@ function createObj(mIndex, mDay, day, weekCount, curr, scheduleUsers) {
     halfday: mDay.isHalf,
     work: mDay.isWork,
     isOffice,
-    officeInfos
+    officeInfos,
+    isActive
   };
   return dayObj;
 }
@@ -392,6 +416,17 @@ export default function HomeContent() {
       const fday = new Date(fMonth.setDate(first)).getDate();
       const eday = new Date(eMonth.setDate(last)).getDate();
 
+      const isWorkingArr = [];
+
+      for (let i = 0; i < 7; i += 1) {
+        let isWorking = false;
+        wDays.map((day) => {
+          if (i === day) isWorking = true;
+        });
+        if (isWorking) isWorkingArr.push(1);
+        else isWorkingArr.push(0);
+      }
+
       const thisWeekSchedules = [];
 
       const tmpDate = new Date();
@@ -415,7 +450,7 @@ export default function HomeContent() {
               day
             );
             // eslint-disable-next-line prettier/prettier
-            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth, scheduleUsers);
+            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth, scheduleUsers, isWorkingArr);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
@@ -435,7 +470,7 @@ export default function HomeContent() {
               day
             );
             // eslint-disable-next-line prettier/prettier
-            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth, scheduleUsers);
+            const dayObj = createObj(mIndex, mDay, day, weekCount, fMonth, scheduleUsers, isWorkingArr);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
@@ -454,7 +489,7 @@ export default function HomeContent() {
               day
             );
             // eslint-disable-next-line prettier/prettier
-            const dayObj = createObj(mIndex, mDay, day, weekCount, eMonth, scheduleUsers);
+            const dayObj = createObj(mIndex, mDay, day, weekCount, eMonth, scheduleUsers, isWorkingArr);
             thisWeekSchedules.push(dayObj);
             weekCount += 1;
           }
@@ -570,7 +605,6 @@ export default function HomeContent() {
       dispatch(getAllStatusById());
       dispatch(getCalendar());
     });
-    // setThisWeekSchedule([...ThisWeekSchedule]);
   };
 
   const initShowDetail = (day, selectedIndex) => {

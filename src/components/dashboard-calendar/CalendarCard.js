@@ -77,8 +77,7 @@ function getDaybyWeek(year, month) {
 }
 
 // eslint-disable-next-line prettier/prettier
-function getCalendar(days, status, allStatus, schedules, month, year) {
-  console.log('Month', month);
+function getCalendar(days, status, allStatus, schedules, isWorkingArr, month, year) {
   const monthCalendar = [];
 
   days.map((weekdays) => {
@@ -140,6 +139,20 @@ function getCalendar(days, status, allStatus, schedules, month, year) {
             }
           });
 
+          const today = new Date().getDate();
+          const thisMonth = new Date().getMonth();
+
+          const isAvailable =
+            thisMonth < month
+              ? true
+              : today <= weekdays[dIndex] + 1 && thisMonth === month;
+
+          let isActive = false;
+
+          if (isWorkingArr[(dIndex + 1) % 7]) {
+            isActive = isAvailable;
+          }
+
           dayObj.year = year;
           dayObj.month = month;
           dayObj.day = weekdays[dIndex];
@@ -147,6 +160,7 @@ function getCalendar(days, status, allStatus, schedules, month, year) {
           dayObj.icon = status[i].icon;
           dayObj.halfday = status[i].halfday;
           dayObj.selected = false;
+          dayObj.isActive = isActive;
           break;
         }
       }
@@ -164,13 +178,6 @@ function getFirstDay(y, m) {
 function getMonthNamebyNumber(month) {
   return Months[month];
 }
-CalendarCard.propTypes = {
-  allStatuses: PropTypes.array,
-  schedule: PropTypes.array,
-  daystatus: PropTypes.array,
-  officeFilterId: PropTypes.number,
-  viewDetailByClick: PropTypes.func
-};
 
 // styling conponent
 const GridContainer = styled('div')(() => ({
@@ -181,11 +188,21 @@ const GridItem = styled('div')(() => ({
   flex: 1
 }));
 
+CalendarCard.propTypes = {
+  allStatuses: PropTypes.array,
+  schedule: PropTypes.array,
+  daystatus: PropTypes.array,
+  officeFilterId: PropTypes.number,
+  isWorkingArr: PropTypes.array,
+  viewDetailByClick: PropTypes.func
+};
+
 export default function CalendarCard({
   daystatus,
   allStatuses,
   schedule,
   officeFilterId,
+  isWorkingArr,
   viewDetailByClick
 }) {
   const theme = useTheme();
@@ -203,14 +220,6 @@ export default function CalendarCard({
   const [isDisableBack, setIsDisableBack] = useState(false);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
-  const [today, setToday] = useState(0);
-  const [thisMonth, setThisMonth] = useState(0);
-
-  useEffect(() => {
-    setToday(new Date().getDate() - 1);
-    setThisMonth(new Date().getMonth());
-    console.log(new Date().getMonth());
-  }, []);
 
   useEffect(() => {
     dispatch(getOrganizations());
@@ -238,21 +247,20 @@ export default function CalendarCard({
     // was changed regarding allStatuses, schedule
     if (monthData.length > 0) {
       const days = getDaybyWeek(year, month);
-      // console.log('Calendar', calendar);
       const calendarInfo = getCalendar(
         days,
         monthData[month],
         allStatuses,
         schedule,
+        isWorkingArr,
         month,
         year
       );
 
       setCalendar(calendarInfo);
-
-      console.log('CalendarInfo:', calendarInfo, today, thisMonth, month);
     }
-  }, [daystatus, month, year, allStatuses, schedule]);
+  }, [daystatus, month, year, isWorkingArr]);
+  // }, [daystatus, month, year, allStatuses, schedule]);
 
   useEffect(() => {
     if (count < max) {
@@ -301,7 +309,6 @@ export default function CalendarCard({
         if (item.day === day) agenda[wIndex][dIndex].selected = selected;
       });
     });
-    // console.log(agenda);
     setCalendar([...agenda]);
     viewDetailByClick(year, month, day);
   };
@@ -369,11 +376,7 @@ export default function CalendarCard({
                       halfday={day.halfday}
                       Selection={handleSelected}
                       isSelected={day.selected}
-                      isActive={
-                        thisMonth < day.month
-                          ? true
-                          : today < day.day && thisMonth === day.month
-                      }
+                      isActive={day.isActive}
                     />
                   )}
                 </GridItem>

@@ -70,7 +70,6 @@ exports.createCheckoutSession = async (req, res) => {
   const customerId = customer.id;
 
   await Company.update({ customerId }, { where: { id: companyId } });
-  console.log(customer);
 
   const session = await stripe.checkout.sessions.create({
     customer: customerId,

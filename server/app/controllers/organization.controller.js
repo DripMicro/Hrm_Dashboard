@@ -35,7 +35,6 @@ exports.getOrganizations = async (req, res) => {
   const orgInfo = await Organizations.findOne({
     where: { companyId }
   });
-  console.log('this is orgInfo', orgInfo, companyId);
   let workingDaysInfo = await WorkingDays.findOne({
     where: { companyId }
   });
@@ -92,8 +91,6 @@ exports.getOrganizations = async (req, res) => {
       monthRange: orgInfo.monthRange,
       workDays: workDayInfo
     };
-
-    console.log('--------->', calendar);
 
     features = {
       isHalfDays: orgInfo.isHalfDays,

@@ -17,10 +17,8 @@ export default function PlanContent() {
   const handlePlanPrice = (price) => {
     if (plans.length > 0) {
       const tmpPlans = plans;
-      console.log(tmpPlans);
       tmpPlans[1].price = price;
       setPlans([...tmpPlans]);
-      console.log('Hello', price);
     }
   };
 

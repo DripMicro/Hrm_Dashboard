@@ -72,7 +72,6 @@ export default function StatusesCard({ dataProps, setStatusProps, plan }) {
   const changeIcon = (icon, index) => {
     basicList = [];
     const values = icon;
-    console.log(basics, index);
     const insData = {
       ...basics[index],
       emoji: values
