@@ -269,30 +269,34 @@ export default function AccountGeneral({ isEdit, currentUser }) {
                   </Grid>
                 </Grid>
                 <Box sx={{ mb: 5 }} />
-                <Box>
-                  <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
-                    Offices*
-                  </Typography>
-                  <DayStatusButtonGroup
-                    officeInitProps={officeIds}
-                    statusProps={setStatusProps}
-                    officeGroups={offices}
-                    isMulti
-                    sx={{ textAlign: 'left !important' }}
-                  />
-                </Box>
-                <Box sx={{ mb: 5 }} />
-                <Box>
-                  <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
-                    My Teams
-                  </Typography>
-                  <TeamCategoryGroup
-                    teamInitProps={teamIds}
-                    daygroups={teams}
-                    teamStatusProps={handleTeamSelected}
-                    sx={{ textAlign: 'left' }}
-                  />
-                </Box>
+                {user.roles === 'ADMIN' && (
+                  <>
+                    <Box>
+                      <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
+                        Offices*
+                      </Typography>
+                      <DayStatusButtonGroup
+                        officeInitProps={officeIds}
+                        statusProps={setStatusProps}
+                        officeGroups={offices}
+                        isMulti
+                        sx={{ textAlign: 'left !important' }}
+                      />
+                    </Box>
+                    <Box sx={{ mb: 5 }} />
+                    <Box>
+                      <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
+                        My Teams
+                      </Typography>
+                      <TeamCategoryGroup
+                        teamInitProps={teamIds}
+                        daygroups={teams}
+                        teamStatusProps={handleTeamSelected}
+                        sx={{ textAlign: 'left' }}
+                      />
+                    </Box>
+                  </>
+                )}
                 <Box
                   sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}
                 >
