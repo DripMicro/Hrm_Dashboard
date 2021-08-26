@@ -13,6 +13,7 @@ import {
   addStatus,
   // Directory
   addMemberList,
+  makeAdmin,
   // Payment
   createCheckoutSession,
   updatePaidStatus
@@ -75,6 +76,7 @@ export default function useUserManage() {
     addTeam: () => dispatch(addTeam()),
 
     addMemberList: (memberList) => dispatch(addMemberList(memberList)), // in Directory by admin
+    makeAdmin: (userId) => dispatch(makeAdmin(userId)), // in Directory by admin
 
     createCheckoutSession: (payData) =>
       dispatch(createCheckoutSession(payData)), // in Directory by admin

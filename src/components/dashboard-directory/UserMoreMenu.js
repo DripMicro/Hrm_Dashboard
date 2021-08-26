@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { paramCase } from 'change-case';
 import { useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 // material
 import {
   Menu,
@@ -20,11 +20,18 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // ----------------------------------------------------------------------
 
 UserMoreMenu.propTypes = {
+  isAdmin: PropTypes.bool,
+  onMakeAdmin: PropTypes.func,
   onDelete: PropTypes.func,
-  userName: PropTypes.string
+  userId: PropTypes.number
 };
 
-export default function UserMoreMenu({ onDelete, userName }) {
+export default function UserMoreMenu({
+  isAdmin,
+  onMakeAdmin,
+  onDelete,
+  userId
+}) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,6 +51,21 @@ export default function UserMoreMenu({ onDelete, userName }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
+        <MenuItem
+          onClick={() => {
+            onMakeAdmin(userId);
+            setIsOpen(false);
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <ListItemIcon>
+            <SupervisorAccountIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={isAdmin ? 'Drop admin' : 'Make admin'}
+            primaryTypographyProps={{ variant: 'body2' }}
+          />
+        </MenuItem>
         <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
@@ -56,7 +78,7 @@ export default function UserMoreMenu({ onDelete, userName }) {
 
         <MenuItem
           component={RouterLink}
-          to={`${PATH_DASHBOARD.general.user}/${paramCase(userName)}/edit`}
+          to={`${PATH_DASHBOARD.general.calendar}/${userId}/detail`}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>

@@ -27,6 +27,19 @@ exports.getCalendar = (req, res) => {
   });
 };
 
+exports.getCalendarList = (req, res) => {
+  Calendar.findAll().then((calendars) => {
+    const calendarList = [];
+    calendars.map((calendar) => {
+      const { id, schedule, userId } = calendar;
+      const sch = JSON.parse(schedule);
+      calendarList.push({ id, sch, userId });
+    });
+    console.log(calendarList);
+    res.status(200).send(calendarList);
+  });
+};
+
 exports.getAllUserStatusById = (req, res) => {
   const { authorization } = req.headers;
   if (!authorization) {

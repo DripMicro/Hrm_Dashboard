@@ -15,7 +15,8 @@ const initialState = {
   allStatus: [],
   allUsers: [],
   // calendar
-  calendar: []
+  calendar: [],
+  calendarList: []
 };
 
 const slice = createSlice({
@@ -37,6 +38,12 @@ const slice = createSlice({
     getCalendarSuccess(state, action) {
       state.isLoading = false;
       state.calendar = action.payload;
+    },
+
+    // GET CALENDAR List
+    getCalendarListSuccess(state, action) {
+      state.isLoading = false;
+      state.calendarList = action.payload;
     },
 
     // GET ALL USER STATUS BY COMPANY ID
@@ -86,6 +93,19 @@ export function getCalendar() {
     try {
       const response = await axios.get('/api/general/calendars');
       dispatch(slice.actions.getCalendarSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getCalendarList() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/general/calendar-lists');
+      console.log(response);
+      dispatch(slice.actions.getCalendarListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

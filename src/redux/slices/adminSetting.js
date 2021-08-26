@@ -205,6 +205,14 @@ export function updateOrganizations({ updatedOrg }) {
   };
 }
 
+export function makeAdmin({ userId }) {
+  console.log('Here is redux:', userId);
+  const data = { userId };
+  return async () => {
+    await axios.post('/api/user/make-admin', data);
+  };
+}
+
 // ----------------------------------------------------------------------
 // Delete
 // ----------------------------------------------------------------------

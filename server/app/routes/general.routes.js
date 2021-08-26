@@ -12,6 +12,7 @@ module.exports = (app) => {
   // --------------------- Office Getting List section --------------------------------------------------------------
 
   app.get('/api/general/calendars', controller.getCalendar);
+  app.get('/api/general/calendar-lists', controller.getCalendarList);
   app.get('/api/general/allstatus', controller.getAllUserStatusById);
   app.get('/api/general/allusers', controller.getUsersByCompany);
 

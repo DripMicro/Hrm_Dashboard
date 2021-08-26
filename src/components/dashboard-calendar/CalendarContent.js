@@ -4,8 +4,9 @@
 import React, { useState, useEffect } from 'react';
 // material
 import { useTheme } from '@material-ui/core/styles';
+import { useParams, useLocation } from 'react-router-dom';
 
-import { Container, Box } from '@material-ui/core';
+import { Container, Box, Stack, Avatar, Typography } from '@material-ui/core';
 // ----------------------------------------------------------------------
 // hooks
 import useGeneral from '../../hooks/useGeneral';
@@ -14,6 +15,7 @@ import useAuth from '../../hooks/useAuth';
 import { useDispatch, useSelector } from '../../redux/store';
 import {
   getCalendar,
+  getCalendarList,
   getAllStatusById,
   getUsersByCompany
 } from '../../redux/slices/general';
@@ -23,9 +25,14 @@ import {
   getOrganizations
 } from '../../redux/slices/adminSetting';
 
+import { getUserList } from '../../redux/slices/user';
+
 import CalendarCard from './CalendarCard';
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
+
+import DetailOfficeButtons from '../dashboard-component/DetailOfficeButtons';
+import DetailTeamButtons from '../dashboard-component/DetailTeamButtons';
 
 import RightSideBar from './RightSideBar';
 
@@ -35,11 +42,24 @@ export default function CalendarContent() {
   const { updateSchedule } = useGeneral();
   const { user } = useAuth();
   const { officeList, teamList } = useSelector((state) => state.adminSetting);
-  const { calendar, allStatus, allUsers } = useSelector(
+  const { calendar, calendarList, allStatus, allUsers } = useSelector(
     (state) => state.general
   );
+  const { userList } = useSelector((state) => state.user);
   const { organizations } = useSelector((state) => state.adminSetting);
 
+  const { pathname } = useLocation();
+  const { userId } = useParams();
+  const isDetail = pathname.includes('detail');
+  const currentCalendar = calendarList.find(
+    (calendar) => calendar.userId === Number(userId)
+  );
+
+  const currentUser = userList.find((user) => user.id === Number(userId));
+
+  // startind the code
+
+  const [newCalendar, setNewCalendar] = useState([]);
   const [teams, setTeams] = useState([]);
   const [teamIds, setTeamIds] = useState([]);
 
@@ -64,14 +84,91 @@ export default function CalendarContent() {
   const [scheduleUsers, setScheduleUsers] = useState([]);
   const [notStatusUsers, setNotStatusUsers] = useState([]);
 
+  // detail info
+
+  const [cUser, setCUser] = useState({});
+
   useEffect(() => {
     dispatch(getCalendar());
+    dispatch(getCalendarList());
     dispatch(getOfficeList());
     dispatch(getTeamList());
+    dispatch(getUserList());
     dispatch(getOrganizations());
     dispatch(getAllStatusById());
     dispatch(getUsersByCompany());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      isDetail &&
+      currentCalendar !== undefined &&
+      currentUser !== undefined
+    ) {
+      const { sch } = currentCalendar;
+      setNewCalendar(sch);
+      console.log('CurrentUser:', currentUser, officeList, teamList);
+      setCUser(currentUser);
+
+      const { officeIds, teamIds } = currentUser;
+      const OfficeStatus = [];
+      officeList.map((office) => {
+        officeIds.map((officeId) => {
+          if (office.id === Number(officeId)) {
+            const data = {
+              id: office.id,
+              label: office.name,
+              icon: office.emoji
+            };
+            OfficeStatus.push(data);
+          }
+        });
+      });
+
+      const TeamStatus = [];
+      teamList.map((team) => {
+        teamIds.map((teamId) => {
+          if (team.id === Number(teamId)) {
+            const data = {
+              id: team.id,
+              label: team.name,
+              color: team.color
+            };
+            TeamStatus.push(data);
+          }
+        });
+      });
+
+      setOffices([...OfficeStatus]);
+      setTeams([...TeamStatus]);
+    } else {
+      setNewCalendar(calendar);
+      const OfficeStatus = [];
+      officeList.map((office) => {
+        const data = {
+          id: office.id,
+          label: office.name,
+          icon: office.emoji
+        };
+
+        OfficeStatus.push(data);
+      });
+
+      const TeamStatus = [];
+      teamList.map((team) => {
+        const data = {
+          id: team.id,
+          label: team.name,
+          color: team.color
+        };
+
+        TeamStatus.push(data);
+      });
+
+      setOffices([...OfficeStatus]);
+      setTeams([...TeamStatus]);
+    }
+  }, [currentCalendar, currentUser, isDetail, calendar, officeList, teamList]);
 
   useEffect(() => {
     setUserInfo(user);
@@ -109,11 +206,11 @@ export default function CalendarContent() {
   }, []);
 
   useEffect(() => {
-    if (calendar.length > 0) {
+    if (newCalendar.length > 0) {
       const today = new Date().getDate();
       const tMonth = new Date().getMonth();
       const yearData = [];
-      calendar.map((months, mIndex) => {
+      newCalendar.map((months, mIndex) => {
         const curr = new Date();
         curr.setMonth(mIndex);
         const thisMonth = months;
@@ -154,34 +251,34 @@ export default function CalendarContent() {
 
       setCalendarProps(yearData);
     }
-  }, [calendar, isWorking]);
+  }, [newCalendar, isWorking]);
 
-  useEffect(() => {
-    const OfficeStatus = [];
-    officeList.map((office) => {
-      const data = {
-        id: office.id,
-        label: office.name,
-        icon: office.emoji
-      };
+  // useEffect(() => {
+  //   const OfficeStatus = [];
+  //   officeList.map((office) => {
+  //     const data = {
+  //       id: office.id,
+  //       label: office.name,
+  //       icon: office.emoji
+  //     };
 
-      OfficeStatus.push(data);
-    });
+  //     OfficeStatus.push(data);
+  //   });
 
-    const TeamStatus = [];
-    teamList.map((team) => {
-      const data = {
-        id: team.id,
-        label: team.name,
-        color: team.color
-      };
+  //   const TeamStatus = [];
+  //   teamList.map((team) => {
+  //     const data = {
+  //       id: team.id,
+  //       label: team.name,
+  //       color: team.color
+  //     };
 
-      TeamStatus.push(data);
-    });
+  //     TeamStatus.push(data);
+  //   });
 
-    setOffices([...OfficeStatus]);
-    setTeams([...TeamStatus]);
-  }, [officeList, teamList]);
+  //   setOffices([...OfficeStatus]);
+  //   setTeams([...TeamStatus]);
+  // }, [officeList, teamList]);
 
   useEffect(() => {
     if (organizations.result !== undefined) {
@@ -344,17 +441,49 @@ export default function CalendarContent() {
           maxWidth="sm"
           sx={{ [theme.breakpoints.down('md')]: { px: 0 } }}
         >
-          <DayStatusButtonGroup
-            officeInitProps={officeIds}
-            statusProps={setStatusProps}
-            officeGroups={offices}
-            isMulti={false}
-          />
-          <TeamCategoryGroup
-            teamInitProps={teamIds}
-            daygroups={teams}
-            teamStatusProps={handleTeamSelected}
-          />
+          {isDetail ? (
+            <Box sx={{ mb: 3, mt: 1 }}>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Avatar
+                  alt={cUser.name}
+                  src={cUser.avatarUrl}
+                  sx={{ width: theme.spacing(7), height: theme.spacing(7) }}
+                />
+                <Box>
+                  <Typography variant="h6" noWrap>
+                    {cUser.name}
+                  </Typography>
+                  <Typography variant="body1" noWrap>
+                    {cUser.email}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Box m={3} />
+              <Box sx={{ pl: 7 }}>
+                <DetailOfficeButtons officeGroups={offices} />
+                <DetailTeamButtons
+                  teamInitProps={teamIds}
+                  daygroups={teams}
+                  teamStatusProps={handleTeamSelected}
+                />
+              </Box>
+            </Box>
+          ) : (
+            <>
+              <DayStatusButtonGroup
+                officeInitProps={officeIds}
+                statusProps={setStatusProps}
+                officeGroups={offices}
+                isMulti={false}
+              />
+              <TeamCategoryGroup
+                teamInitProps={teamIds}
+                daygroups={teams}
+                teamStatusProps={handleTeamSelected}
+              />
+            </>
+          )}
+
           <CalendarCard
             officeFilterId={officeIds[0]}
             allStatuses={allStatuses}
@@ -373,6 +502,7 @@ export default function CalendarContent() {
         cToday={cToday}
         scheduleUsers={scheduleUsers}
         notStatusUsers={notStatusUsers}
+        isDetail={isDetail}
       />
     </Box>
   );

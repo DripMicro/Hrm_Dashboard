@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 
 import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -18,6 +19,7 @@ import {
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import { PATH_DASHBOARD } from '../../routes/paths';
 import Heatmap from './Heatmap';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +49,8 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
   const classes = useStyles();
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
+
+  console.log('Users', scheduleUsers);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -228,7 +232,9 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
               <ListItem
                 key={index}
                 button
-                onClick={handleProfile}
+                // onClick={handleProfile}
+                component={RouterLink}
+                to={`${PATH_DASHBOARD.general.calendar}/${item.id}/detail`}
                 sx={{ borderRadius: '10px' }}
               >
                 <ListItemIcon sx={{ marginRight: '3px' }}>
@@ -321,7 +327,8 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
               <ListItem
                 key={index}
                 button
-                onClick={handleProfile}
+                component={RouterLink}
+                to={`${PATH_DASHBOARD.general.calendar}/${item.id}/detail`}
                 sx={{ borderRadius: '10px' }}
               >
                 <ListItemIcon>

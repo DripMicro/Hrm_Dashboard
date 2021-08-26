@@ -36,6 +36,7 @@ export const PATH_DASHBOARD = {
   general: {
     home: path(ROOTS_DASHBOARD, '/home'),
     calendar: path(ROOTS_DASHBOARD, '/calendar'),
+    calendarDetail: path(ROOTS_DASHBOARD, '/calendar/:userId/detail'),
     directory: path(ROOTS_DASHBOARD, '/directory'),
     user: path(ROOTS_DASHBOARD, '/user')
   },

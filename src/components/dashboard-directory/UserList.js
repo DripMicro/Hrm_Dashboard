@@ -18,6 +18,8 @@ import {
   TableContainer,
   TablePagination
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+
 // redux
 import { useDispatch } from '../../redux/store';
 import { deleteUser } from '../../redux/slices/user';
@@ -30,6 +32,9 @@ import SearchNotFound from '../SearchNotFound';
 import UserListHead from './UserListHead';
 import UserListToolbar from './UserListToolbar';
 import UserMoreMenu from './UserMoreMenu';
+
+import { PATH_DASHBOARD } from '../../routes/paths';
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -76,10 +81,11 @@ function applySortFilter(arrays, comparator, query) {
 }
 
 UserList.propTypes = {
+  onMakeAdmin: PropTypes.func,
   userList: PropTypes.array
 };
 
-export default function UserList({ userList }) {
+export default function UserList({ onMakeAdmin, userList }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   // const { userList } = useSelector((state) => state.user);
@@ -206,7 +212,13 @@ export default function UserList({ userList }) {
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Avatar alt={name} src={avatarUrl} />
-                          <Typography variant="subtitle2" noWrap>
+                          <Typography
+                            component={RouterLink}
+                            to={`${PATH_DASHBOARD.general.calendar}/${id}/detail`}
+                            variant="subtitle2"
+                            noWrap
+                            sx={{ textDecoration: 'auto' }}
+                          >
                             {name}
                           </Typography>
                         </Stack>
@@ -229,8 +241,10 @@ export default function UserList({ userList }) {
                       <TableCell align="right">
                         {user.roles === 'ADMIN' && (
                           <UserMoreMenu
+                            onMakeAdmin={onMakeAdmin}
+                            isAdmin={role === 'admin'}
                             onDelete={() => handleDeleteUser(id)}
-                            userName={name}
+                            userId={id}
                           />
                         )}
                       </TableCell>

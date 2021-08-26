@@ -42,6 +42,7 @@ SelfSettingButton.propTypes = {
   weekTitle: PropTypes.string,
   notStatus: PropTypes.bool,
   isActive: PropTypes.bool,
+  disabled: PropTypes.bool,
   iconProps: PropTypes.func
 };
 
@@ -55,6 +56,7 @@ export default function SelfSettingButton({
   weekTitle,
   notStatus,
   isActive,
+  disabled,
   iconProps
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -107,6 +109,7 @@ export default function SelfSettingButton({
   return (
     <div>
       <Button
+        disabled={disabled}
         aria-describedby={id}
         variant="contained"
         color="primary"

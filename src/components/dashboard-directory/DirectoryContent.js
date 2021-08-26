@@ -31,7 +31,7 @@ export default function DirectoryContent() {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { addMemberList } = useAdmin();
+  const { addMemberList, makeAdmin } = useAdmin();
   const { user } = useAuth();
   const dispatch = useDispatch();
   const { officeList, teamList } = useSelector((state) => state.adminSetting);
@@ -140,6 +140,13 @@ export default function DirectoryContent() {
     setHasError(false);
   };
 
+  const handleMakeAdmin = async (userId) => {
+    await makeAdmin({ userId });
+    setTimeout(() => {
+      dispatch(getUserList());
+    }, 500);
+  };
+
   return (
     <Container maxWidth="xl">
       <Container
@@ -168,7 +175,7 @@ export default function DirectoryContent() {
           </>
         )}
         <SpaceStyle />
-        <UserLists userList={userList} />
+        <UserLists onMakeAdmin={handleMakeAdmin} userList={userList} />
       </Container>
     </Container>
   );

@@ -292,6 +292,18 @@ exports.addMemberList = (req, res) => {
   res.status(200).send('success');
 };
 
+exports.makeAdmin = (req, res) => {
+  const { userId } = req.body;
+  User.findOne({ where: { id: userId } }).then((user) => {
+    const { roleId } = user;
+    console.log('RoleId:', roleId);
+    let role = 0;
+    role = roleId === 2 ? 4 : 2;
+    User.update({ roleId: role }, { where: { id: userId } });
+  });
+  res.status(200).send('success');
+};
+
 async function generateUser(userData, cId, officeIds, teamIds) {
   Calendar.create({
     schedule: JSON.stringify(SCHEDULES),

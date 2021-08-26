@@ -37,6 +37,7 @@ RightSideBar.propTypes = {
   notStatusUsers: PropTypes.array,
   scheduleUsers: PropTypes.array,
   isOpenSidebar: PropTypes.bool,
+  isDetail: PropTypes.bool,
   onCloseSidebar: PropTypes.func
 };
 
@@ -49,6 +50,7 @@ export default function RightSideBar({
   notStatusUsers,
   scheduleUsers,
   isOpenSidebar,
+  isDetail,
   onCloseSidebar
 }) {
   const { pathname } = useLocation();
@@ -122,6 +124,7 @@ export default function RightSideBar({
           {todayTitle}
         </Typography>
         <SelfSettingButton
+          disabled={isDetail}
           schedule={schedule}
           icon={icon}
           halfday={isHalf}

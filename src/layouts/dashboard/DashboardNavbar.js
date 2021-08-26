@@ -23,8 +23,8 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.background.default, 0.75),
   zIndex: 1201,
   [theme.breakpoints.up('md')]: {
-    backgroundColor: alpha(theme.palette.background.default, 0),
-    width: `calc(100% - ${1185}px)`
+    width: 300,
+    backgroundColor: alpha(theme.palette.background.default, 0)
   }
 }));
 
