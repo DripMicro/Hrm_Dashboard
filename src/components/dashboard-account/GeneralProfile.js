@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
+import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
@@ -17,6 +18,7 @@ import { LoadingButton } from '@material-ui/lab';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getOfficeList, getTeamList } from '../../redux/slices/adminSetting';
+import { getProfile } from '../../redux/slices/user';
 
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -26,27 +28,23 @@ import { UploadAvatar } from '../upload';
 //
 import DayStatusButtonGroup from '../dashboard-component/DayStatusButtonGroup';
 import TeamCategoryGroup from '../dashboard-component/TeamCategoryGroup';
-// utils
-// import { passwordError, emailError } from '../../utils/helpError';
 // ----------------------------------------------------------------------
-const initialOffices = [];
-const initialTeams = [];
+let initialOffices = [];
+let initialTeams = [];
 
-// async function doesFileExist(urlToFile) {
-//   const xhr = new XMLHttpRequest();
-//   xhr.open('HEAD', urlToFile, false);
-//   xhr.send();
+AccountGeneral.propTypes = {
+  isEdit: PropTypes.bool,
+  currentUser: PropTypes.object
+};
 
-//   return xhr.status !== 404;
-// }
-
-export default function AccountGeneral() {
+export default function AccountGeneral({ isEdit, currentUser }) {
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar } = useSnackbar();
   const { updateProfile } = useAdmin();
   const { user } = useAuth();
   const dispatch = useDispatch();
   const { officeList, teamList } = useSelector((state) => state.adminSetting);
+  const { myProfile } = useSelector((state) => state.user);
 
   const [offices, setOffices] = useState([]);
   const [officeIds, setOfficeIds] = useState([]);
@@ -57,7 +55,7 @@ export default function AccountGeneral() {
   useEffect(() => {
     dispatch(getOfficeList());
     dispatch(getTeamList());
-    // dispatch(getProfile());
+    dispatch(getProfile());
   }, [dispatch]);
 
   useEffect(() => {
@@ -87,19 +85,39 @@ export default function AccountGeneral() {
     setTeams([...TeamStatus]);
   }, [officeList, teamList]);
 
+  console.log('My Profile', myProfile);
+
   useEffect(() => {
-    if (user.offices !== undefined) {
-      user.offices.map((office) => {
+    if (isEdit && currentUser !== undefined) {
+      console.log('Current:', currentUser);
+      initialOffices = [];
+      initialTeams = [];
+      if (currentUser.offices !== undefined) {
+        currentUser.offices.map((office) => {
+          initialOffices.push(Number(office));
+        });
+        setOfficeIds(initialOffices);
+
+        currentUser.teams.map((team) => {
+          initialTeams.push(Number(team));
+        });
+        setTeamIds(initialTeams);
+      }
+    } else if (myProfile !== null) {
+      console.log('User Setting', myProfile);
+      initialOffices = [];
+      initialTeams = [];
+      myProfile.offices.map((office) => {
         initialOffices.push(Number(office));
       });
       setOfficeIds(initialOffices);
 
-      user.teams.map((team) => {
+      myProfile.teams.map((team) => {
         initialTeams.push(Number(team));
       });
       setTeamIds(initialTeams);
     }
-  }, [user]);
+  }, [isEdit, currentUser, myProfile]);
 
   const UpdateUserSchema = Yup.object().shape({
     firstname: Yup.string().required('FirstName is required'),
@@ -107,23 +125,29 @@ export default function AccountGeneral() {
   });
 
   const setStatusProps = (selectedIds) => {
+    console.log('Here is officeIds', selectedIds);
     setOfficeIds(selectedIds);
   };
 
   const handleTeamSelected = (teamStatus) => {
+    console.log('Here is teamIds', teamStatus);
     setTeamIds(teamStatus);
   };
 
   const formik = useFormik({
     enableReinitialize: false,
     initialValues: {
-      firstname: user.firstname === null ? '' : user.firstname,
-      lastname: user.lastname === null ? '' : user.lastname,
-      prefferedname: user.prefferedname === null ? '' : user.prefferedname,
-      jobtitle: user.jobtitle === null ? '' : user.jobtitle,
-      email: user.email,
-      departmentname: user.departmentname === null ? '' : user.departmentname,
-      photoURL: user.photoURL === '/static/uploads/1.jpg' ? null : user.photoURL
+      firstname: isEdit ? currentUser?.firstname || '' : user.firstname,
+      lastname: isEdit ? currentUser?.lastname || '' : user.lastname,
+      prefferedname: isEdit
+        ? currentUser?.prefferedname || ''
+        : user.prefferedname,
+      jobtitle: isEdit ? currentUser?.jobtitle || '' : user.jobtitle,
+      email: isEdit ? currentUser?.email || '' : user.email,
+      departmentname: isEdit
+        ? currentUser?.departmentname || ''
+        : user.departmentname,
+      photoURL: isEdit ? currentUser?.photoURL || '' : user.photoURL
     },
 
     validationSchema: UpdateUserSchema,
@@ -134,6 +158,7 @@ export default function AccountGeneral() {
 
         const tmpPhoto =
           values.photoURL === null ? '/static/uploads/1.jpg' : values.photoURL;
+        console.log(values);
         await updateProfile({
           ...values,
           photoURL: tmpPhoto,
@@ -194,6 +219,7 @@ export default function AccountGeneral() {
                       fullWidth
                       label="First Name"
                       {...getFieldProps('firstname')}
+                      value={values.firstname}
                       error={Boolean(touched.firstname && errors.firstname)}
                       helperText={touched.firstname && errors.firstname}
                     />

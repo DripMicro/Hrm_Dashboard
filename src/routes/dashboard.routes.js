@@ -64,6 +64,11 @@ const DashboardRoutes = {
       path: PATH_DASHBOARD.general.user,
       component: lazy(() => import('../views/DashboardUserPage'))
     },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.general.userEdit,
+      component: lazy(() => import('../views/DashboardUserPage'))
+    },
     // admin
     // ----------------------------------------------------------------------
     {

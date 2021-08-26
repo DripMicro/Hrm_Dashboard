@@ -3,7 +3,8 @@ import { experimentalStyled as styled } from '@material-ui/core/styles';
 
 import { Icon } from '@iconify/react';
 import { capitalCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import bellFill from '@iconify/icons-eva/bell-fill';
 import roundReceipt from '@iconify/icons-ic/round-receipt';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
@@ -11,6 +12,8 @@ import LockIcon from '@material-ui/icons/Lock';
 // material
 import { Container, Tab, Box, Tabs } from '@material-ui/core';
 
+import { useDispatch, useSelector } from '../../redux/store';
+import { getUserList } from '../../redux/slices/user';
 // components
 import SlackIntegration from './SlackIntegration';
 import GeneralProfile from './GeneralProfile';
@@ -21,13 +24,25 @@ import ChangePassword from './ChangePassword';
 // ----------------------------------------------------------------------
 
 export default function UserAccount() {
+  const dispatch = useDispatch();
   const [currentTab, setCurrentTab] = useState('informations');
+
+  const { userList } = useSelector((state) => state.user);
+
+  const { pathname } = useLocation();
+  const { userId } = useParams();
+  const isEdit = pathname.includes('edit');
+  const currentUser = userList.find((user) => user.id === Number(userId));
+
+  useEffect(() => {
+    dispatch(getUserList());
+  }, [dispatch]);
 
   const ACCOUNT_TABS = [
     {
       value: 'informations',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-      component: <GeneralProfile />
+      component: <GeneralProfile isEdit={isEdit} currentUser={currentUser} />
     },
     {
       value: 'about',

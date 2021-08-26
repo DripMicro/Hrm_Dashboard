@@ -11,10 +11,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 ConfirmDialog.propTypes = {
   deleteTitle: PropTypes.string,
   deleteId: PropTypes.number,
-  deleteProps: PropTypes.func
+  deleteProps: PropTypes.func,
+  isUser: PropTypes.bool
 };
 
-export default function ConfirmDialog({ deleteId, deleteTitle, deleteProps }) {
+export default function ConfirmDialog({
+  deleteId,
+  deleteTitle,
+  deleteProps,
+  isUser
+}) {
   const [open, setOpen] = React.useState(false);
 
   const [id, setId] = useState(0);
@@ -39,13 +45,27 @@ export default function ConfirmDialog({ deleteId, deleteTitle, deleteProps }) {
 
   return (
     <div>
-      <IconButton
-        aria-label="delete"
-        onClick={handleClickOpen}
-        sx={{ color: '#ff4842' }}
-      >
-        <DeleteIcon />
-      </IconButton>
+      {!isUser ? (
+        <IconButton
+          aria-label="delete"
+          onClick={handleClickOpen}
+          sx={{ color: '#ff4842' }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      ) : (
+        <Button
+          onClick={handleClickOpen}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: 36
+          }}
+        />
+      )}
+
       <Dialog
         open={open}
         onClose={handleClose}

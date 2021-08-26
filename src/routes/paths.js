@@ -38,7 +38,8 @@ export const PATH_DASHBOARD = {
     calendar: path(ROOTS_DASHBOARD, '/calendar'),
     calendarDetail: path(ROOTS_DASHBOARD, '/calendar/:userId/detail'),
     directory: path(ROOTS_DASHBOARD, '/directory'),
-    user: path(ROOTS_DASHBOARD, '/user')
+    user: path(ROOTS_DASHBOARD, '/user'),
+    userEdit: path(ROOTS_DASHBOARD, '/user/:userId/edit')
   },
   admin: {
     offices: path(ROOTS_DASHBOARD, '/offices'),

@@ -216,7 +216,7 @@ export default function WeekList({
                           <Avatar
                             key={index}
                             alt={item.name}
-                            src={item.avatarURL}
+                            src={item.photoURL}
                             sx={{
                               width: theme.spacing(4.5),
                               height: theme.spacing(4.5)

@@ -17,20 +17,24 @@ import {
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 
+import ConfirmDialog from '../dashboard-component/ConfirmDialog';
+
 // ----------------------------------------------------------------------
 
 UserMoreMenu.propTypes = {
   isAdmin: PropTypes.bool,
   onMakeAdmin: PropTypes.func,
   onDelete: PropTypes.func,
-  userId: PropTypes.number
+  userId: PropTypes.number,
+  userName: PropTypes.string
 };
 
 export default function UserMoreMenu({
   isAdmin,
   onMakeAdmin,
   onDelete,
-  userId
+  userId,
+  userName
 }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -66,19 +70,9 @@ export default function UserMoreMenu({
             primaryTypographyProps={{ variant: 'body2' }}
           />
         </MenuItem>
-        <MenuItem onClick={onDelete} sx={{ color: 'text.secondary' }}>
-          <ListItemIcon>
-            <Icon icon={trash2Outline} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText
-            primary="Delete"
-            primaryTypographyProps={{ variant: 'body2' }}
-          />
-        </MenuItem>
-
         <MenuItem
           component={RouterLink}
-          to={`${PATH_DASHBOARD.general.calendar}/${userId}/detail`}
+          to={`${PATH_DASHBOARD.general.user}/${userId}/edit`}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>
@@ -87,6 +81,21 @@ export default function UserMoreMenu({
           <ListItemText
             primary="Edit"
             primaryTypographyProps={{ variant: 'body2' }}
+          />
+        </MenuItem>
+        <MenuItem sx={{ color: 'text.secondary' }}>
+          <ListItemIcon>
+            <Icon icon={trash2Outline} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Delete"
+            primaryTypographyProps={{ variant: 'body2' }}
+          />
+          <ConfirmDialog
+            deleteId={userId}
+            deleteProps={onDelete}
+            deleteTitle={userName}
+            isUser
           />
         </MenuItem>
       </Menu>

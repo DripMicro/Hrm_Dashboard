@@ -24,6 +24,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch } from '../../redux/store';
 import { deleteUser } from '../../redux/slices/user';
 import useAuth from '../../hooks/useAuth';
+import useAdmin from '../../hooks/useAdmin';
 // components
 import Label from '../Label';
 import Scrollbar from '../Scrollbar';
@@ -90,6 +91,7 @@ export default function UserList({ onMakeAdmin, userList }) {
   const dispatch = useDispatch();
   // const { userList } = useSelector((state) => state.user);
   const { user } = useAuth();
+  const { deleteUserList } = useAdmin();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -152,6 +154,8 @@ export default function UserList({ onMakeAdmin, userList }) {
   };
 
   const handleDeleteUser = (userId) => {
+    console.log(userId);
+    deleteUserList({ userId });
     dispatch(deleteUser(userId));
   };
 
@@ -190,7 +194,7 @@ export default function UserList({ onMakeAdmin, userList }) {
               {filteredUsers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { id, name, role, email, avatarUrl, isLinked } = row;
+                  const { id, name, role, email, photoURL, isLinked } = row;
 
                   const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -211,13 +215,16 @@ export default function UserList({ onMakeAdmin, userList }) {
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={name} src={avatarUrl} />
+                          <Avatar alt={name} src={photoURL} />
                           <Typography
                             component={RouterLink}
                             to={`${PATH_DASHBOARD.general.calendar}/${id}/detail`}
                             variant="subtitle2"
                             noWrap
-                            sx={{ textDecoration: 'auto' }}
+                            sx={{
+                              textDecoration: 'auto',
+                              '&:hover': { textDecoration: 'underline' }
+                            }}
                           >
                             {name}
                           </Typography>
@@ -245,6 +252,7 @@ export default function UserList({ onMakeAdmin, userList }) {
                             isAdmin={role === 'admin'}
                             onDelete={() => handleDeleteUser(id)}
                             userId={id}
+                            userName={name}
                           />
                         )}
                       </TableCell>

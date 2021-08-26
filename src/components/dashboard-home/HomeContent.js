@@ -215,7 +215,7 @@ function getScheduleUsersInfo(
           }
           const userObj = {
             id: userId,
-            avatarURL: member.avatarURL,
+            photoURL: member.photoURL,
             name: member.name,
             isTeam
           };
@@ -271,7 +271,7 @@ function getScheduleUsersInfo(
           }
           const userObj = {
             id: userId,
-            avatarURL: member.avatarURL,
+            photoURL: member.photoURL,
             name: member.name,
             isTeam
           };

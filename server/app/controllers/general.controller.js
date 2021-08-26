@@ -131,7 +131,7 @@ async function getUsers(users) {
     });
     const userObj = {
       id: users[i].id,
-      avatarURL: users[i].photoURL,
+      photoURL: users[i].photoURL,
       name: `${users[i].firstname} ${users[i].lastname}`,
       teamIds
     };

@@ -135,7 +135,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                     <Avatar
                       key={index}
                       alt={item.name}
-                      src={item.avatarURL}
+                      src={item.photoURL}
                       sx={{
                         width: theme.spacing(5),
                         height: theme.spacing(5),
@@ -219,7 +219,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                     <Avatar
                       key={index}
                       alt={item.name}
-                      src={item.avatarURL}
+                      src={item.photoURL}
                       sx={{ width: theme.spacing(5), height: theme.spacing(5) }}
                     />
                   ))}
@@ -246,7 +246,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                   >
                     <Avatar
                       alt={item.name}
-                      src={item.avatarURL}
+                      src={item.photoURL}
                       sx={{
                         width: theme.spacing(6),
                         height: theme.spacing(6),
@@ -316,7 +316,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
               {expanded !== 'not-status' && (
                 <AvatarGroup max={3}>
                   {notStatusUsers.map((item, index) => (
-                    <Avatar key={index} alt={item.name} src={item.avatarURL} />
+                    <Avatar key={index} alt={item.name} src={item.photoURL} />
                   ))}
                 </AvatarGroup>
               )}
@@ -340,7 +340,7 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
                   >
                     <Avatar
                       alt={item.name}
-                      src={item.avatarURL}
+                      src={item.photoURL}
                       sx={{
                         width: theme.spacing(6),
                         height: theme.spacing(6),
@@ -359,6 +359,6 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
   );
 }
 
-// avatarURL: "user.avatarURL"
+// photoURL: "user.photoURL"
 // id: 3
 // name: "Zlenko Sofia"

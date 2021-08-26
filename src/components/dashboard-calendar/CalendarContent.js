@@ -446,8 +446,8 @@ export default function CalendarContent() {
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Avatar
                   alt={cUser.name}
-                  src={cUser.avatarUrl}
-                  sx={{ width: theme.spacing(7), height: theme.spacing(7) }}
+                  src={cUser.photoURL}
+                  sx={{ width: theme.spacing(10), height: theme.spacing(10) }}
                 />
                 <Box>
                   <Typography variant="h6" noWrap>
@@ -503,6 +503,7 @@ export default function CalendarContent() {
         scheduleUsers={scheduleUsers}
         notStatusUsers={notStatusUsers}
         isDetail={isDetail}
+        currentUser={cUser}
       />
     </Box>
   );
@@ -642,7 +643,7 @@ function getScheduleUsersInfo(
           }
           const userObj = {
             id: userId,
-            avatarURL: member.avatarURL,
+            photoURL: member.photoURL,
             name: member.name,
             isTeam
           };
@@ -698,7 +699,7 @@ function getScheduleUsersInfo(
           }
           const userObj = {
             id: userId,
-            avatarURL: member.avatarURL,
+            photoURL: member.photoURL,
             name: member.name,
             isTeam
           };

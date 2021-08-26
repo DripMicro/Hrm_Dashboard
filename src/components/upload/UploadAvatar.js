@@ -137,9 +137,9 @@ export default function UploadAvatar({
             })
             .then((response) => {
               const { data } = response;
-              const avatarURL = `/static/uploads/${data.filename}`;
+              const photoURL = `/static/uploads/${data.filename}`;
               if (isMountedRef.current) {
-                setFile(avatarURL);
+                setFile(photoURL);
                 setIsLoading(false);
                 setIsError(null);
               }

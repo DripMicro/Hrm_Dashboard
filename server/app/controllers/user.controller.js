@@ -104,13 +104,21 @@ async function getUserLists(datas) {
     for (let i = 0; i < teams.length; i += 1) {
       teamIds.push(`${teams[i].id}`);
     }
+
     users.push({
       id: datas[i].id,
-      avatarUrl: datas[i].photoURL,
+      photoURL: datas[i].photoURL,
+      firstname: datas[i].firstname,
+      lastname: datas[i].lastname,
       name: `${datas[i].firstname} ${datas[i].lastname}`,
       email: datas[i].email,
       role: ROLES[datas[i].roleId - 1],
       isLinked: false,
+      departmentname: datas[i].departmentname,
+      jobtitle: datas[i].jobtitle,
+      prefferedname: datas[i].prefferedname,
+      offices: officeIds,
+      teams: teamIds,
       officeIds,
       teamIds
     });
@@ -296,11 +304,16 @@ exports.makeAdmin = (req, res) => {
   const { userId } = req.body;
   User.findOne({ where: { id: userId } }).then((user) => {
     const { roleId } = user;
-    console.log('RoleId:', roleId);
     let role = 0;
     role = roleId === 2 ? 4 : 2;
     User.update({ roleId: role }, { where: { id: userId } });
   });
+  res.status(200).send('success');
+};
+
+exports.deleteUser = async (req, res) => {
+  const { userId } = req.body;
+  await User.destroy({ where: { id: userId } });
   res.status(200).send('success');
 };
 

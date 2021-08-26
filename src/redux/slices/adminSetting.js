@@ -237,6 +237,16 @@ export function deleteTeam({ teamId }) {
   };
 }
 
+export function deleteUser({ userId }) {
+  const data = {
+    userId
+  };
+  console.log('Here is redux', data);
+  return async () => {
+    await axios.post('/api/user/delete-user', data);
+  };
+}
+
 // ----------------------------------------------------------------------
 // Add
 // ----------------------------------------------------------------------

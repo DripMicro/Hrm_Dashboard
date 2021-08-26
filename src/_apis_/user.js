@@ -39,7 +39,7 @@ mock.onGet('/api/user/all').reply(() => {
     const setIndex = index + 1;
     return {
       id: createId(setIndex),
-      avatarUrl: mockImgAvatar(setIndex),
+      photoURL: mockImgAvatar(setIndex),
       cover: mockImgCover(setIndex),
       name: faker.name.findName(),
       follower: faker.datatype.number(),
@@ -70,7 +70,7 @@ mock.onGet('/api/user/manage-users').reply(() => {
     const setIndex = index + 1;
     return {
       id: createId(setIndex),
-      avatarUrl: mockImgAvatar(setIndex),
+      photoURL: mockImgAvatar(setIndex),
       name: faker.name.findName(),
       company: faker.company.companyName(),
       isVerified: faker.datatype.boolean(),
@@ -100,7 +100,7 @@ mock.onGet('/api/user/social/followers').reply(() => {
     const setIndex = index + 2;
     return {
       id: createId(setIndex),
-      avatarUrl: mockImgAvatar(setIndex),
+      photoURL: mockImgAvatar(setIndex),
       name: faker.name.findName(),
       country: faker.address.country(),
       isFollowed: faker.datatype.boolean()
@@ -117,7 +117,7 @@ mock.onGet('/api/user/social/friends').reply(() => {
     const setIndex = index + 2;
     return {
       id: createId(setIndex),
-      avatarUrl: mockImgAvatar(setIndex),
+      photoURL: mockImgAvatar(setIndex),
       name: faker.name.findName(),
       role: sample([
         'Leader',
@@ -220,7 +220,7 @@ mock.onGet('/api/user/posts').reply(() => {
       id: faker.datatype.uuid(),
       author: {
         id: createId(1),
-        avatarUrl: mockImgAvatar(1),
+        photoURL: mockImgAvatar(1),
         name: 'Caitlyn Kerluke'
       },
       isLiked: true,
@@ -229,14 +229,14 @@ mock.onGet('/api/user/posts').reply(() => {
       message: faker.lorem.sentence(),
       personLikes: [...Array(50)].map((_, index) => ({
         name: faker.name.findName(),
-        avatarUrl: mockImgAvatar(index + 2)
+        photoURL: mockImgAvatar(index + 2)
       })),
       comments: (setIndex === 2 && []) || [
         {
           id: faker.datatype.uuid(),
           author: {
             id: createId(2),
-            avatarUrl: mockImgAvatar(sample([2, 3, 4, 5, 6])),
+            photoURL: mockImgAvatar(sample([2, 3, 4, 5, 6])),
             name: faker.name.findName()
           },
           createdAt: faker.date.past(),
@@ -246,7 +246,7 @@ mock.onGet('/api/user/posts').reply(() => {
           id: faker.datatype.uuid(),
           author: {
             id: createId(3),
-            avatarUrl: mockImgAvatar(sample([7, 8, 9, 10, 11])),
+            photoURL: mockImgAvatar(sample([7, 8, 9, 10, 11])),
             name: faker.name.findName()
           },
           createdAt: faker.date.past(),

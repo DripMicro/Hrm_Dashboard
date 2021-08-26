@@ -161,6 +161,7 @@ export function updateProfile({
     officeId,
     teamId
   };
+  console.log(data);
   return async () => {
     await axios.post('/api/user/updateProfile', data);
   };

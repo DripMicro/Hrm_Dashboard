@@ -94,7 +94,7 @@ const products = [...Array(24)].map((_, index) => {
     reviews: [...Array(8)].map((_, index) => ({
       id: faker.datatype.uuid(),
       name: faker.name.findName(),
-      avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
+      photoURL: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
       comment: faker.lorem.lines(),
       rating: faker.datatype.number({ min: 1, max: 5 }),
       isPurchased: faker.datatype.boolean(),

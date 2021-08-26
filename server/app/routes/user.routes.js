@@ -20,4 +20,5 @@ module.exports = (app) => {
   // -----------------------------------------------------------------------------------
   app.post('/api/user/addMemberList', controller.addMemberList);
   app.post('/api/user/make-admin', controller.makeAdmin);
+  app.post('/api/user/delete-user', controller.deleteUser);
 };

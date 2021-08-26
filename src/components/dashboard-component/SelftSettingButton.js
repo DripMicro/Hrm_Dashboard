@@ -43,6 +43,7 @@ SelfSettingButton.propTypes = {
   notStatus: PropTypes.bool,
   isActive: PropTypes.bool,
   disabled: PropTypes.bool,
+  currentUser: PropTypes.object,
   iconProps: PropTypes.func
 };
 
@@ -57,6 +58,7 @@ export default function SelfSettingButton({
   notStatus,
   isActive,
   disabled,
+  currentUser,
   iconProps
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -64,6 +66,10 @@ export default function SelfSettingButton({
   const [mInit, setMInit] = useState(0);
   const [aInit, setAInit] = useState(0);
   const { user } = useAuth();
+
+  useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
 
   useEffect(() => {
     if (detailInfo.morning !== undefined) {
@@ -135,8 +141,8 @@ export default function SelfSettingButton({
         >
           <Box sx={{ display: 'flex' }}>
             <Avatar
-              alt={user.firstname}
-              src={user.photoURL}
+              alt={disabled ? currentUser.firstname : user.firstname}
+              src={disabled ? currentUser.photoURL : user.photoURL}
               sx={{
                 width: theme.spacing(6),
                 height: theme.spacing(6),

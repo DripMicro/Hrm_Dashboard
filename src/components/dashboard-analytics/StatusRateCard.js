@@ -111,7 +111,7 @@ function getCalendar(status, allStatus, allMembers, schedules, month, year) {
           if (userId === member.id) {
             const userObj = {
               id: userId,
-              avatarURL: member.avatarURL,
+              photoURL: member.photoURL,
               name: member.name
             };
             updatedUsers.push(userObj);
@@ -129,7 +129,7 @@ function getCalendar(status, allStatus, allMembers, schedules, month, year) {
           if (userId === member.id) {
             const userObj = {
               id: userId,
-              avatarURL: member.avatarURL,
+              photoURL: member.photoURL,
               name: member.name
             };
             updatedUsers.push(userObj);

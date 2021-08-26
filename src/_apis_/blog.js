@@ -138,7 +138,7 @@ const users = [...Array(12)].map((_, index) => {
   return {
     id: `31a6d8e0-12d4-4aef-88c3-39229ea852f7-${setIndex}`,
     name: faker.name.findName(),
-    avatarUrl: `/static/mock-images/avatars/avatar_${setIndex}.jpg`
+    photoURL: `/static/mock-images/avatars/avatar_${setIndex}.jpg`
   };
 });
 
@@ -146,7 +146,7 @@ const POST_COMMENTS = [
   {
     id: faker.datatype.uuid(),
     name: users[0].name,
-    avatarUrl: users[0].avatarUrl,
+    photoURL: users[0].photoURL,
     message: faker.lorem.lines(),
     postedAt: faker.date.past(),
     users: [users[0], users[1], users[2]],
@@ -175,7 +175,7 @@ const POST_COMMENTS = [
   {
     id: faker.datatype.uuid(),
     name: users[4].name,
-    avatarUrl: users[4].avatarUrl,
+    photoURL: users[4].photoURL,
     message: faker.lorem.lines(),
     postedAt: faker.date.past(),
     users: [users[5], users[6], users[7]],
@@ -203,7 +203,7 @@ const POST_COMMENTS = [
   {
     id: faker.datatype.uuid(),
     name: users[8].name,
-    avatarUrl: users[8].avatarUrl,
+    photoURL: users[8].photoURL,
     message: faker.lorem.lines(),
     postedAt: faker.date.past(),
     users: [],
@@ -212,7 +212,7 @@ const POST_COMMENTS = [
   {
     id: faker.datatype.uuid(),
     name: users[9].name,
-    avatarUrl: users[9].avatarUrl,
+    photoURL: users[9].photoURL,
     message: faker.lorem.lines(),
     postedAt: faker.date.past(),
     users: [],
@@ -234,14 +234,14 @@ let posts = [...Array(23)].map((_, index) => {
     favorite: faker.datatype.number(),
     author: {
       name: faker.name.findName(),
-      avatarUrl: `/static/mock-images/avatars/avatar_${setIndex}.jpg`
+      photoURL: `/static/mock-images/avatars/avatar_${setIndex}.jpg`
     },
     tags: ['Lamp', 'A man', 'Human', 'Lantern', 'Festival'],
     body: POST_BODY,
     favoritePerson: [...Array(50)].map((_, index) => {
       return {
         name: faker.name.findName(),
-        avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`
+        photoURL: `/static/mock-images/avatars/avatar_${index + 1}.jpg`
       };
     }),
     comments: POST_COMMENTS
