@@ -146,3 +146,10 @@ export function updateSchedule({ updatedSchedule }) {
     await axios.post('/api/general/updateSchedule', data);
   };
 }
+
+export function sendingInviteEmail({ emails }) {
+  const data = emails;
+  return async () => {
+    await axios.post('/api/general/invite-emails', data);
+  };
+}

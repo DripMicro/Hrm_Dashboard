@@ -121,4 +121,7 @@ for (let i = 0; i < 12; i += 1) {
 
 db.SCHEDULES = yData;
 
+db.EMAIL_API_KEY =
+  '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';
+
 module.exports = db;

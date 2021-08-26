@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 // redux
-import { updateSchedule } from '../redux/slices/general';
+import { updateSchedule, sendingInviteEmail } from '../redux/slices/general';
 
 // ----------------------------------------------------------------------
 
@@ -9,6 +9,9 @@ export default function useUserManage() {
   const dispatch = useDispatch();
 
   return {
+    // -------------- Send invite email ---------------------
+    sendingInviteEmail: ({ emails }) =>
+      dispatch(sendingInviteEmail({ emails })),
     // -------------- Update list ---------------------
     updateSchedule: ({ updatedSchedule }) =>
       dispatch(updateSchedule({ updatedSchedule }))

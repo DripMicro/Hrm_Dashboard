@@ -2,8 +2,13 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable array-callback-return */
+const sendGridMail = require('@sendgrid/mail');
 const jwt = require('jsonwebtoken');
 const db = require('../models');
+
+sendGridMail.setApiKey(
+  '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'
+);
 
 const Calendar = db.calendar;
 const User = db.user;
@@ -121,6 +126,11 @@ exports.updateSchedule = (req, res) => {
   });
 };
 
+exports.inviteEmails = async (req, res) => {
+  console.log(req.body);
+  await sendEmail();
+};
+
 async function getUsers(users) {
   const resData = [];
   for (let i = 0; i < users.length; i += 1) {
@@ -138,4 +148,28 @@ async function getUsers(users) {
     resData.push(userObj);
   }
   return resData;
+}
+
+function getMessage() {
+  const body = 'This is a test email using SendGrid from Node.js';
+  return {
+    to: 'kw981112@gmail.com',
+    from: 'm.bengoufa@gmail.com',
+    subject: 'Test email with Node.js and SendGrid',
+    text: body,
+    html: `<strong>${body}</strong>`
+  };
+}
+
+async function sendEmail() {
+  try {
+    await sendGridMail.send(getMessage());
+    console.log('Test email sent successfully');
+  } catch (error) {
+    console.error('Error sending test email');
+    console.error(error);
+    if (error.response) {
+      console.error(error.response.body);
+    }
+  }
 }

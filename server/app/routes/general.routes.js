@@ -16,9 +16,10 @@ module.exports = (app) => {
   app.get('/api/general/allstatus', controller.getAllUserStatusById);
   app.get('/api/general/allusers', controller.getUsersByCompany);
 
-  // --------------------- Office CRUD section --------------------------------------------------------------
-  // app.post('/api/office/addOffice', controller.addOffice);
-  // app.post('/api/office/deleteOffice', controller.deleteOffice);
+  // --------------------- Schedule update section --------------------------------------------------------------
   app.post('/api/general/updateSchedule', controller.updateSchedule);
+
+  // --------------------- Invite emails section --------------------------------------------------------------
+  app.post('/api/general/invite-emails', controller.inviteEmails);
   // -----------------------------------------------------------------------------------
 };

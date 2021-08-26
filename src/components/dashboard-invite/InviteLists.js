@@ -1,8 +1,10 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import SendIcon from '@material-ui/icons/Send';
+import IconButton from '@material-ui/core/IconButton';
 
 import {
   Button,
@@ -16,30 +18,49 @@ import {
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
+// hooks
+import useGeneral from '../../hooks/useGeneral';
+
 import CopyClipboard from './CopyClipboard';
 
 function createData(id, email) {
   return { id, email };
 }
 
-const rows = [
-  createData(0, 'demo@test.com'),
-  createData(1, 'demo@test.com'),
-  createData(2, 'demo@test.com')
-];
+InviteLists.propTypes = {
+  domain: PropTypes.string
+};
 
-export default function InviteLists() {
+export default function InviteLists({ domain }) {
   const theme = useTheme();
+  const { sendingInviteEmail } = useGeneral();
+  const [inviteEmails, setInviteEmails] = useState([]);
 
-  const [inviteEmails, setInviteEmails] = useState(rows);
+  useEffect(() => {
+    const initValue = [];
+    initValue.push(createData(0, `employee@${domain}`));
+    setInviteEmails(initValue);
+  }, [domain]);
 
   const handleAddInviteEmail = () => {
-    rows.push(createData(rows.length, ''));
+    const rows = inviteEmails;
+    let lastId = 0;
+    if (rows.length > 0) {
+      lastId = rows[rows.length - 1].id;
+    }
+    console.log(lastId);
+    rows.push(createData(lastId + 1, ''));
     setInviteEmails([...rows]);
   };
 
-  const handleClick = () => {
-    console.log('Hello');
+  const handleClickDelete = (id) => {
+    const rows = inviteEmails;
+    rows.splice(id, 1);
+    setInviteEmails([...rows]);
+  };
+
+  const handleSendEmail = () => {
+    sendingInviteEmail({ emails: inviteEmails });
   };
 
   return (
@@ -47,27 +68,38 @@ export default function InviteLists() {
       <Card>
         <CardContent sx={{ padding: theme.spacing(3, 0) }}>
           <Container maxWidth="sm">
-            {inviteEmails.map((row) => (
-              <Box sx={{ display: 'flex', mb: 2 }} key={row.id}>
-                <TextField
-                  id="outlined-basic"
-                  label="Email Address"
-                  variant="outlined"
-                  sx={{ width: '100%' }}
-                />
-                <Button
-                  onClick={handleClick}
-                  color="error"
-                  sx={{
-                    borderRadius: '50%',
-                    minWidth: '0px',
-                    width: 50,
-                    height: 50,
-                    ml: 2
-                  }}
-                >
-                  <DeleteIcon />
-                </Button>
+            {inviteEmails.map((row, index) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2
+                }}
+                key={row.id}
+              >
+                <Box sx={{ width: '100%', mr: 1 }}>
+                  <TextField
+                    id="outlined-basic"
+                    label="Email Address"
+                    variant="outlined"
+                    sx={{ width: '100%' }}
+                    value={row.email}
+                    onChange={(e) => {
+                      const tmpList = inviteEmails;
+                      tmpList[index].email = e.target.value;
+                      setInviteEmails([...tmpList]);
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleClickDelete(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
               </Box>
             ))}
             <Button
@@ -84,6 +116,7 @@ export default function InviteLists() {
                 variant="contained"
                 color="secondary"
                 endIcon={<SendIcon />}
+                onClick={handleSendEmail}
               >
                 Send Invitations
               </Button>
@@ -92,7 +125,7 @@ export default function InviteLists() {
           <Box m={2} />
           <Box sx={{ width: '100%', textAlign: 'center' }}>
             <Typography variant="body1">Or share an invite link:</Typography>
-            <CopyClipboard value="https://at.cafe/get" />
+            <CopyClipboard value="https://thimble.io/get" />
           </Box>
         </CardContent>
       </Card>
