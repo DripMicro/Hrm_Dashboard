@@ -13,7 +13,7 @@ sendGridMail.setApiKey(
 const Calendar = db.calendar;
 const User = db.user;
 const config = require('../config/auth.config');
-const { user } = require('../models');
+// const { user } = require('../models');
 
 const JWT_SECRET = config.secret;
 
@@ -40,7 +40,6 @@ exports.getCalendarList = (req, res) => {
       const sch = JSON.parse(schedule);
       calendarList.push({ id, sch, userId });
     });
-    console.log(calendarList);
     res.status(200).send(calendarList);
   });
 };
@@ -127,8 +126,16 @@ exports.updateSchedule = (req, res) => {
 };
 
 exports.inviteEmails = async (req, res) => {
-  console.log(req.body);
-  await sendEmail();
+  const data = req.body;
+  const emails = [];
+  data.map((email) => {
+    emails.push(email.email);
+  });
+  if (emails.length > 0) {
+    const domain = emails[0].split('@')[1];
+    await sendEmail(emails, domain);
+    res.status(200).send({ message: 'success' });
+  }
 };
 
 async function getUsers(users) {
@@ -150,21 +157,20 @@ async function getUsers(users) {
   return resData;
 }
 
-function getMessage() {
-  const body = 'This is a test email using SendGrid from Node.js';
+function getMessage(emails, domain) {
+  const body = `<h3>Welcome to Thimble, please click <a href='http://localhost:3000/auth/login'>here</a> to register and join <br> your colleagues from the company ${domain}</h3>`;
   return {
-    to: 'kw981112@gmail.com',
+    to: emails,
     from: 'm.bengoufa@gmail.com',
-    subject: 'Test email with Node.js and SendGrid',
+    subject: 'Join to Thimble',
     text: body,
-    html: `<strong>${body}</strong>`
+    html: `<div style='text-align: center;'><div><img src='https://escribers.team/assets/img/recruitment.jpg' /></div>${body}</div>`
   };
 }
 
-async function sendEmail() {
+async function sendEmail(emails, domain) {
   try {
-    await sendGridMail.send(getMessage());
-    console.log('Test email sent successfully');
+    await sendGridMail.send(getMessage(emails, domain));
   } catch (error) {
     console.error('Error sending test email');
     console.error(error);

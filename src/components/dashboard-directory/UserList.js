@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // material
 import { useTheme } from '@material-ui/core/styles';
 import {
@@ -99,14 +99,6 @@ export default function UserList({ onMakeAdmin, userList }) {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // useEffect(() => {
-  //   dispatch(getUserList());
-  // }, [dispatch]);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -154,7 +146,6 @@ export default function UserList({ onMakeAdmin, userList }) {
   };
 
   const handleDeleteUser = (userId) => {
-    console.log(userId);
     deleteUserList({ userId });
     dispatch(deleteUser(userId));
   };

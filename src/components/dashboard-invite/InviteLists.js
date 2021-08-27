@@ -5,6 +5,8 @@ import { useTheme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
+import { useSnackbar } from 'notistack';
+import { LoadingButton } from '@material-ui/lab';
 
 import {
   Button,
@@ -33,8 +35,10 @@ InviteLists.propTypes = {
 
 export default function InviteLists({ domain }) {
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const { sendingInviteEmail } = useGeneral();
   const [inviteEmails, setInviteEmails] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const initValue = [];
@@ -48,7 +52,6 @@ export default function InviteLists({ domain }) {
     if (rows.length > 0) {
       lastId = rows[rows.length - 1].id;
     }
-    console.log(lastId);
     rows.push(createData(lastId + 1, ''));
     setInviteEmails([...rows]);
   };
@@ -59,8 +62,11 @@ export default function InviteLists({ domain }) {
     setInviteEmails([...rows]);
   };
 
-  const handleSendEmail = () => {
-    sendingInviteEmail({ emails: inviteEmails });
+  const handleSendEmail = async () => {
+    setIsSubmitting(true);
+    await sendingInviteEmail({ emails: inviteEmails });
+    setIsSubmitting(false);
+    enqueueSnackbar('The email is sent successfully!', { variant: 'success' });
   };
 
   return (
@@ -103,6 +109,7 @@ export default function InviteLists({ domain }) {
               </Box>
             ))}
             <Button
+              variant="outlined"
               onClick={handleAddInviteEmail}
               sx={{ width: '100%', mt: 2 }}
             >
@@ -112,14 +119,15 @@ export default function InviteLists({ domain }) {
           <Container maxWidth="md">
             <Box sx={{ width: '100%', textAlign: 'center' }}>
               <Box m={3} />
-              <Button
+              <LoadingButton
                 variant="contained"
                 color="secondary"
-                endIcon={<SendIcon />}
                 onClick={handleSendEmail}
+                endIcon={<SendIcon />}
+                pending={isSubmitting}
               >
                 Send Invitations
-              </Button>
+              </LoadingButton>
             </Box>
           </Container>
           <Box m={2} />

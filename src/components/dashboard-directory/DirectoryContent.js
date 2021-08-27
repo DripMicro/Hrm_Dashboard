@@ -54,31 +54,62 @@ export default function DirectoryContent() {
   }, [dispatch]);
 
   useEffect(() => {
+    const { offices, teams, roles } = user;
     const OfficeStatus = [];
-    officeList.map((office) => {
-      const data = {
-        id: office.id,
-        label: office.name,
-        icon: office.emoji
-      };
-
-      OfficeStatus.push(data);
-    });
-
     const TeamStatus = [];
-    teamList.map((team) => {
-      const data = {
-        id: team.id,
-        label: team.name,
-        color: team.color
-      };
+    if (roles === 'ADMIN') {
+      officeList.map((office) => {
+        const data = {
+          id: office.id,
+          label: office.name,
+          icon: office.emoji
+        };
 
-      TeamStatus.push(data);
-    });
+        OfficeStatus.push(data);
+      });
+
+      teamList.map((team) => {
+        const data = {
+          id: team.id,
+          label: team.name,
+          color: team.color
+        };
+
+        TeamStatus.push(data);
+      });
+    } else {
+      officeList.map((office) => {
+        offices.map((uOfficeId) => {
+          if (Number(office.id) === Number(uOfficeId)) {
+            const data = {
+              id: office.id,
+              label: office.name,
+              icon: office.emoji
+            };
+
+            OfficeStatus.push(data);
+          }
+        });
+      });
+
+      teamList.map((team) => {
+        teams.map((uTeamId) => {
+          if (Number(team.id) === Number(uTeamId)) {
+            const data = {
+              id: team.id,
+              label: team.name,
+              color: team.color
+            };
+
+            TeamStatus.push(data);
+          }
+        });
+      });
+    }
 
     setOffices([...OfficeStatus]);
     setTeams([...TeamStatus]);
-  }, [officeList, teamList]);
+  }, [officeList, teamList, user]);
 
   const setStatusProps = (selectedIds) => {
     setOfficeIds(selectedIds);

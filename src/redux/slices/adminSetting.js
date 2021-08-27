@@ -206,7 +206,6 @@ export function updateOrganizations({ updatedOrg }) {
 }
 
 export function makeAdmin({ userId }) {
-  console.log('Here is redux:', userId);
   const data = { userId };
   return async () => {
     await axios.post('/api/user/make-admin', data);
@@ -241,7 +240,6 @@ export function deleteUser({ userId }) {
   const data = {
     userId
   };
-  console.log('Here is redux', data);
   return async () => {
     await axios.post('/api/user/delete-user', data);
   };

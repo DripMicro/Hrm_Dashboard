@@ -85,11 +85,8 @@ export default function AccountGeneral({ isEdit, currentUser }) {
     setTeams([...TeamStatus]);
   }, [officeList, teamList]);
 
-  console.log('My Profile', myProfile);
-
   useEffect(() => {
     if (isEdit && currentUser !== undefined) {
-      console.log('Current:', currentUser);
       initialOffices = [];
       initialTeams = [];
       if (currentUser.offices !== undefined) {
@@ -104,7 +101,6 @@ export default function AccountGeneral({ isEdit, currentUser }) {
         setTeamIds(initialTeams);
       }
     } else if (myProfile !== null) {
-      console.log('User Setting', myProfile);
       initialOffices = [];
       initialTeams = [];
       myProfile.offices.map((office) => {
@@ -125,12 +121,10 @@ export default function AccountGeneral({ isEdit, currentUser }) {
   });
 
   const setStatusProps = (selectedIds) => {
-    console.log('Here is officeIds', selectedIds);
     setOfficeIds(selectedIds);
   };
 
   const handleTeamSelected = (teamStatus) => {
-    console.log('Here is teamIds', teamStatus);
     setTeamIds(teamStatus);
   };
 
@@ -158,7 +152,6 @@ export default function AccountGeneral({ isEdit, currentUser }) {
 
         const tmpPhoto =
           values.photoURL === null ? '/static/uploads/1.jpg' : values.photoURL;
-        console.log(values);
         await updateProfile({
           ...values,
           photoURL: tmpPhoto,

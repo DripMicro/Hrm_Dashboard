@@ -2,9 +2,14 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable array-callback-return */
+const sendGridMail = require('@sendgrid/mail');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
+
+sendGridMail.setApiKey(
+  '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'
+);
 
 const config = require('../config/auth.config');
 
@@ -262,7 +267,7 @@ exports.getProfile = (req, res) => {
   });
 };
 
-exports.addMemberList = (req, res) => {
+exports.addMemberList = async (req, res) => {
   const memberList = req.body;
   const { authorization } = req.headers;
   if (!authorization) {
@@ -274,30 +279,13 @@ exports.addMemberList = (req, res) => {
 
   const role = MEMBER;
 
-  memberList.map((member) => {
-    User.findOne({ where: { email: member.email } }).then((userData) => {
-      if (userData === null) {
-        User.create({
-          firstname: member.firstname === null ? '' : member.firstname,
-          lastname: member.lastname === null ? '' : member.lastname,
-          prefferedname:
-            member.prefferedname === null ? '' : member.prefferedname,
-          jobtitle: member.jobtitle === null ? '' : member.jobtitle,
-          email: member.email,
-          departmentname:
-            member.departmentname === null ? '' : member.departmentname,
-          photoURL: '/static/uploads/1.jpg',
-          password: bcrypt.hashSync('thimble1234', 8),
-          roleId: role,
-          companyId
-        }).then((userInfo) => {
-          const { officeIds, teamIds } = getIds(member);
-          generateUser(userInfo, companyId, officeIds, teamIds);
-        });
-      }
-    });
-  });
-  res.status(200).send('success');
+  const sendingEmails = await addMembers(memberList, role, companyId);
+
+  if (sendingEmails.length > 0) {
+    const domain = sendingEmails[0].split('@')[1];
+    await sendEmail(sendingEmails, domain);
+    res.status(200).send({ message: 'success' });
+  }
 };
 
 exports.makeAdmin = (req, res) => {
@@ -316,6 +304,34 @@ exports.deleteUser = async (req, res) => {
   await User.destroy({ where: { id: userId } });
   res.status(200).send('success');
 };
+
+async function addMembers(memberList, role, companyId) {
+  const asyncRes = await Promise.all(
+    memberList.map(async (member) => {
+      const userData = await User.findOne({ where: { email: member.email } });
+      if (userData === null) {
+        const userInfo = await User.create({
+          firstname: member.firstname === null ? '' : member.firstname,
+          lastname: member.lastname === null ? '' : member.lastname,
+          prefferedname:
+            member.prefferedname === null ? '' : member.prefferedname,
+          jobtitle: member.jobtitle === null ? '' : member.jobtitle,
+          email: member.email,
+          departmentname:
+            member.departmentname === null ? '' : member.departmentname,
+          photoURL: '/static/uploads/1.jpg',
+          password: bcrypt.hashSync('thimble1234', 8),
+          roleId: role,
+          companyId
+        });
+        const { officeIds, teamIds } = getIds(member);
+        await generateUser(userInfo, companyId, officeIds, teamIds);
+        return member.email;
+      }
+    })
+  );
+  return asyncRes;
+}
 
 async function generateUser(userData, cId, officeIds, teamIds) {
   Calendar.create({
@@ -357,4 +373,27 @@ function getIds(member) {
   resData.officeIds = officeIds;
   resData.teamIds = teamIds;
   return resData;
+}
+
+function getMessage(emails, domain) {
+  const body = `<h3>Welcome to Thimble, please click <a href='http://localhost:3000/auth/login'>here</a> to register and join <br> your colleagues from the company ${domain}</h3>`;
+  return {
+    to: emails,
+    from: 'm.bengoufa@gmail.com',
+    subject: 'Join to Thimble',
+    text: body,
+    html: `<div style='text-align: center;'><div><img src='https://escribers.team/assets/img/recruitment.jpg' /></div>${body}<div> Password: thimble1234 </div></div>`
+  };
+}
+
+async function sendEmail(emails, domain) {
+  try {
+    await sendGridMail.send(getMessage(emails, domain));
+  } catch (error) {
+    console.error('Error sending test email');
+    console.error(error);
+    if (error.response) {
+      console.error(error.response.body);
+    }
+  }
 }

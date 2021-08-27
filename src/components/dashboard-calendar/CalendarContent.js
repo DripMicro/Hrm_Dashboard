@@ -107,7 +107,6 @@ export default function CalendarContent() {
     ) {
       const { sch } = currentCalendar;
       setNewCalendar(sch);
-      console.log('CurrentUser:', currentUser, officeList, teamList);
       setCUser(currentUser);
 
       const { officeIds, teamIds } = currentUser;
@@ -143,32 +142,71 @@ export default function CalendarContent() {
       setTeams([...TeamStatus]);
     } else {
       setNewCalendar(calendar);
+      const { offices, teams, roles } = user;
       const OfficeStatus = [];
-      officeList.map((office) => {
-        const data = {
-          id: office.id,
-          label: office.name,
-          icon: office.emoji
-        };
-
-        OfficeStatus.push(data);
-      });
-
       const TeamStatus = [];
-      teamList.map((team) => {
-        const data = {
-          id: team.id,
-          label: team.name,
-          color: team.color
-        };
+      if (roles === 'ADMIN') {
+        officeList.map((office) => {
+          const data = {
+            id: office.id,
+            label: office.name,
+            icon: office.emoji
+          };
 
-        TeamStatus.push(data);
-      });
+          OfficeStatus.push(data);
+        });
+
+        teamList.map((team) => {
+          const data = {
+            id: team.id,
+            label: team.name,
+            color: team.color
+          };
+
+          TeamStatus.push(data);
+        });
+      } else {
+        officeList.map((office) => {
+          offices.map((uOfficeId) => {
+            if (Number(office.id) === Number(uOfficeId)) {
+              const data = {
+                id: office.id,
+                label: office.name,
+                icon: office.emoji
+              };
+
+              OfficeStatus.push(data);
+            }
+          });
+        });
+
+        teamList.map((team) => {
+          teams.map((uTeamId) => {
+            if (Number(team.id) === Number(uTeamId)) {
+              const data = {
+                id: team.id,
+                label: team.name,
+                color: team.color
+              };
+
+              TeamStatus.push(data);
+            }
+          });
+        });
+      }
 
       setOffices([...OfficeStatus]);
       setTeams([...TeamStatus]);
     }
-  }, [currentCalendar, currentUser, isDetail, calendar, officeList, teamList]);
+  }, [
+    currentCalendar,
+    currentUser,
+    isDetail,
+    calendar,
+    officeList,
+    teamList,
+    user
+  ]);
 
   useEffect(() => {
     setUserInfo(user);
@@ -252,33 +290,6 @@ export default function CalendarContent() {
       setCalendarProps(yearData);
     }
   }, [newCalendar, isWorking]);
-
-  // useEffect(() => {
-  //   const OfficeStatus = [];
-  //   officeList.map((office) => {
-  //     const data = {
-  //       id: office.id,
-  //       label: office.name,
-  //       icon: office.emoji
-  //     };
-
-  //     OfficeStatus.push(data);
-  //   });
-
-  //   const TeamStatus = [];
-  //   teamList.map((team) => {
-  //     const data = {
-  //       id: team.id,
-  //       label: team.name,
-  //       color: team.color
-  //     };
-
-  //     TeamStatus.push(data);
-  //   });
-
-  //   setOffices([...OfficeStatus]);
-  //   setTeams([...TeamStatus]);
-  // }, [officeList, teamList]);
 
   useEffect(() => {
     if (organizations.result !== undefined) {
@@ -454,7 +465,7 @@ export default function CalendarContent() {
                     {cUser.name}
                   </Typography>
                   <Typography variant="body1" noWrap>
-                    {cUser.email}
+                    {cUser.jobtitle}
                   </Typography>
                 </Box>
               </Stack>

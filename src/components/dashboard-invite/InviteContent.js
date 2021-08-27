@@ -25,7 +25,6 @@ export default function InviteContent() {
   useEffect(() => {
     if (organizations.result !== undefined) {
       const { company } = organizations.result;
-      console.log(company);
       setDomain(company.domain);
     }
   }, [organizations]);

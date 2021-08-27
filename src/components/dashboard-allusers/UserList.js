@@ -19,7 +19,6 @@ import {
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList } from '../../redux/slices/superAdmin';
-import useAuth from '../../hooks/useAuth';
 // components
 import Label from '../Label';
 import Scrollbar from '../Scrollbar';
@@ -78,7 +77,6 @@ export default function UserList() {
   // const theme = useTheme();
   const dispatch = useDispatch();
   const { userList } = useSelector((state) => state.superAdmin);
-  const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -89,10 +87,6 @@ export default function UserList() {
   useEffect(() => {
     dispatch(getUserList());
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

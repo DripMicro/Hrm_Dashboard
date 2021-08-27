@@ -63,9 +63,6 @@ export default function WeekList({
   const theme = useTheme();
 
   useEffect(() => {
-    // console.log('Here is WeekList:', daystatus);
-  }, [daystatus]);
-  useEffect(() => {
     if (initShowDetail !== undefined && firstDay > 0 && lastDay > 0) {
       let today = new Date().getDate();
       const thisMonth = new Date().getMonth();

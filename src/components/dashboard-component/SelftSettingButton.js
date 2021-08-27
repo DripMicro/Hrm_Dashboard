@@ -68,10 +68,6 @@ export default function SelfSettingButton({
   const { user } = useAuth();
 
   useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser]);
-
-  useEffect(() => {
     if (detailInfo.morning !== undefined) {
       schedule.map((sche, index) => {
         if (

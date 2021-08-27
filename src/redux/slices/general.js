@@ -104,7 +104,6 @@ export function getCalendarList() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('/api/general/calendar-lists');
-      console.log(response);
       dispatch(slice.actions.getCalendarListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

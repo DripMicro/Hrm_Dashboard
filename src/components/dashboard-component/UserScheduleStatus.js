@@ -50,14 +50,8 @@ export default function UserScheduleStatus({ notStatusUsers, scheduleUsers }) {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
-  console.log('Users', scheduleUsers);
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-  };
-
-  const handleProfile = () => {
-    console.log('this is profile');
   };
 
   return (
