@@ -5,33 +5,33 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 
-// const corsOptions = {
-//   origin: 'http://localhost:3000'
-//   // origin: 'http://3.68.219.73/'
-// };
-// app.use(cors(corsOptions));
-
-const whitelist = [
-  'https://checkout.stripe.com',
-  'http://localhost:3000',
-  'http://3.68.219.73/'
-];
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error());
-    }
-  }
+  // origin: 'http://localhost:3000'
+  origin: 'http://3.68.219.73:3000/'
 };
-
 app.use(cors(corsOptions));
-app.use(
-  cors({
-    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
-  })
-);
+
+// const whitelist = [
+//   'https://checkout.stripe.com',
+//   'http://localhost:3000',
+//   'http://3.68.219.73/'
+// ];
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error());
+//     }
+//   }
+// };
+
+// app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
+//   })
+// );
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
