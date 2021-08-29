@@ -11,7 +11,11 @@ const app = express();
 // };
 // app.use(cors(corsOptions));
 
-const whitelist = ['https://checkout.stripe.com', 'http://localhost:3000'];
+const whitelist = [
+  'https://checkout.stripe.com',
+  'http://localhost:3000',
+  'http://3.68.219.73/'
+];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {

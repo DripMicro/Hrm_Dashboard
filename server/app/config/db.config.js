@@ -1,7 +1,7 @@
 module.exports = {
   HOST: 'localhost',
   USER: 'root',
-  PASSWORD: 'root',
+  PASSWORD: 'Deliteser112',
   DB: 'db_thimble',
   dialect: 'mysql',
   pool: {
