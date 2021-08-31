@@ -108,7 +108,7 @@ export default function LandingSafeFlexible() {
               <Box
                 component="img"
                 alt="theme mode"
-                src="/static/home/landing01.png"
+                src="/static/home/landing01.webp"
                 sx={{
                   maxWidth: { md: 'calc(100% - 48px)' },
                   transform: 'translateZ(0)'

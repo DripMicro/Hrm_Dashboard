@@ -120,7 +120,7 @@ export default function LandingPlugPlay() {
               <Box
                 component="img"
                 alt="theme mode"
-                src="/static/home/landing03.png"
+                src="/static/home/landing03.webp"
                 sx={{
                   maxWidth: { md: 'calc(100% - 48px)' },
                   transform: 'translateZ(0)'

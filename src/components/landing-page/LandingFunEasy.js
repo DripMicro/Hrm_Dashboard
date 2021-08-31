@@ -124,7 +124,7 @@ export default function LandingFunEasy() {
               <Box
                 component="img"
                 alt="theme mode"
-                src="/static/home/landing02.png"
+                src="/static/home/landing02.webp"
                 sx={{
                   maxWidth: { md: 'calc(100% - 48px)' },
                   transform: 'translateZ(0)'

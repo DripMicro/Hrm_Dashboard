@@ -128,13 +128,13 @@ export default function LandingHero() {
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
         <HeroImgStyleRight
           alt="hero"
-          src="/static/home/headerRight.png"
+          src="/static/home/headerRight.webp"
           variants={varFadeInUp}
         />
 
         <HeroImgStyleLeft
           alt="hero"
-          src="/static/home/headerLeft.png"
+          src="/static/home/headerLeft.webp"
           variants={varFadeInUp}
         />
 

@@ -127,7 +127,7 @@ export default function LandingHybridPolicy() {
               <Box
                 component="img"
                 alt="theme mode"
-                src="/static/home/landing04.png"
+                src="/static/home/landing04.webp"
                 sx={{
                   maxWidth: { md: 'calc(100% - 48px)' },
                   transform: 'translateZ(0)'
